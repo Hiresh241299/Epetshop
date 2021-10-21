@@ -18,6 +18,7 @@ $result = $conn->query($sql);
 if($result -> num_rows > 0){
     //output data for each row
     while($row = $result->fetch_assoc()){
+        //Add comment
         //FOR LATER USE, when filling forms
         //escape the input so that database does not see data as code// Prevent SQL Injection
         //$first = mysqli_real_escape_string($conn, $POST['first']);
