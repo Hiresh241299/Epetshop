@@ -113,6 +113,7 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
 
                                             <!-- Fetch product name from db, on selecting product, if product exsits, fetch and 
                                             populate other field and disabled them-->
+                                            
                                             <div class="form-group col-lg-6">
                                                 <label>Name *</label>
                                                 <input list="pname" type="text" name="pname" class="form-control"
