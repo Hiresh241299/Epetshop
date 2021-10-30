@@ -104,11 +104,25 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
 
                                         <div class="input-grids row">
 
-                                            <div class="form-group col-lg-6">
+
+                                            <!-- <div class="form-group col-lg-6">
                                                 <label>Name *</label>
                                                 <input type="text" name="pname" class="form-control"
                                                     placeholder="Product Name" required="">
+                                            </div> -->
+
+                                            <!-- Fetch product name from db, on selecting product, if product exsits, fetch and 
+                                            populate other field and disabled them-->
+                                            <div class="form-group col-lg-6">
+                                                <label>Name *</label>
+                                                <input list="pname" type="text" name="pname" class="form-control"
+                                                    placeholder="Product Name" required="">
+                                                <datalist id="pname">
+                                                    <option value="KOI KING">
+                                                    <option value="SAKURA 2 IN 1">
+                                                </datalist>
                                             </div>
+
                                             <div class="form-group col-lg-6">
                                                 <label>Brand *</label>
                                                 <input type="text" name="brand" class="form-control" placeholder="Brand"
@@ -118,8 +132,7 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
 
                                         <div class="form-group">
                                             <label>Image</label>
-                                            <input type="file" name="image" id="image" class="form-control"
-                                                 required="">
+                                            <input type="file" name="image" id="image" class="form-control" required="">
                                         </div>
 
 
@@ -134,7 +147,8 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                                             <div class="form-group col-lg-6">
                                                 <label>Pet Category *</label>
                                                 <select class="form-control" name="petcat" id="petcat" required>
-                                                    <option value="" selected="true" disabled="disabled">Pet Category</option>
+                                                    <option value="" selected="true" disabled="disabled">Pet Category
+                                                    </option>
                                                     <?php
                                                     
                                                     $sql = "CALL sp_getPetCategories();";
@@ -151,7 +165,7 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                                                      $result->close();
                                                      $conn->next_result();
                                                     ?>
-                                                    
+
 
                                                 </select>
                                             </div>
@@ -159,7 +173,8 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                                             <div class="form-group col-lg-6">
                                                 <label>Product Category *</label>
                                                 <select class="form-control" name="prodcat" id="prodcat" required>
-                                                    <option value="" selected="true" disabled="disabled">Product Category</option>
+                                                    <option value="" selected="true" disabled="disabled">Product
+                                                        Category</option>
                                                     <?php
                                                     $sql = "CALL sp_getProdCategories();";
                                                     $result = $conn->query($sql);
@@ -175,7 +190,7 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                                                     $result->close();
                                                     $conn->next_result();
                                                     ?>
-                                                    
+
                                                 </select>
                                             </div>
 
@@ -221,12 +236,12 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                                             <div class="form-group col-lg-6">
                                                 <label>% Discount * </label>
                                                 <input type="number" name="per" class="form-control"
-                                                    placeholder="% Discount" >
+                                                    placeholder="% Discount">
                                             </div>
                                             <div class="form-group col-lg-6">
                                                 <label>Discount Days * </label>
                                                 <input type="number" name="day" class="form-control"
-                                                    placeholder="Discount Days" >
+                                                    placeholder="Discount Days">
                                             </div>
                                         </div>
 
