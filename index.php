@@ -209,7 +209,7 @@ if ($session_roleID == 2) {
                         while ($row = $result->fetch_assoc()) {
                             $pid = $row['productID'];
                             $pname = $row['pname'];
-                            $brand = $row['brand'];
+                            $brand = $row['bname'];
                             $desc= $row['description'];
                             $img = $row['imgPath'];
                             $prodcat = $row['pcname'];

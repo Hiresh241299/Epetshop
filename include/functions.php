@@ -114,10 +114,10 @@ function addPetshop($pname, $desc, $street, $town, $district, $long, $lat, $stat
 }
 
 //add product
-function addProduct($prodname, $brand, $desc, $img, $qoh, $price, $percdis, $discdays, $prodcatid, $specialityid, $status, $dateposted, $lastmodif, $petshopid)
+function addProduct($prodname, $brandID, $desc, $img, $prodcatid, $specialityid, $status, $dateposted, $lastmodif, $petshopid)
 {
     include "dbConnection.php";
-    $sql = "CALL sp_addProduct('$prodname', '$brand', '$desc', '$img','$prodcatid', '$specialityid', '$status', '$dateposted','$qoh', '$price', '$percdis', '$discdays','$lastmodif', '$petshopid');";
+    $sql = "CALL sp_addProduct('$prodname', '$brandID', '$desc', '$img','$prodcatid', '$specialityid', '$status', '$dateposted','$lastmodif', '$petshopid');";
     $result = mysqli_query($conn, $sql);
 
     return $result;
@@ -137,6 +137,20 @@ function getPetshopID($uid)
         }
     }
     return $petshopid;
+}
+
+//get recently added product id by petshop 
+function getLatestProductId($uid){
+    include "dbConnection.php";
+    $petshopid = getPetshopID($uid);
+    $sql = "CALL sp_getProductID($petshopid)";
+    $result = $conn->query($sql);
+    if ($result -> num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $prodID = $row['productID'];
+        }
+    }
+    return $prodID;
 }
 
 //count my products
