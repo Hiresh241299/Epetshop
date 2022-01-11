@@ -88,27 +88,27 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
             <div class="container py-lg-5">
                 <div class="blog-inner-grids">
 
-                        <h3 class="hny-title mb-0">My <span>Products</span></h3>
-                        <p class="mb-4">List of all your products
-                        </p>
+                    <h3 class="hny-title mb-0">My <span>Products</span></h3>
+                    <p class="mb-4">List of all your products
+                    </p>
 
-                        <!-- Datatable -->
-                        <table id="table_id" class="display" width="100%">
-                            <thead>
-                                <tr>
-                                    <th>Image1</th>
-                                    <th>Name</th>
-                                    <th width="20%">Description</th>
-                                    <th>Category</th>
-                                    <th>Quantity</th>
-                                    <th>Price</th>
-                                    <th>Action</th>
+                    <!-- Datatable -->
+                    <table id="table_id" class="display" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Product Image</th>
+                                <th>Name</th>
+                                <th width="20%">Description</th>
+                                <th>Category</th>
+                                <!--<th>Quantity</th>
+                                <th>Price</th>-->
+                                <th>Action</th>
 
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- repeat within body-->
-                                <?php
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- repeat within body-->
+                            <?php
                                 
                                 //fetch product from database, using session userid
                                 $psid = getPetshopID($userid);
@@ -118,27 +118,31 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                             if ($result -> num_rows > 0) {
                                 //output data for each row
                                 while ($row = $result->fetch_assoc()) {
+                                    $productID = $row['productID'];
                                     $img = $row['imgPath'];
                                     $name = $row['pname'];
                                     $brand = $row['bname'];
                                     $desc = $row['description'];
                                     $pcname = $row['pcname'];
                                     $sname = $row['sname'];
-                                    $qoh = $row['qoh'];
-                                    $price = $row['price'];
+                                    $qoh = " ";
+                                    $price = " ";
+
+                                                                                       
+                                   
                                     echo '<tr>
-                                <td width="16%"><img src="http://localhost/epetshop/product/'.$img.'" alt="Img" width="100%"
+                                <td width="16%"><img src="product/'.$img.'" alt="Img" width="100%"
                                         height="100%"></td>
                                 <td><b><span style="text-transform:uppercase">'.$brand.'</span></b> - '.$name.'</td>
                                 <td>'.$desc.'</td>
                                 <td>'.$sname.' '.$pcname.'</td>
-                                <td>'.$qoh.'</td>
-                                <td>'.$price.'</td>
+                                <!--<td>'.$qoh.'</td>
+                                <td>'.$price.'</td>-->
                                 <td width="15%">
-                                    <button class="btn btn-primary" title="View"><i class="fa fa-eye iblack"
-                                            aria-hidden="true"></i></button>
-                                    <button class="btn btn-warning" title="Edit"><i class="fa fa-edit iblack"
-                                            aria-hidden="true"></i></button>
+                                    <a  href="addproductpricing.php?id='.$productID.'"  class="btn btn-primary" title="View"><i class="fa fa-eye iblack"
+                                            aria-hidden="true"></i></a>
+                                    <a href="addproduct.php?id='.$productID.'" class="btn btn-warning" title="Edit"><i class="fa fa-edit iblack"
+                                            aria-hidden="true"></i></a>
                                     <button class="btn btn-danger" title="Delete"><i class="fa fa-trash iblack"
                                             aria-hidden="true"></i></button>
 
@@ -149,11 +153,11 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                              $result->close();
                              $conn->next_result();
                                 ?>
-                                <!-- //repeat body-->
-                            </tbody>
+                            <!-- //repeat body-->
+                        </tbody>
 
-                        </table>
-                        <!-- //Datatable -->
+                    </table>
+                    <!-- //Datatable -->
                 </div>
                 <!--//mag-content-->
                 <div style="margin: 8px auto; display: block; text-align:center;">

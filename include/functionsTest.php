@@ -34,6 +34,14 @@ if ($result == 1){
     echo "Product failed to add" . "<br>";
 }
 
+//add product line
+//addProductLine($F_unit, $F_amount, $F_qoh, $F_price, $F_lastmodif, $F_status, $productID);
+$result = addProductLine('kg', 5, 2, 1000, "2021-09-14 09:22:26", 1, 26);
+if ($result == 1){
+    echo "Product Line added" . "<br>";
+}else{
+    echo "Product Line failed to add" . "<br>";
+}
 
 //get petshop id
 echo "petshop id is" . getPetshopID(31). "<br>";
@@ -57,4 +65,14 @@ if($result == 1){
 //}else{
 //    echo "\n admin not created" . "<br>";
 //}
+
+
+//update product
+//updateProduct($productID,$name, $brandID, $description, $imgpath, $prodCatID, $petCatID, $status, $lastMDT)
+$result = updateProduct(62 ,"testnew", 2, "NewDesc", "x", 1, 1, 1, "2021-09-14 09:22:26");
+if($result == 1){
+    echo "Product Updated!!" . "<br>";
+}else if ($result == 0){
+    echo "Product not Updated!!" . "<br>";
+}
 ?>

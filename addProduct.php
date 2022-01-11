@@ -10,6 +10,16 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
 } else {
     $userid = $_SESSION["userid"];
 }
+
+//if url does not contain query string product id, go to page add product
+$isUpdate = false;
+if((!isset($_GET['id'])) || (($_GET['id']) == NULL)){
+    $isUpdate = false;
+}else{
+    $isUpdate = true;
+    $productId = $_GET['id'];
+}
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -98,9 +108,9 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                                     </p>
 
                                     <form action="" method="post" enctype="multipart/form-data">
-                                        <p class="mb-4 text-white text-center bg-dark">
+                                        <!--<p class="mb-4 text-white text-center bg-dark">
                                             Product Details
-                                        </p>
+                                        </p> -->
 
                                         <div class="input-grids row">
 
@@ -111,13 +121,38 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                                                     placeholder="Product Name" required="">
                                             </div> -->
 
-                                            <!-- Fetch product name from db, on selecting product, if product exsits, fetch and 
-                                            populate other field and disabled them-->
-                                            
-                                            <div class="form-group col-lg-6"> 
+                                            <?php
+                                            //update nmode, fetch product by id
+                                            if($isUpdate){
+                                                $sql = "CALL sp_getProductDetails($productId);";
+                                                $result = $conn->query($sql);
+
+                                                if ($result -> num_rows > 0) {
+                                                //output data for each row
+                                                    while ($row = $result->fetch_assoc()) {
+                                                        $img = $row['imgPath'];
+                                                        $name = $row['pname'];
+                                                        $brandid = $row['brandID'];
+                                                        $desc = $row['description'];
+                                                        $pcid = $row['petcatID'];
+                                                        $prodid = $row['prodCatID'];
+                                                    }
+                                                }
+                                                $result->close();
+                                                $conn->next_result();
+                                            }
+                                            ?>
+
+                                            <div class="form-group col-lg-6">
                                                 <label>Name *</label>
-                                                <input list="pname" type="text" name="pname" class="form-control"
-                                                    placeholder="Product Name" required>
+                                                <?php 
+                                                if($isUpdate){
+                                                    echo '<input list="pname" type="text" name="pname" class="form-control" placeholder="Product Name" value="'.$name.'" required>';
+                                                }else{
+                                                    echo '<input list="pname" type="text" name="pname" class="form-control" placeholder="Product Name" required>';
+                                                }
+                                                ?>
+
                                             </div>
 
                                             <!--<div class="form-group col-lg-6">
@@ -129,7 +164,7 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                                                 <label>Brand *</label>
                                                 <select class="form-control" name="brand" id="brand" required="">
                                                     <option value="" selected="true" disabled="disabled">Product
-                                                    Brand</option>
+                                                        Brand</option>
                                                     <?php
                                                     $sql = "CALL sp_getAllBrand();";
                                                     $result = $conn->query($sql);
@@ -139,7 +174,11 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                                                         while($row = $result->fetch_assoc()){
                                                             $id = $row['brandID'];
                                                             $name = $row['name'];
-                                                            echo '<option value="'.$id.'">'.$name.'</option>';
+                                                            if($brandid == $id){
+                                                                echo '<option value="'.$id.'" selected="true">'.$name.'</option>';
+                                                            }else{
+                                                                echo '<option value="'.$id.'">'.$name.'</option>';
+                                                            }
                                                         }
                                                     }
                                                     $result->close();
@@ -152,14 +191,28 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
 
                                         <div class="form-group">
                                             <label>Image</label>
-                                            <input type="file" name="image" id="image" class="form-control" required="">
+                                            <input type="file" name="image" id="image" class="form-control" onchange="setImage()" required="">
                                         </div>
 
-
+                                        <!--if isupdate then display image here-->
+                                        <?php
+                                        if ($isUpdate) {
+                                            echo '<img class="border" src="product/'.$img.'" id="updateimg" alt="Product Image" height="20%" width="20%"/>';
+                                        }
+                                            echo '<img class="border" src="" id="addimg" alt="Product Image" height="20%" width="20%"/>';
+                                        
+                                        ?>
+                                        
                                         <div class="form-group">
                                             <label>Description</label>
                                             <textarea name="description" class="form-control" placeholder="Description"
-                                                required="" spellcheck="false"></textarea>
+                                                required="" spellcheck="false">
+                                                <?php
+                                                 if($isUpdate){
+                                                     echo $desc;
+                                                 }
+                                                 ?>
+                                            </textarea>
                                         </div>
 
                                         <div class="input-grids row">
@@ -178,7 +231,12 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                                                         while($row = $result->fetch_assoc()){
                                                             $id = $row['prodCatID'];
                                                             $name = $row['name'];
-                                                            echo '<option value="'.$id.'">'.$name.'</option>';
+                                                            if($prodid == $id){
+                                                                echo '<option value="'.$id.'" selected="true">'.$name.'</option>';
+                                                            }else{
+                                                                echo '<option value="'.$id.'">'.$name.'</option>';
+                                                            }
+                                                            
                                                         }
                                                     }
                                                     $result->close();
@@ -203,7 +261,12 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                                                         while ($row = $result->fetch_assoc()) {
                                                             $id = $row['petcatID'];
                                                             $name = $row['name'];
-                                                            echo '<option value="'.$id.'">'.$name.'</option>';
+                                                            if($pcid == $id){
+                                                                echo '<option value="'.$id.'" selected="true">'.$name.'</option>';
+                                                            }else{
+                                                                echo '<option value="'.$id.'">'.$name.'</option>';
+                                                            }
+                                                            
                                                         }
                                                     }
                                                      $result->close();
@@ -215,81 +278,19 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                                             </div>
 
                                         </div>
-
-                                        <!--
-                                        <p class="mb-4 text-white text-center bg-dark">
-                                            Pricing Details
-                                        </p>
-
-                                        <div class="input-grids row">
-                                        <div class="form-group col-lg-6">
-                                                <label>Unit *</label>
-                                                <select class="form-control" name="unit" id="unit" required>
-                                                    <option value="" selected="true" disabled="disabled">Unit</option>
-                                                    <option value="g">g</option>
-                                                    <option value="kg">kg</option>
-                                                    <option value="ml">ml</option>
-                                                    <option value="cl">cl</option>
-                                                    <option value="l">l</option>
-
-                                                </select>
-                                            </div>
-                                        <div class="form-group col-lg-6">
-                                                <label>Amount * </label>
-                                                <input type="number" name="Amount" class="form-control"
-                                                    placeholder="Amount" required="">
-                                            </div>
-                                        </div>
-
-                                        <div class="input-grids row">
-
-                                            <div class="form-group col-lg-6">
-                                                <label>Price * </label>
-
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend border border-dark rounded">
-                                                        <div class="input-group-text">Rs</div>
-                                                    </div>
-                                                    <input type="number" name="price" class="form-control"
-                                                        placeholder="Price" required="">
-                                                </div>
-                                            </div>
-                                            <div class="form-group col-lg-6">
-                                                <label>Quantity Available * </label>
-                                                <input type="number" name="qoh" class="form-control"
-                                                    placeholder="Quantity in stock" required="">
-                                            </div>
-                                        </div> -->
-
-                                        <!-- Discount -->
-                                        <!--<div class="input-grids row">
-                                            <div class="form-group col-lg-6">
-                                                <label>Discount</label>
-                                                <select class="form-control" name="disc" id="disc"
-                                                    onchange="switchDisc();" required>
-                                                    <option value="0" selected="true">No</option>
-                                                    <option value="1">Yes</option>
-                                                </select>
-                                            </div>
-                                        </div> 
-
-                                        <div class="input-grids row" id="discountDetails">
-
-                                            <div class="form-group col-lg-6">
-                                                <label>% Discount * </label>
-                                                <input type="number" name="per" class="form-control"
-                                                    placeholder="% Discount">
-                                            </div>
-                                            <div class="form-group col-lg-6">
-                                                <label>Discount Days * </label>
-                                                <input type="number" name="day" class="form-control"
-                                                    placeholder="Discount Days">
-                                            </div>
-                                        </div> -->
-
                                         <div class="submit text-right mt-5">
-                                            <Button class="btn btn-primary" name="addProduct" value="post product">
-                                                Submit</button>
+                                            <?php
+                                            if($isUpdate){
+                                                echo '<button class="btn btn-danger" name="btncancel" id="btncancel" formaction="viewAllMyProducts.php" formnovalidate>
+                                                Cancel</button>&nbsp';
+                                                echo '<Button class="btn btn-primary" name="updateProduct" value="update product">
+                                                Update</button>';
+                                            }else{
+                                                echo '<Button class="btn btn-primary" name="addProduct" value="post product">
+                                                Submit</button>';
+                                            }
+                                            ?>
+                                            
                                         </div>
                                         <br>
                                     </form>
@@ -305,17 +306,6 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                                         $prodname = $_POST['pname'];
                                         $brand = $_POST['brand'];
                                         $desc = $_POST['description'];
-                                        //$qoh = $_POST['qoh'];
-                                        //$price = $_POST['price'];
-                                        //discount percentage and days
-                                        //$val = $_POST['price'];
-                                        //if($val == "0"){
-                                        //    $percdis = 0;
-                                        //    $discdays = 0;
-                                        //}else{
-                                        //    $percdis = $_POST['per'];
-                                        //    $discdays = $_POST['day'];
-                                        //}
 
                                         $prodcatid = $_POST['prodcat'];
                                         $specialityid = $_POST['petcat'];
@@ -343,6 +333,53 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                                                     //Add product price => add to table productLine
                                                     $prodID = getLatestProductId($userid);
                                                     header('Location: addProductPricing.php?id='.$prodID);
+                                                } else {
+                                                    //**********get add product failed message
+                                                    header('Location: fail.php');
+                                                    //echo "<script>window.location.href='register.php';</script>";
+                                                }
+                                            } else {
+                                                $statusMsg = "Sorry, there was an error uploading your file.";
+                                                header("Location: fail1.php");
+                                            }
+                                        }
+                                    }
+
+                                    if (isset($_POST['updateProduct'])) {
+                                        
+                                        //Fetch data from the fields
+                                        //$productID
+                                        $prodname = $_POST['pname'];
+                                        $brandID = $_POST['brand'];
+                                        $desc = $_POST['description'];
+                                        $prodcatid = $_POST['prodcat'];
+                                        $specialityid = $_POST['petcat'];
+                                        $status = 1;
+                                        $lastmodif = date("Y/m/d h:i:s");
+                                        //$petshopid= getPetshopID($userid);
+
+
+                                        //add img field to form
+                                        $statusMsg = '';
+                                        $targetDir = "product/";
+                                        $fileName = basename($_FILES["image"]["name"]);
+                                        $targetFilePath = $targetDir . $fileName;
+                                        $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
+
+                                        //allow certain file type
+                                        $allowTypes = array('jpg','jpeg','png','gif','tiff','webp');
+
+                                        if (in_array($fileType, $allowTypes)) {
+                                            // Upload file to server
+
+                                            // tmpname empty, 
+                                            if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFilePath)) {
+                                                $result = updateProduct($productId,$prodname, $brandID, $desc, $fileName, $prodcatid, $specialityid, $status, $lastmodif);
+                                                if ($result) {
+                                                    //**********get add product success message, go to page to view posted product
+                                                    //Add product price => add to table productLine
+                                                    //$prodID = getLatestProductId($userid);
+                                                    header('Location: addProductPricing.php?id='. $productId);
                                                 } else {
                                                     //**********get add product failed message
                                                     header('Location: fail.php');
@@ -414,6 +451,31 @@ function switchDisc() {
 
 <script src="assets/js/jquery-3.3.1.min.js"></script>
 <script src="assets/js/jquery-2.1.4.min.js"></script>
+
+<script>
+    document.getElementById('addimg').style.display = "none"
+function setImage(){
+    //set hidden false
+    document.getElementById('updateimg').style.display = "none"
+    //document.getElementById('addimg').style.display = "none"
+}
+
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            $('#addimg').attr('src', e.target.result);
+        }
+        document.getElementById('addimg').style.display = "block"
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+$("#image").change(function(){
+    readURL(this);
+});
+</script>
 
 <!--Price Range-->
 <script src="assets/js/jquery-ui.js"></script>

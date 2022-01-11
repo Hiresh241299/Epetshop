@@ -10,6 +10,13 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
 } else {
     $userid = $_SESSION["userid"];
 }
+
+//if url does not contain query string product id, go to page add product
+if((!isset($_GET['id'])) || (($_GET['id']) == NULL)){
+    header('Location: addproduct.php');
+}else{
+    $productID = $_GET['id'];
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -91,9 +98,9 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                             <!--/set-1-->
                             <div class="blog-pt-grid-content">
 
-                            <?php
+                                <?php
                             //get product id
-                            $productID = $_GET['id'];
+                            
                             
 
                             $sql = "CALL sp_getProductDetails($productID);";
@@ -103,6 +110,12 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                                 //output data for each row
                                 while ($row = $result->fetch_assoc()) {
                                     $pname = $row['pname'];
+                                    $bname = $row['bname'];
+                                    $description = $row['description'];
+                                    $imgpath = $row['imgPath'];
+                                    $pcname = $row['pcname'];
+                                    $prodCatName = $row['prodname'];
+
                                 }
                             }
                              $result->close();
@@ -128,9 +141,10 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                                                 <div class="flex-viewport"
                                                     style="overflow: hidden; position: relative;">
                                                     <ul>
-                                                        <li data-thumb="assets/images/cart4.jpg" class="clone"
+                                                        <li data-thumb="product/<?php echo $imgpath; ?>" class="clone"
                                                             style="width: 445px; float: left; display: block;">
-                                                            <div class="thumb-image"> <img src="assets/images/cart4.jpg"
+                                                            <div class="thumb-image"> <img
+                                                                    src="product/<?php echo $imgpath; ?>"
                                                                     data-imagezoom="true" class="img-fluid" alt=" ">
                                                             </div>
                                                         </li>
@@ -139,11 +153,19 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                                             </div>
                                         </div>
                                         <div class="col-lg-7 single-right-left pl-lg-4">
-                                            <h3><?php echo $pname ?>
-                                            </h3>
-                                            <!-- <div class="caption">
+                                            <h3><?php echo $bname . " | " . $pname ?></h3>
+
+                                            <div class="caption">
 
                                                 <ul class="rating-single">
+                                                    <li>
+                                                        <a href="#">
+                                                            <p><?php echo $pcname ." " . $prodCatName?></p>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+
+                                                <!-- <ul class="rating-single">
                                                     <li>
                                                         <a href="#">
                                                             <span class="fa fa-star yellow-star"
@@ -155,9 +177,9 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                                                 <h6>
                                                     <span class="item_price">$575</span>
                                                     <del>$1,199</del> Free Delivery
-                                                </h6>
+                                                </h6>-->
                                             </div>
-                                            <div class="desc_single my-4">
+                                            <!--  <div class="desc_single my-4">
                                                 <ul class="emi-views">
                                                     <li><span>Special Price</span> Get extra 5% off (price inclusive of
                                                         discount)</li>
@@ -215,11 +237,48 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                                                 </form>
                                             </div>-->
                                             <div class="description mb-4">
-                                                <p>Product Description</p>
+                                                <h5>Product Description</h5>
+                                                <p><?php echo $description; ?></p>
                                             </div>
 
                                             <div class="description mb-4">
-                                                <p>Price table</p>
+                                                <h5>Product Price</h5>
+                                                <table border="3">
+                                                    <thead class="bg-primary">
+                                                        <td> Unit </td>
+                                                        <td> Price </td>
+                                                        <td> Quantity in stock </td>
+                                                        <td>Action</td>
+                                                    </thead>
+
+                                                    <?php
+                                                    //fetch data from product line for this particular product
+                                                    $sql = "CALL sp_getProductLine($productID);";
+                                                    $result = $conn->query($sql);
+                        
+                                                    if ($result -> num_rows > 0) {
+                                                        //output data for each row
+                                                        while ($row = $result->fetch_assoc()) {
+                                                            $unit = $row['unit'];
+                                                            $number = $row['number'];
+                                                            $qoh = $row['qoh'];
+                                                            $price = $row['price'];
+                                                            $lastMDT = $row['lastModifiedDateTime'];
+
+                                                            echo '<tr>
+                                                            <td> ' . $number . " ". $unit . ' </td>
+                                                            <td> Rs'  . $price . ' </td>
+                                                            <td> '.$qoh.' </td>
+                                                            <td>btn</td>
+                                                            </tr>';
+                        
+                                                        }
+                                                    }
+                                                     $result->close();
+                                                     $conn->next_result();
+                                                    ?>
+
+                                                </table>
                                             </div>
 
                                         </div>
@@ -229,7 +288,7 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                                 <!-- Product -->
 
                                 <div class="leave-comment-form mt-lg-5 mt-4" id="comment">
-                                    <h3 class="hny-title mb-0">Product <span>Pricing</span></h3>
+                                    <!-- <h3 class="hny-title mb-0">Product <span>Pricing</span></h3> -->
                                     <p class="mb-4">Required fields are marked
                                         *
                                     </p>
@@ -255,7 +314,7 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                                             </div>
                                             <div class="form-group col-lg-6">
                                                 <label>Amount * </label>
-                                                <input type="number" name="Amount" class="form-control"
+                                                <input type="number" name="amount" class="form-control"
                                                     placeholder="Amount" required="">
                                             </div>
                                         </div>
@@ -307,7 +366,8 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                                         </div> -->
 
                                         <div class="submit text-right mt-5">
-                                            <Button class="btn btn-primary" name="addProduct" value="post product">
+                                            <Button class="btn btn-primary" name="addProductpricing"
+                                                value="post product">
                                                 Submit</button>
                                         </div>
                                         <br>
@@ -317,15 +377,14 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                                     //submit form, fetch data from form, call function addProduct
                                     //go to another page to view posted product
 
-                                    if (isset($_POST['addProduct'])) {
+                                    if (isset($_POST['addProductpricing'])) {
                                         
                                         //Fetch data from the fields
                                           
-                                        $prodname = $_POST['pname'];
-                                        $brand = $_POST['brand'];
-                                        $desc = $_POST['description'];
-                                        //$qoh = $_POST['qoh'];
-                                        //$price = $_POST['price'];
+                                        $F_unit = $_POST['unit'];
+                                        $F_amount = $_POST['amount'];
+                                        $F_price = $_POST['price'];
+                                        $F_qoh = $_POST['qoh'];
                                         //discount percentage and days
                                         //$val = $_POST['price'];
                                         //if($val == "0"){
@@ -336,41 +395,28 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                                         //    $discdays = $_POST['day'];
                                         //}
 
-                                        $prodcatid = $_POST['prodcat'];
-                                        $specialityid = $_POST['petcat'];
-                                        $status = 1;
-                                        $dateposted = date("Y/m/d h:i:s");
-                                        $lastmodif = date("Y/m/d h:i:s");
-                                        $petshopid= getPetshopID($userid);
+                                        //$prodcatid = $_POST['prodcat'];
+                                        //$specialityid = $_POST['petcat'];
+                                        $F_status = 1;
+                                        //$dateposted = date("Y/m/d h:i:s");
+                                        $F_lastmodif = date("Y/m/d h:i:s");
+                                        //$petshopid= getPetshopID($userid);
 
-                                        //add img field to form
-                                        $statusMsg = '';
-                                        $targetDir = "product/";
-                                        $fileName = basename($_FILES["image"]["name"]);
-                                        $targetFilePath = $targetDir . $fileName;
-                                        $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
+                                        
 
-                                        //allow certain file type
-                                        $allowTypes = array('jpg','jpeg','png','gif','tiff','webp');
-
-                                        if (in_array($fileType, $allowTypes)) {
-                                            // Upload file to server
-                                            if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFilePath)) {
-                                                $result = addProduct($prodname, $brand, $desc, $fileName, $prodcatid, $specialityid, $status, $dateposted, $lastmodif, $petshopid);
-                                                if ($result) {
-                                                    //**********get add product success message, go to page to view posted product
-                                                    //Add product price => add to table productLine
-                                                    header('Location: viewAllMyProducts.php');
-                                                } else {
-                                                    //**********get add product failed message
-                                                    header('Location: fail.php');
-                                                    //echo "<script>window.location.href='register.php';</script>";
-                                                }
-                                            } else {
-                                                $statusMsg = "Sorry, there was an error uploading your file.";
-                                                header("Location: fail1.php");
-                                            }
+                                        
+                                        $result = addProductLine($F_unit, $F_amount, $F_qoh, $F_price, $F_lastmodif, $F_status, $productID);
+                                        if ($result) {
+                                            //**********get add product success message, go to page to view posted product
+                                            //Add product price => add to table productLine
+                                            header('Location: addProductpricing.php?id='.$productID);
+                                        } else {
+                                            //**********get add product failed message
+                                            header('Location: fail.php');
+                                            //echo "<script>window.location.href='register.php';</script>";
                                         }
+                                            
+                                        
                                     }
                                     
                                     ?>

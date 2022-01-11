@@ -123,6 +123,25 @@ function addProduct($prodname, $brandID, $desc, $img, $prodcatid, $specialityid,
     return $result;
 }
 
+//add product line
+function addProductLine($unit, $amount, $qoh, $price, $lastmodif, $status, $productID){
+    include "dbConnection.php";
+    $sql = "CALL sp_addProductLine('$unit', '$amount', '$qoh', '$price', '$lastmodif', '$status', '$productID');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
+
+//update product
+function updateProduct($productID,$name, $brandID, $description, $imgpath, $prodCatID, $petCatID, $status, $lastMDT){
+    include "dbConnection.php";
+    $sql = "CALL sp_updateProduct('$productID','$name', '$brandID', '$description', '$imgpath', '$prodCatID', '$petCatID', '$status', '$lastMDT');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
+
+
 //get petshopID
 function getPetshopID($uid)
 {

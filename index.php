@@ -138,51 +138,6 @@ if ($session_roleID == 2) {
     </section>
     <!--//Navbar & Carousel -->
 
-    <!--Pet Categories-->
-    <section class="w3l-grids-hny-2">
-        <div class="grids-hny-2-mian py-5">
-            <div class="container py-lg-5">
-
-                <h3 class="hny-title mb-0 text-center">Pet <span>Categories</span></h3>
-                <p class="mb-4 text-center">Different pets available for you</p>
-                <div class="welcome-grids row mt-5">
-                    <!-- Pet Cat Start -->
-                    <?php
-                    //Load pet categories from database
-                    $sql = "CALL sp_getPetCategories();";
-                    $result = $conn->query($sql);
-
-                    if ($result -> num_rows > 0) {
-                        //output data for each row
-                        while ($row = $result->fetch_assoc()) {
-                            $name = $row['name'];
-                            $imgPath = $row['imgPath'];
-
-                            echo '<div class="col-lg-2 col-md-4 col-6 welcome-image">
-                            <div class="boxhny13">
-                                <a href="#URL">
-                                    <img src="http://localhost/epetshop/category/'.$imgPath.'" class="img-fluid" alt=""/>
-                                    <div class="boxhny-content">
-                                        <h3 class="title"> '.$name.'</h3>
-                                    </div>
-                                </a>
-                            </div>
-                            <h4><a href="#URL">'.$name.'</a></h4>
-                        </div>';
-
-                        }
-                    }
-                    $result->close();
-                    $conn->next_result();
-                    ?>
-                    <!-- Pet Cat End -->
-                </div>
-
-            </div>
-        </div>
-    </section>
-    <!--//Pet Categories-->
-
     <!--Posters-->
     <section class="w3l-ecommerce-main bg-light">
         <!-- /products-->
@@ -201,7 +156,7 @@ if ($session_roleID == 2) {
                     //gets error details
                     //mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-                    $sql = "CALL sp_getAllProductDetails();";
+                    $sql = "CALL sp_getRecentlyAddedProducts();";
                     $result = $conn->query($sql);
 
                     if ($result -> num_rows > 0) {
@@ -214,15 +169,15 @@ if ($session_roleID == 2) {
                             $img = $row['imgPath'];
                             $prodcat = $row['pcname'];
                             $petCat = $row['sname'];
-                            $price = $row['price']; 
+                            $price = "100";
                             
                             echo '<div class="col-lg-3 col-6 product-incfhny mt-4">
                             <div class="product-grid2 transmitv">
                                 <div class="product-image2">
                                     <div class="pimg">
                                     <a href="#">
-                                        <img class="pic-1 img-fluid" src="http://localhost/epetshop/product/'.$img.'">
-                                        <img class="pic-2 img-fluid" src="http://localhost/epetshop/product/'.$img.'">
+                                        <img class="pic-1 img-fluid" src="product/'.$img.'">
+                                        <img class="pic-2 img-fluid" src="product/'.$img.'">
                                     </a>
                                     </div>
 
@@ -265,6 +220,97 @@ if ($session_roleID == 2) {
         </div>
     </section>
     <!-- //Posters-->
+
+    <!--Pet Categories-->
+    <section class="w3l-grids-hny-2">
+        <div class="grids-hny-2-mian py-5">
+            <div class="container py-lg-5">
+
+                <h3 class="hny-title mb-0 text-center">Pet <span>Categories</span></h3>
+                <p class="mb-4 text-center">Different pets available for you</p>
+                <div class="welcome-grids row mt-5">
+                    <!-- Pet Cat Start -->
+                    <?php
+                    //Load pet categories from database
+                    $sql = "CALL sp_getPetCategories();";
+                    $result = $conn->query($sql);
+
+                    if ($result -> num_rows > 0) {
+                        //output data for each row
+                        while ($row = $result->fetch_assoc()) {
+                            $name = $row['name'];
+                            $imgPath = $row['imgPath'];
+
+                            echo '<div class="col-lg-2 col-md-4 col-6 welcome-image">
+                            <div class="boxhny13">
+                                <a href="#URL">
+                                    <img src="category/'.$imgPath.'" class="img-fluid" alt=""/>
+                                    <div class="boxhny-content">
+                                        <h3 class="title"> '.$name.'</h3>
+                                    </div>
+                                </a>
+                            </div>
+                            <h4><a href="#URL">'.$name.'</a></h4>
+                        </div>';
+
+                        }
+                    }
+                    $result->close();
+                    $conn->next_result();
+                    ?>
+                    <!-- Pet Cat End -->
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <!--//Pet Categories-->
+
+
+    <!--Brands available-->
+    <section class="w3l-grids-hny-2">
+        <div class="grids-hny-2-mian py-5">
+            <div class="container py-lg-5">
+
+                <h3 class="hny-title mb-0 text-center">Available <span>Brands</span></h3>
+                <p class="mb-4 text-center">A wide range of product available in various brands.</p>
+                <div class="welcome-grids row mt-5">
+                    <!-- Brand Start -->
+                    <?php
+                    //Load Brands from database
+                    $sql = "CALL sp_getAllBrand();";
+                    $result = $conn->query($sql);
+
+                    if ($result -> num_rows > 0) {
+                        //output data for each row
+                        while ($row = $result->fetch_assoc()) {
+                            $name = $row['name'];
+                            $imgPath = $row['imgPath'];
+
+                            echo '<div class="col-lg-2 col-md-4 col-6 welcome-image">
+                            <div class="boxhny13">
+                                <a href="#URL">
+                                    <img src="brands/'.$imgPath.'" class="img-fluid" alt=""/>
+                                    <div class="boxhny-content">
+                                        <h3 class="title"> '.$name.'</h3>
+                                    </div>
+                                </a>
+                            </div>
+                            <h4><a href="#URL">'.$name.'</a></h4>
+                        </div>';
+
+                        }
+                    }
+                    $result->close();
+                    $conn->next_result();
+                    ?>
+                    <!-- Pet Cat End -->
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <!--//Brands available-->
 
 
     <!-- //content-6-section
