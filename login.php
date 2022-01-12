@@ -84,6 +84,15 @@ if (isset($_SESSION["roleid"])) {
                 $_SESSION['userid'] = getUserID($userEmail);
                 $_SESSION['roleid'] = getUserRole($userEmail);
 
+                //load cart
+                $userID = $_SESSION['userid'];
+                //check if user have active order
+                if (getActiveUserOrder($userID) > 0) {
+                    $orderID = getActiveUserOrder($userID);
+
+                    loadcart($orderID);
+                }
+
                 //check role id to redirect to appropriate page
                 $roleid = getUserRole($userEmail);
                 if ($roleid == 1) {

@@ -17,14 +17,11 @@
             </li> 
             <!-- Cart -->
             <li class="transmitvcart galssescart2 cart cart box_1">
-                <form action="#" method="post" class="last">
-                    <input type="hidden" name="cmd" value="_cart">
-                    <input type="hidden" name="display" value="1">
-                    <button class="top_transmitv_cart" type="submit" name="submit" value="">
+                    <button class="top_transmitv_cart" onclick="cart()">
                         My Cart
                         <span class="fa fa-shopping-cart"></span>
+                        <span id="cart" class="badge badge-warning rounded-circle"></span>
                     </button>
-                </form>
             </li>
         </ul>
         <!--//right-->
@@ -75,7 +72,7 @@
                         Products
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="displayProducts.php">All Products</a>
+                        <a class="dropdown-item" href="displayAllProducts.php">All Products</a>
                         <!-- different pets categpry dropdown with scroll bar -->
                     </div>
                 </li>

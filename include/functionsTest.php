@@ -8,6 +8,14 @@ if (verifyUserCredentials("hireshmh24@gmail.com","12345")){
     echo "user does not exists\n";
     echo password_hash(12345, PASSWORD_DEFAULT) . "<br>";
 }
+//Verify order Details
+//verifyOrderDetails($orderID, $productLineID);
+if(verifyOrderDetails(51868, 1) > 0){
+    echo "Product exists in cart" . "<br>";
+}else{
+    echo "Product does exists in cart" . "<br>";
+}
+
 
 //add user
 //$res = addUser("newtest", "test", "Male", "1999-08-08", "test", "test", "test", "test@gmail.com", "52345678", "1999-08-08", password_hash("test123",PASSWORD_DEFAULT), 1, 1);
@@ -27,22 +35,39 @@ echo getUserID("hiresh@gmail.com"). "<br>";
 
 //add product
 //addProduct($prodname, $brandID, $desc, $img, $prodcatid, $specialityid, $status, $dateposted, $lastmodif, $petshopid)
-$result = addProduct("Pimafix", 1, "Medication", "x",2, 1, 1, "2021-09-14 09:22:26", "2021-09-14 09:22:26",1);
+/*$result = addProduct("Pimafix", 1, "Medication", "x",2, 1, 1, "2021-09-14 09:22:26", "2021-09-14 09:22:26",1);
 if ($result == 1){
     echo "Product added" . "<br>";
 }else{
     echo "Product failed to add" . "<br>";
-}
+}*/
 
 //add product line
 //addProductLine($F_unit, $F_amount, $F_qoh, $F_price, $F_lastmodif, $F_status, $productID);
-$result = addProductLine('kg', 5, 2, 1000, "2021-09-14 09:22:26", 1, 26);
+/*$result = addProductLine('kg', 5, 2, 1000, "2021-09-14 09:22:26", 1, 26);
 if ($result == 1){
     echo "Product Line added" . "<br>";
 }else{
     echo "Product Line failed to add" . "<br>";
+}*/
+
+//add order
+//addOrder($createdDT, $status, $userID){
+$result = addOrder("2021-09-14 09:22:26", "active", 164);
+if($result == 1){
+    echo "Order added !!" . "<br>";
+}else if ($result == 0){
+    echo "Fail to add order!!!!" . "<br>";
 }
 
+//add order Details
+//addOrderDetails($quantity, $price, $remark, $status, $orderID, $productLineID)
+    $result = addOrderDetails(3, 200, "", "1", 1, 5);
+    if($result == 1){
+        echo "Order details added !!" . "<br>";
+    }else if ($result == 0){
+        echo "Fail to add order details!!!!" . "<br>";
+    }
 //get petshop id
 echo "petshop id is" . getPetshopID(31). "<br>";
 
@@ -74,5 +99,23 @@ if($result == 1){
     echo "Product Updated!!" . "<br>";
 }else if ($result == 0){
     echo "Product not Updated!!" . "<br>";
+}
+
+//update order details quantity
+//updateOrderDetailsQuantity($orderID, $productLineID, $quantity);
+$result = updateOrderDetailsQuantity(1, 5, 10);
+if($result == 1){
+    echo "Product Line Quantity updated" . "<br>";
+}else if ($result == 0){
+    echo "Product Line Quantity Not updated" . "<br>";
+}
+
+//load cart
+$result=loadCart(1);
+if($result){
+    echo "cart loaded";
+
+}else{
+    echo "cart not loaded";
 }
 ?>

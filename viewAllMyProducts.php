@@ -230,13 +230,6 @@ $('.overlay-close1').on('click', function() {
     open = false;
 });
 </script>
-<!--//login-->
-<script>
-// optional
-$('#customerhnyCarousel').carousel({
-    interval: 5000
-});
-</script>
 <!-- cart-js -->
 <script src="assets/js/minicart.js"></script>
 <script>

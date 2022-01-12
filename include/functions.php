@@ -40,6 +40,23 @@ function verifyUserCredentials($email, $passw)
     return $output;
 }
 
+//verify order Details
+function verifyOrderDetails($orderID, $productLineID){
+    include "dbConnection.php";
+    $sql = "CALL sp_verifyOrderDetails('$orderID', '$productLineID');";
+    $result = $conn->query($sql);
+    $output = 0;
+    //result
+    if ($result -> num_rows > 0) {
+        //output password form db
+        while ($row = $result->fetch_assoc()) {
+            $output = $row['quantity'];
+        }
+    }
+
+    return $output;
+}
+
 //add user
 function addUser($fname, $lname, $gender, $dob, $street, $town, $district, $email, $mobile, $reg, $pass, $status, $role)
 {
@@ -101,6 +118,11 @@ function getUserID($email)
     return $output;
 }
 
+//get product line details
+//function getProductLineDetailsByOrderID($orderID){
+//
+//}
+
 //add petshop
 //by default petshop status is 0
 //admin must accept petshop, then vendor can post product etc.
@@ -132,6 +154,24 @@ function addProductLine($unit, $amount, $qoh, $price, $lastmodif, $status, $prod
     return $result;
 }
 
+//add order
+function addOrder($createdDT, $status, $userID){
+    include "dbConnection.php";
+    $sql = "CALL sp_addOrder('$createdDT', '$status', '$userID');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
+
+//add order details
+function addOrderDetails($quantity, $price, $remark, $status, $orderID, $productLineID){
+    include "dbConnection.php";
+    $sql = "CALL sp_addOrderDetails('$quantity', '$price', '$remark', '$status', '$orderID', '$productLineID');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
+
 //update product
 function updateProduct($productID,$name, $brandID, $description, $imgpath, $prodCatID, $petCatID, $status, $lastMDT){
     include "dbConnection.php";
@@ -141,6 +181,14 @@ function updateProduct($productID,$name, $brandID, $description, $imgpath, $prod
     return $result;
 }
 
+//update orderDetails Quantity
+function updateOrderDetailsQuantity($orderID, $productLineID, $quantity){
+    include "dbConnection.php";
+    $sql = "CALL sp_updateOrderDetailsQuantity('$orderID', '$productLineID', '$quantity');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
 
 //get petshopID
 function getPetshopID($uid)
@@ -172,6 +220,23 @@ function getLatestProductId($uid){
     return $prodID;
 }
 
+//get active user order
+function getActiveUserOrder($userID){
+    include "dbConnection.php";
+    $sql = "CALL sp_getActiveUserOrder($userID);";
+    $result = $conn->query($sql);
+    $output = 0;
+
+    if ($result -> num_rows > 0) {
+    //output data for each row
+        while ($row = $result->fetch_assoc()) {
+             //check for active orders for this user
+            $output = $row['orderID'];
+        }
+    }
+    return $output;
+}
+
 //count my products
 function getCountMyProducts($uid)
 {
@@ -187,6 +252,37 @@ function getCountMyProducts($uid)
         }
     }
     return $count;
+}
+
+//get customer productline
+function loadCart($orderID){
+    include "dbConnection.php";
+    $sql = "CALL sp_getProductLineDetailsByOrderID($orderID);";
+    $result = $conn->query($sql);
+    $output = false;
+    if ($result -> num_rows > 0) {
+        //output data for each row
+        //all productline details from that order
+        //create session cart
+        while ($row = $result->fetch_assoc()) {
+            $quantity = $row['quantity'];
+            $price = $row['price'];
+            $remark = $row['remark'];
+            $status = $row['status'];
+            $plID = $row['productLineID'];
+
+             //Create cart
+            $item_array = array(
+                'id'  => $plID,
+                'name' => $remark,
+                'price' => $price,
+                'quantity' => $quantity
+            );
+            $_SESSION['mycart'][] = $item_array;
+            $output = true;
+        }
+    }
+   return $output;
 }
 
 //send email

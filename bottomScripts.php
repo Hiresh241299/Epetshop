@@ -34,6 +34,32 @@ $('.overlay-close2').on('click', function() {
 </script>-->
 <!--//register-->
 
+<script>
+function cart(){
+    window.location.href='cart.php';
+}
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+            
+            show_mycart();
+           function show_mycart(){
+              $.ajax({
+              url: "ajax/show_mycart.php",
+              method:"POST",
+              dataType:"JSON",
+              success:function(data){
+                $(".get_cart").html(data.out);
+                $("#cart").text(data.da);
+              }
+           });
+           }
+
+           setInterval(show_mycart,1000);
+
+    });
+</script>
 
 <script>
 // optional
@@ -41,7 +67,7 @@ $('#customerhnyCarousel').carousel({
     interval: 5000
 });
 </script>
-<!-- cart-js -->
+<!-- cart-js 
 <script src="assets/js/minicart.js"></script>
 <script>
 transmitv.render();
@@ -55,7 +81,7 @@ transmitv.cart.on('transmitv_checkout', function(evt) {
         for (i = 0, len = items.length; i < len; i++) {}
     }
 });
-</script>
+</script>-->
 <!-- //cart-js -->
 <!--pop-up-box-->
 <script src="assets/js/jquery.magnific-popup.js"></script>
