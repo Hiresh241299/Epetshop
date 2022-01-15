@@ -4,7 +4,11 @@ include 'include/common.php';
 include 'include/functions.php';
 //solves header issue
 ob_start();
-session_start();
+if(!isset($_SESSION)){
+    if(!isset($_SESSION)){
+    session_start();
+}
+}
 //Check if session roleid exists
 if (isset($_SESSION["roleid"])) {
     $session_roleID = $_SESSION["roleid"];

@@ -2,6 +2,7 @@
 //Create database connection
 header('Access-Control-Allow-Origin: *');
 include "dbConnection.php";
+include "cookies.php";
 
 //check connection
 if ($conn -> connect_error) {
@@ -190,6 +191,33 @@ function updateOrderDetailsQuantity($orderID, $productLineID, $quantity){
     return $result;
 }
 
+//update orders Status
+function updateOrderStatus($orderID, $status){
+    include "dbConnection.php";
+    $sql = "CALL sp_updateOrderStatus('$orderID', '$status');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
+
+//update orderDetails Status
+function updateOrderDetailsStatus($orderID, $status){
+    include "dbConnection.php";
+    $sql = "CALL sp_updateOrderDetailsStatus('$orderID', '$status');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
+
+//update single order details status
+function updateSingleOrderDetailsStatus($orderID, $productLineID, $status){
+    include "dbConnection.php";
+    $sql = "CALL sp_updateSingleOrderDetailsStatus('$orderID', '$productLineID', '$status');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
+
 //get petshopID
 function getPetshopID($uid)
 {
@@ -254,10 +282,58 @@ function getCountMyProducts($uid)
     return $count;
 }
 
+//get No of products in paid order details by orderID
+function getPaidOrderDetailsNoOFProducts($orderID){
+    include "dbConnection.php";
+    $sql = "CALL sp_getPaidOrderDetailsNoOFProducts('$orderID');";
+    $result = $conn->query($sql);
+    $output = 0;
+
+    if ($result -> num_rows > 0) {
+    //output data for each row
+        while ($row = $result->fetch_assoc()) {
+             //check for active orders for this user
+            $output = $row['qty'];
+        }
+    }
+    return $output;
+}
+
+//get total price in paid order details by orderID
+function getPaidOrderDetailsTotals($orderID){
+    include "dbConnection.php";
+    $sql = "CALL sp_getPaidOrderDetailsTotals('$orderID');";
+    $result = $conn->query($sql);
+    $output = 0;
+
+    if ($result -> num_rows > 0) {
+    //output data for each row
+        while ($row = $result->fetch_assoc()) {
+             //check for active orders for this user
+            $output = $row['total'];
+        }
+    }
+    return $output;
+}
+
+//get product details by productID
+function getProductDetailsByProductID($productID){
+    include "dbConnection.php";
+    $sql = "CALL sp_getProductDetails('$productID');";
+    $result = $conn->query($sql);
+    $output = 0;
+
+    if ($result -> num_rows > 0) {
+        return $result;
+    }
+    return $output;
+}
+
+
 //get customer productline
 function loadCart($orderID){
     include "dbConnection.php";
-    $sql = "CALL sp_getProductLineDetailsByOrderID($orderID);";
+    $sql = "CALL sp_getProductLineDetailsByOrderID($orderID,'active');";
     $result = $conn->query($sql);
     $output = false;
     if ($result -> num_rows > 0) {

@@ -60,7 +60,9 @@ if (!isset($_GET['code']) && !isset($_GET['provider'])) {
 
 require 'vendor/autoload.php';
 
-session_start();
+if(!isset($_SESSION)){
+    session_start();
+}
 
 $providerName = '';
 

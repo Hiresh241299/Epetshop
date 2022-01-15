@@ -1,8 +1,10 @@
 <?php
+if(!isset($_SESSION)){
+    session_start();
+}
 include 'include/common.php';
 //include 'include/dbConnection.php';
 include 'include/functions.php';
-session_start();
 //Check if session roleid exists
 if (isset($_SESSION["roleid"])) {
     $session_roleID = $_SESSION["roleid"];
@@ -290,7 +292,8 @@ if ($session_roleID == 2) {
                             echo '<div class="col-lg-2 col-md-4 col-6 welcome-image">
                             <div class="boxhny13">
                                 <a href="#URL">
-                                    <img src="brands/'.$imgPath.'" class="img-fluid" alt=""/>
+                                    <!--<img src="brands/'.$imgPath.'" class="img-fluid" alt=""/>-->
+                                    <img src="" class="img-fluid" alt=""/>
                                     <div class="boxhny-content">
                                         <h3 class="title"> '.$name.'</h3>
                                     </div>

@@ -1,5 +1,7 @@
 <?php 
-session_start();
+if(!isset($_SESSION)){
+    session_start();
+}
 include '../include/functions.php';
 
 if(isset($_SESSION['userid'])){
@@ -13,6 +15,19 @@ if (isset($_POST['action'])) {
 
 	if ($_POST['action'] == "clearall") {
 		unset($_SESSION['mycart']);
+        $_SESSION['total_price'] = 0;
+        //$cart = array();
+        //setcookie("cart", json_encode($cart), time() + (1), "/");
+        setcookie("cart", null, -1, '/');
+        //Set order status and orderDetails status 'disactive'
+        if ($userID != null) {
+            if (getActiveUserOrder($userID) > 0) {
+                $orderID = getActiveUserOrder($userID);
+                updateOrderDetailsStatus($orderID, 'Order Cancelled');
+                updateOrderStatus($orderID, 'Order Cancelled');
+            }
+        }
+        
 	}
 
 	if ($_POST['action'] == "delete") {
@@ -21,6 +36,13 @@ if (isset($_POST['action'])) {
 			
 			if ($value['id'] == $_POST['id']) {
 				unset($_SESSION['mycart'][$key]);
+                //delete in db
+                //get orderID and productLineID
+                //set status to product Deleted
+                if (getActiveUserOrder($userID) > 0) {
+                    $orderID = getActiveUserOrder($userID);
+                    updateSingleOrderDetailsStatus($orderID, $_POST['id'],'Product Deleted');
+                }
 			}
 		}
 	}
@@ -56,7 +78,7 @@ if (isset($_POST['action'])) {
                 $quantity = $_POST['quantity'];
                 $price = $_POST['price'];
                 $remark =$_POST['name'];
-                $status= 1 ;
+                $status= "active" ;
                 //if product ID already exists, add quantity then update quantity only
 				$existingQuantity = verifyOrderDetails($orderID, $productLineID);
                 if ($existingQuantity > 0) {
@@ -110,7 +132,33 @@ if (isset($_POST['action'])) {
 
             $_SESSION['mycart'][] = $item_array;
 		}
+
+        
 	}
+
+
+    if ($_POST['action'] != null) {
+        //save in cookies
+
+        //get cookie cart
+        //$cart = isset($_COOKIE['cart']) ? $_COOKIE['cart'] : "array()";
+        //$cart = json_decode($cart);
+
+        //Synchronise cookie file to Session['cart']
+        if (isset($_SESSION['mycart'])) {
+            $cart = array();
+            foreach ($_SESSION['mycart'] as $key => $value) {
+                array_push($cart, array(
+                'id' => $_SESSION['mycart'][$key]['id'],
+                'name' => $_SESSION['mycart'][$key]['name'],
+                'price' => $_SESSION['mycart'][$key]['price'],
+                'quantity' => $_SESSION['mycart'][$key]['quantity']
+            ));
+            }
+            //The cookie will expire after 30 days (86400 * 30)
+            setcookie("cart", json_encode($cart), time() + (86400 * 30), "/");
+        }
+    }
 }
 
  ?>

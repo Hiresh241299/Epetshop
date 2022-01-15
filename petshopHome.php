@@ -2,7 +2,9 @@
 include 'include/common.php';
 //include 'include/dbConnection.php';
 include 'include/functions.php';
-session_start();
+if(!isset($_SESSION)){
+    session_start();
+}
 //when session roleid does not exists or session roleid is not 2 (Not vendor) redirect to login page
 if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2)) {
     header('Location: login.php');

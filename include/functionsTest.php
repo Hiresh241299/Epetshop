@@ -110,6 +110,64 @@ if($result == 1){
     echo "Product Line Quantity Not updated" . "<br>";
 }
 
+//update order status
+//updateOrderStatus($orderID, $status)
+$result = updateOrderStatus(51877, 'disactive');
+if($result == 1){
+    echo "Order status Updated!!" . "<br>";
+}else if ($result == 0){
+    echo "Order status not Updated!!" . "<br>";
+}
+
+//update order details status
+//updateOrderDetailsStatus($orderID, $status)
+$result = updateOrderDetailsStatus(51877, 'order cancelled');
+if($result == 1){
+    echo "Order Details status Updated!!" . "<br>";
+}else if ($result == 0){
+    echo "Order Details status not Updated!!" . "<br>";
+}
+
+//get No of products in paid order details by orderID
+//getPaidOrderDetailsNoOFProducts($orderID);
+$result = getPaidOrderDetailsNoOFProducts(51889);
+if($result > 0){
+    echo "No of products:". $result . "<br>";
+}else if ($result == 0){
+    echo "No of products:0 !!" . "<br>";
+}
+
+//get total price in paid order details by orderID
+//getPaidOrderDetailsTotals($orderID);
+$result = getPaidOrderDetailsTotals(51889);
+if($result > 0){
+    echo "Totals : !!" .$result. "<br>";
+}else if ($result == 0){
+    echo "Total:0!!" . "<br>";
+}
+
+//getProductDetailsByProductID($productID)
+$resultArr = getProductDetailsByProductID(24);
+if ($resultArr -> num_rows > 0) {
+    //output data for each row
+        while ($row = $resultArr->fetch_assoc()) {
+            $pname = $row['pname'];
+            $bname = $row['bname'];
+            $desc = $row['description'];
+            $img = $row['imgPath'];
+            $pcname = $row['pcname'];
+            $pdname = $row['prodname'];
+
+        }
+}
+$resultArr->close();
+$conn->next_result();
+if($resultArr =! null){
+    echo $pname. "</br>";
+}else{
+    echo "Empty product array!!" . "<br>";
+}
+
 //load cart
 $result=loadCart(1);
 if($result){

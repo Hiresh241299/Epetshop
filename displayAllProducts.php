@@ -2,7 +2,9 @@
 include 'include/common.php';
 //include 'include/dbConnection.php';
 include 'include/functions.php';
-session_start();
+if(!isset($_SESSION)){
+    session_start();
+}
 //Check if session roleid exists
 if (isset($_SESSION["roleid"])) {
     $session_roleID = $_SESSION["roleid"];

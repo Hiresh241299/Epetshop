@@ -14,21 +14,10 @@
 <body>
 
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-		<h1 class="text-white">E-COMMERCE</h1>
 		<div class="mr-auto"></div>
     <ul class="text-white navbar-nav">
-    	
-      <li class="nav-item">
-        <a class="nav-link text-white" href="index.php">Home</a>
-      </li>
          <li class="nav-item">
         <a class="nav-link text-white" href="cart.php" >Cart<span id="cart" class="badge badge-warning mx-2"></span></a>
-      </li>
-         <li class="nav-item">
-        <a class="nav-link text-white" href="add_new_product.php">Add New Product</a>
-      </li>
-
-        
     </ul>
 		
 	</nav>

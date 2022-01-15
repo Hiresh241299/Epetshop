@@ -34,6 +34,8 @@ echo $output;
 
 
 //Creating Session for testing
-session_start();
+if(!isset($_SESSION)){
+    session_start();
+}
 $_SESSION["roleid"]=3;
 ?>
