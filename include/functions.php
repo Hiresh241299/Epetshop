@@ -173,6 +173,15 @@ function addOrderDetails($quantity, $price, $remark, $status, $orderID, $product
     return $result;
 }
 
+//add payment
+function addPayment($dateTime, $remark, $status, $orderID){
+    include "dbConnection.php";
+    $sql = "CALL sp_addPayment('$dateTime', '$remark', '$status', '$orderID');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
+
 //update product
 function updateProduct($productID,$name, $brandID, $description, $imgpath, $prodCatID, $petCatID, $status, $lastMDT){
     include "dbConnection.php";

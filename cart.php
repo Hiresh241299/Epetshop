@@ -121,10 +121,8 @@ if(isset($_SESSION["userid"])){
                             <div class="blog-sidebar-bg">
                                 <div class="side-bar-hny-recent mb-5">
                                     <?php
-                                    if (isset($_SESSION['total_price'])) {
-                                        if ($_SESSION['total_price'] > 0) {
+                                    if ((isset($_SESSION['total_price'])) &&($_SESSION['total_price'] != 0)) {
                                             echo '<h4 class="side-title">Order <span>Summary</span></h4>';
-                                        }
                                     }else{
                                         echo '<p>No product in cart</p>';
                                     }

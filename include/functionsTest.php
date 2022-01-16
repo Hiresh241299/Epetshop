@@ -176,4 +176,14 @@ if($result){
 }else{
     echo "cart not loaded";
 }
+
+//add payment
+//addPayment($dateTime, $remark, $status, $orderID)
+$result = addPayment($dateTime, $remark, $status, $orderID);
+if($result){
+    echo "Payment added";
+
+}else{
+    echo "Payment not added";
+}
 ?>

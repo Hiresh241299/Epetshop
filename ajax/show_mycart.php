@@ -54,6 +54,10 @@ if (!empty($_SESSION['mycart'])) {
                         <div class="mag-hny-content">
                             <!--/set-1-->
                             <div class="blog-pt-grid-content">
+                            <!--Remove single product from cart-->
+                            <button class="btn btn-danger remove float-right" id="'.$value['id'].'" title="Delete Product">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                            </button>
                                 <div class="maghny-gd-1 blog-pt-grid mb-5 blog-sidebar-bg">
                                     <div class="row">
                                       <div class="col-md-4">
@@ -61,22 +65,15 @@ if (!empty($_SESSION['mycart'])) {
                                       </div>
                                       <div class="col-md-6">
                                         <h5>'.$number." ".$unit." ".$pname. " | " .$brand.'</h5>
-                                        <p><b>Pet:</b> '." ".$petCat."  ".'<b>Type:</b>'.$prodcat.'</p>
+                                        <p><b>Pet: </b> '.$petCat."  ".'<b>Type: </b>'.$prodcat.'</p>
                                         <p>'.$desc.'</p>
                                         <h5>Rs '.$value['price'].'</h5>
                                       </div>
                                       <div class="col-md-2">
-                                        <button class="btn btn-danger remove float-right" id="'.$value['id'].'" title="Delete Product">
-                                        <i class="fa fa-trash" aria-hidden="true"></i>
-                                        </button>
-                                        </br>
-                                        </br>
-                                        </br>
-                                        </br>
                                         <p class="text-center" ><b>Quantity</b></p>
-                                        <!--<p class="text-center" ><i class="fa fa-angle-up"></i></p>-->
+                                        <p class="text-center" ><i class="fa fa-angle-up"></i></p>
                                         <p class="text-center">'.$value['quantity'].'</p>
-                                        <!--<p class="text-center" ><i class="fa fa-angle-down"></i></p>-->
+                                        <p class="text-center" ><i class="fa fa-angle-down"></i></p>
                                       </div>
                                     </div>
                                     <!--<div class="entry-meta d-flex mt-3"><span class="entry-author">By <a href="#">
@@ -92,7 +89,7 @@ if (!empty($_SESSION['mycart'])) {
                         <!--Repeat-->
     ';
 
-    $total = $total + $value['quantity'] * $value['price'];
+    $total = $total + $value['quantity'] * $value['price'];           
     $_SESSION['total_price'] = $total;
 
 		/*$output .= "

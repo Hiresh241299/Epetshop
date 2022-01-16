@@ -12,6 +12,34 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 3) || (!isset($_SES
 } else {
     $userid = $_SESSION["userid"];
 }
+
+//get query string 'p' from url [to test if a false value is entered]
+if(isset($_GET['p'])){
+    if(($_GET['p']) == 1 ){
+
+        //get active order
+        $orderID = getActiveUserOrder($userid);
+        //set order status to order paid
+        updateOrderStatus($orderID, 'Order Paid');
+        //set order details status to paid
+        updateOrderDetailsStatus($orderID, 'Order Paid');
+
+        // clear session if exists to prevent error
+        if (isset($_SESSION['mycart'])){unset($_SESSION['mycart']);}
+        if (isset($_SESSION['total_price'])){$_SESSION['total_price'] = 0;}
+        
+        //clear cookies
+        setcookie("cart", null, -1, '/');
+
+        //save in payment
+        $dateTime = date("Y/m/d h:i:s");
+        $remark = "";
+        $status = "Payment Completed";
+        addPayment($dateTime, $remark, $status, $orderID);
+    }
+}
+
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -80,12 +108,12 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 3) || (!isset($_SES
                     </p>
 
                     <!-- Datatable -->
-                    <table id="" class="display" width="100%" border=2>
+                    <table id="table_id" class="display" width="100%" border=2>
                         <thead>
                             <tr class="bg-warning">
                                 <th>Order No</th>
                                 <th>Date</th>
-                                <th>No of products</th>
+                                <th>Product(Qty)</th>
                                 <th>Total price</th>
                                 <th>Remark</th>
                                 <th>Delivery</th>
@@ -97,7 +125,7 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 3) || (!isset($_SES
                             <?php
                                 
                                 //fetch product from database, using session userid
-                                $sql = "CALL sp_getPaidOrderByUserID($userid);";
+                            $sql = "CALL sp_getPaidOrderByUserID($userid);";
                             $result = $conn->query($sql);
 
                             if ($result -> num_rows > 0) {
@@ -117,7 +145,7 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 3) || (!isset($_SES
                                 <td>'.$orderNo.'</td>
                                 <td>'.$date.'</td>
                                 <td>'.$qty.'</td>
-                                <td>'.$total.'</td>
+                                <td>Rs '.$total.'</td>
                                 <td>'.$remark.'</td>
                                 <td>'.$delivery.'</td>
                                 <td class="text-center">
@@ -143,10 +171,12 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 3) || (!isset($_SES
                     $orderID = $_GET['viewOrderDetails'];
                     echo'</br></br><div class="blog-inner-grids">
 
-                    <h3 class="hny-title mb-0">Order['.$orderID.'] <span>Details</span></h3>
+                    <h3 class="hny-title mb-0">Order['.$orderID.'] <span>Details</span>
+                    <a href="CustomerOrder.php" class="float-right bg-danger border rounded">&nbsp x &nbsp</a>
+                    </h3>
                     </br>
                     <!-- Datatable -->
-                    <table id="table_id" class="display" width="100%">
+                    <table id="" class="display" width="100%" >
                         <thead>
                             <tr class="bg-warning">
                                 <th>Product IMG</th>
@@ -250,4 +280,3 @@ $(document).ready(function() {
 });
 $('#table_id').DataTable().columns.adjust();
 </script>
-
