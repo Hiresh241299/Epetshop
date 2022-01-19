@@ -65,7 +65,6 @@ if (isset($_POST['action'])) {
                     $status="active";
                     $result = addOrder($createdDT, $status, $userID);
                 }
-
 				while($orderID <= 0){
 					$orderID = getActiveUserOrder($userID);
 				}
@@ -79,7 +78,7 @@ if (isset($_POST['action'])) {
                 $price = $_POST['price'];
                 $remark =$_POST['name'];
                 $status= "active" ;
-                //if product ID already exists, add quantity then update quantity only
+                //if productLineID already exists, add quantity then update quantity only
 				$existingQuantity = verifyOrderDetails($orderID, $productLineID);
                 if ($existingQuantity > 0) {
                     //already exists

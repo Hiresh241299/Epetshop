@@ -18,6 +18,20 @@ if ($session_roleID == 2) {
 $userID = 0;
 if(isset($_SESSION["userid"])){
     $userID = $_SESSION["userid"];
+
+    /*saveCartInDb($userID);
+    //clear cookies
+    //clear session if exists
+    unset($_SESSION['mycart']);
+    $_SESSION['total_price'] = 0;
+    setcookie("cart", null, -1, '/');
+    //load cart
+    //check if user have active order
+    if (getActiveUserOrder($userID) > 0) {
+        $orderID = getActiveUserOrder($userID);
+        loadcart($orderID);
+    }*/
+    
 }
 ?>
 <!doctype html>

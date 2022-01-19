@@ -3,7 +3,6 @@
 header('Access-Control-Allow-Origin: *');
 include "dbConnection.php";
 include "cookies.php";
-
 //check connection
 if ($conn -> connect_error) {
     die("connection failed:" . $conn->connect_error);
@@ -340,6 +339,7 @@ function getProductDetailsByProductID($productID){
 
 
 //get customer productline
+//load Cart from dataabase
 function loadCart($orderID){
     include "dbConnection.php";
     $sql = "CALL sp_getProductLineDetailsByOrderID($orderID,'active');";
@@ -368,6 +368,60 @@ function loadCart($orderID){
         }
     }
    return $output;
+}
+
+//save cookie['cart'] in database
+function saveCartInDb($userID){
+    //cart is not empty => login => save in database, delete session, cookies
+                //check cookies cart
+                if(isset($_COOKIE['cart'])){
+
+                    $cart = $_COOKIE["cart"];
+                    $cart = json_decode($cart);
+
+                    //check if order exists
+                    if (getActiveUserOrder($userID) > 0) {
+                        $orderID = getActiveUserOrder($userID);
+                    } else {
+                        //create a new order for this user
+                        $createdDT= date("Y/m/d h:i:s");
+                        $status="active";
+                        $result = addOrder($createdDT, $status, $userID);
+                    }
+				    while($orderID <= 0){
+				    	$orderID = getActiveUserOrder($userID);
+				    }
+                    //get data from cookies
+                    foreach($cart as $key => $value){
+                            //key1 = field nname
+                            //value1 = data
+                            //check if productLineID exists in order
+                            //update product quantity
+                            //add product
+                            //check if there is an active order else create an order
+                            //check if productDetailID avail => add quantity
+                            //else add productdetailsID
+                            if ($orderID > 0) {
+                                //get productLineDetails
+                                $productLineID = $value->id;
+                                $quantity = $value->quantity;
+                                $price = $value->price;
+                                $remark =$value->name;
+                                $status= "active" ;
+                                //if productLineID already exists, add quantity then update quantity only
+                                $existingQuantity = verifyOrderDetails($orderID, $productLineID);
+                                if ($existingQuantity > 0) {
+                                    //already exists
+                                    $quantity += $existingQuantity;
+                                    updateOrderDetailsQuantity($orderID, $productLineID, $quantity);
+                                } else {
+                                    //add productline
+                                    addOrderDetails($quantity, $price, $remark, $status, $orderID, $productLineID);
+                                }
+                            }
+                    }
+                    
+                }
 }
 
 //send email

@@ -12,7 +12,7 @@ $mail = new PHPMailer(true);
     $mail->Host       = 'smtp.gmail.com';                    // Set the SMTP server to send through
     $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
     $mail->Username   = 'epetshopbse@gmail.com';                     // SMTP username
-    $mail->Password   = 'bse19aftnewx';                               // SMTP password
+    $mail->Password   = 'stE&U?eK?Xi-Ajo+9!SW_dlJETReSuk4na#Hlsek!SpAS!uno?RE-*ph2PHL=A6p';                               // SMTP password
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
     $mail->Port       = 587;       
     $mail->SMTPOptions = array(

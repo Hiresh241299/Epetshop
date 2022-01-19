@@ -342,7 +342,7 @@ if((!isset($_GET['id'])) || (($_GET['id']) == NULL)){
                                                 }
                                             } else {
                                                 $statusMsg = "Sorry, there was an error uploading your file.";
-                                                header("Location: fail1.php");
+                                                header("Location: fail.php");
                                             }
                                         }
                                     }
