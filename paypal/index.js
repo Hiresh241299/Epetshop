@@ -21,7 +21,7 @@ paypal.Buttons({
             console.log(details)
             //payment complete
             //go to order page
-            window.location.replace("customerOrder.php?p=1")
+            window.location.replace("customerOrder.php?p=1#paymentCompleted")
         })
     },
     onCancel: function (data) {

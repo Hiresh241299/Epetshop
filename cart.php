@@ -85,6 +85,14 @@ if(isset($_SESSION["userid"])){
                             <a class="close" href="#">×</a>
                             
                         </div>
+
+                        <!--<div id="paymentCompleted" class="pop-overlay">
+                            <div class="popup">
+                                <h3 class="text-center">Payment Completed</h3>
+                            </div>
+                            <a class="close" href="#">×</a>
+                            
+                        </div>-->
                         <!-- /search popup -->
                     </div>
                     <!--//search-right-->

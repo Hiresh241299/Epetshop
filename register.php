@@ -50,13 +50,19 @@ ob_start();
                                         <div class="form-group">
                                             <p class="login-texthny mb-2 text-white">First Name</p>
                                             <input type="text" class="form-control" id="fname" placeholder=""
-                                                name="fname" data-parsley-maxlength="10" data-parsley-ui-enabled="true"  data-parsley-required="true" required>
+                                                name="fname" data-parsley-maxlength="10" data-parsley-ui-enabled="true"
+                                                data-parsley-required="true" required>
                                         </div>
 
                                         <div class="form-group">
                                             <p class="login-texthny mb-2 text-white">Last Name</p>
                                             <input type="text" class="form-control" id="lname" placeholder=""
                                                 name="lname" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <p class="login-texthny mb-2 text-white">NIC</p>
+                                            <input type="text" class="form-control" id="nic" placeholder="" name="nic"
+                                                required>
                                         </div>
                                         <div class="form-group">
                                             <p class="login-texthny mb-2 text-white">Email address</p>
@@ -72,10 +78,15 @@ ob_start();
                                             <input type="text" class="form-control" id="phone" placeholder=""
                                                 name="phone" required>
                                         </div>
-                                        <div class="form-group">
+                                        <div class="form-group" id="passwordDIV">
                                             <p class="login-texthny mb-2 text-white">Password</p>
                                             <input type="password" class="form-control" id="password" placeholder=""
-                                                name="password" required>
+                                                name="password" onchange="showconfirmbtn()" required>
+                                        </div>
+                                        <div class="form-group" id="cpasswordDIV">
+                                            <p class="login-texthny mb-2 text-white">Confirm Password</p>
+                                            <input type="password" class="form-control" id="cpassword" placeholder=""
+                                                name="cpassword" onchange="checkpassword()" required>
                                         </div>
                                     </div>
 
@@ -173,7 +184,7 @@ ob_start();
                         </a>
                         <p></p>
 
-                        <div class="row story-info-content mt-md-5 mt-4" >
+                        <div class="row story-info-content mt-md-5 mt-4">
 
                             <div class="col-md-6 story-info">
                                 <h5> <a href="#">01. Setup E-Petshop</a></h5>
@@ -203,6 +214,29 @@ ob_start();
 
 </html>
 <script>
+//hide confirmbtn
+document.getElementById("cpasswordDIV").style.display = "none";
+
+function showconfirmbtn() {
+    //unhide confirmbtn
+    document.getElementById("cpasswordDIV").style.display = "block";
+}
+
+//enable register button if password == confirmpassword
+document.getElementById("regis").disabled = true;
+
+function checkpassword() {
+    var pass = document.getElementById("password").value;
+    var cpass = document.getElementById("cpassword").value;
+    if (pass == cpass) {
+        document.getElementById("regis").disabled = false;
+    } else {
+
+        document.getElementById("regis").disabled = true;
+    }
+}
+
+
 //get radion button element by name
 
 var c = document.getElementById("CustDesc");
@@ -262,5 +296,5 @@ function backTab() {
 <?php include "bottomScripts.php"; ?>
 
 <script>
-    $('register').parsley();    
+$('register').parsley();
 </script>

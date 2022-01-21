@@ -48,25 +48,21 @@ if (isset($_SESSION["roleid"])) {
                                 <!--/login-form-->
                                 <form action="#" method="post">
                                     <div class="form-group">
-                                        <p class="login-texthny mb-2">Email address</p>
+                                        <p class="login-texthny mb-2 text-white">Email address</p>
                                         <input type="email" class="form-control" id="exampleInputEmail1" name="email"
                                             aria-describedby="emailHelp" placeholder="" required="">
-                                        <small id="emailHelp" class="form-text text-muted">We'll never share your email
-                                            with anyone else.</small>
+                                        <!--<small id="emailHelp" class="form-text text-white">We'll never share your email
+                                            with anyone else.</small>-->
                                     </div>
                                     <div class="form-group">
-                                        <p class="login-texthny mb-2">Password</p>
+                                        <p class="login-texthny mb-2 text-white">Password</p>
                                         <input type="password" class="form-control" id="exampleInputPassword1"
                                             name="password" placeholder="" required="">
                                     </div>
                                     <div class="form-group">
                                         <div class="userhny-check">
-                                            <label class="check-remember container">
-                                                <input type="checkbox" class="form-check"> <span
-                                                    class="checkmark"></span>
-                                                <p class="privacy-policy">Remember me
-                                            </label>
-                                            <div class="clearfix"></div>
+                                            <input type="checkbox" id="remember" name="remember">
+                                            <label class="privacy-policy text-white">Remember me</label>
                                         </div>
                                     </div>
                                     <input type="submit" class="btn btn-success submit-login btn mb-4" name="login"
@@ -86,6 +82,13 @@ if (isset($_SESSION["roleid"])) {
                 //create session for this user
                 $_SESSION['userid'] = getUserID($userEmail);
                 $_SESSION['roleid'] = getUserRole($userEmail);
+
+                //if remember me is check, create cookie
+                if(isset($_POST['remember'])){
+                    //save emall and password in cookie
+                }else{
+                    //delete cookie if exists
+                }
 
                 $userID = $_SESSION['userid'];
                 

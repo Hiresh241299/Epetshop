@@ -78,6 +78,20 @@ if(isset($_GET['p'])){
                     <?php
             include 'include/navbarCustomer.php';
             ?>
+
+                    <!--/search-right-->
+                    <div class="search-right">
+
+                        <div id="paymentCompleted" class="pop-overlay">
+                            <div class="popup">
+                                <h3 class="text-center">Payment Completed</h3>
+                            </div>
+                            <a class="close" href="#">×</a>
+
+                        </div>
+                        <!-- /search popup -->
+                    </div>
+                    <!--//search-right-->
                 </header>
                 <div class="breadcrumb-contentnhy">
                     <div class="container">
@@ -124,7 +138,7 @@ if(isset($_GET['p'])){
                             <!-- repeat within body-->
                             <?php
                                 
-                                //fetch product from database, using session userid
+                            //fetch product from database, using session userid
                             $sql = "CALL sp_getPaidOrderByUserID($userid);";
                             $result = $conn->query($sql);
 
@@ -241,6 +255,24 @@ echo'
                     </table>
                     <!-- Datatable -->
                 </div>';
+
+                //fetch product from database, using session userid
+                $sql = "CALL sp_getPaidOrderByUserID($userid);";
+                $result = $conn->query($sql);
+                $output = "";
+
+                if ($result -> num_rows > 0) {
+                    //output data for each row
+                    while ($row = $result->fetch_assoc()) {
+                        if($row['orderID']  == $_GET['viewOrderDetails']){
+                            $output=  "";
+                        }else{
+                            $output= '<h3>This order NO is not available!</h3>';
+                        }
+                    }
+                    echo $output;
+                }
+                
                 }
                 ?>
 
