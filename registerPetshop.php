@@ -1,6 +1,21 @@
 <?php
 ob_start();
 include 'include/functions.php';
+/*
+if(!isset($_SESSION)){
+    session_start();
+}
+if (isset($_SESSION['tmpUserID'])){
+$userID = $_SESSION['tmpUserID'];
+}else{
+    //to change : register.php
+    header('Location: registerpetshop.php');
+}*/
+if (isset($_SESSION['tmpUserID'])){
+    $userID = $_SESSION['tmpUserID'];
+}else{
+    header('Location: register.php');
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -85,7 +100,8 @@ include 'include/functions.php';
                                     <div class="form-group">
                                         <p class="login-texthny mb-2 text-white">Business Name</p>
                                         <input type="text" class="form-control" id="pname" placeholder="" name="pname"
-                                            required>
+                                        onchange="validatePetshop(this.id)" required>
+                                        <p class="login-texthny mb-2 text-danger" id="pnameErrorMsg"></p>
                                     </div>
                                     <div class="form-group">
                                         <p class="login-texthny mb-2 text-white">Business Registration Number</p>
@@ -183,7 +199,7 @@ include 'include/functions.php';
                                                 while ($row = $result->fetch_assoc()) {
                                                     $id = $row['petcatID'];
                                                     $name = $row['name'];
-                                                    echo '&nbsp <input type="checkbox" id="'.$id.'" name="'.$id.'">
+                                                    echo '&nbsp <input type="checkbox" id="'.$id.'" name="'.$id.'" value="'.$id.'">
                                                           <label for="horns">'.$name.'</label>
                                                         <br>';
                                                 }
@@ -196,8 +212,10 @@ include 'include/functions.php';
                             </div>
 
                             <div class="form-group">
-                                    <input type="checkbox" id="terms" name="terms" onclick="toggleRegister()">
-                                    <label class="login-texthny mb-2 text-white">I agree to the <a href="TermsAndCondition.txt" class="text-warning" download>Terms and conditions</a></label>
+                                <input type="checkbox" id="terms" name="terms" onclick="toggleRegister()">
+                                <label class="login-texthny mb-2 text-white">I agree to the <a
+                                        href="TermsAndCondition.txt" class="text-warning" download>Terms and
+                                        conditions</a></label>
                             </div>
                             </br>
 
@@ -205,10 +223,10 @@ include 'include/functions.php';
                                 value="Register">
                             </form>
                         </div>
+
                     </div>
                     <?php
         if (isset($_POST['reg'])) {
-            include 'include/functions.php';
             //Fetch data from the fields
               
             $pname = $_POST['pname'];
@@ -220,17 +238,41 @@ include 'include/functions.php';
             $long = "1";
             $lat = "1";
             $status = "1";
-            $speciality = $_POST['speciality'];
             $reg = date("Y/m/d h:i:s");
-            $userID = $_GET['id'];
+            //$userID = $_GET['id'];
 
             //$addpetsh = addPetshop("Dy", "breeding", "tt", "tt", "tt", 12 , 12 , 1 , 31 , 1, "1999-08-08");
-            $result = addPetshop($pname, $desc, $street, $town, $district, $long, $lat, $status, $userID, $speciality, $reg);
+            $result = addPetshop($pname,$brn, $desc, $street, $town, $district, $long, $lat, $status, $userID, $reg);
 
             if ($result) {
                 //**********get registration success message
-                header('Location: login.php');
 
+                //get petshopID
+                $petshopID = getPetshopID($userID);
+                //add specialities
+                $sql = "CALL sp_getPetCategories();";
+                $result = $conn->query($sql);
+                    if ($result -> num_rows > 0) {
+                        //output data for each row
+                        while ($row = $result->fetch_assoc()) {
+                            //from db
+                            $id = $row['petcatID'];
+                            $name = $row['name'];
+
+                            //specialities
+                            $date = date("Y/m/d h:i:s");
+                            $status = 1;
+                            if (isset($_POST[$id])){
+                            //call function addPetshopSpecialities
+                            addPetshopSpeciality($petshopID,$id, $date, $status);
+                            }
+                        }
+                    }
+                $result->close();
+                $conn->next_result();
+
+                $_SESSION['tmpUserID'] = null;
+                header('Location: login.php');
             } else {
                 //**********get registration failed message
                 //header('Location: ecommerce.php');
@@ -240,28 +282,30 @@ include 'include/functions.php';
 ?>
                 </div>
                 <div class="col-lg-7 story-gd pl-lg-4">
-                    <a class="navbar-brand" href="index.php">
-                        <h3 class="hny-title"><span>E </span>Petshop</h3>
-                    </a>
-                    <p></p>
+                    <div class="container-fluid">
+                        <a class="navbar-brand" href="index.php">
+                            <h3 class="hny-title"><span>E </span>Petshop</h3>
+                        </a>
+                        <p></p>
 
-                    <div class="row story-info-content mt-md-5 mt-4">
+                        <div class="row story-info-content mt-md-5 mt-4">
 
-                        <div class="col-md-6 story-info">
-                            <h5> <a href="#">01. Setup E-Petshop</a></h5>
-                            <p>Insert the required details about your petshop.</p>
-                        </div>
-                        <div class="col-md-6 story-info">
-                            <h5> <a href="#">02. Add Products</a></h5>
-                            <p>Add your products and categories them accordingly.</p>
-                        </div>
-                        <div class="col-md-6 story-info">
-                            <h5> <a href="#">03. Make Sales</a></h5>
-                            <p>Attract more customers to increase sales.</p>
-                        </div>
-                        <div class="col-md-6 story-info">
-                            <h5> <a href="#">04. Connect With Customers</a></h5>
-                            <p>Keep in touch with existing and prospect customers.</p>
+                            <div class="col-md-6 story-info">
+                                <h5> <a href="#">01. Setup E-Petshop</a></h5>
+                                <p>Insert the required details about your petshop.</p>
+                            </div>
+                            <div class="col-md-6 story-info">
+                                <h5> <a href="#">02. Add Products</a></h5>
+                                <p>Add your products and categories them accordingly.</p>
+                            </div>
+                            <div class="col-md-6 story-info">
+                                <h5> <a href="#">03. Make Sales</a></h5>
+                                <p>Attract more customers to increase sales.</p>
+                            </div>
+                            <div class="col-md-6 story-info">
+                                <h5> <a href="#">04. Connect With Customers</a></h5>
+                                <p>Keep in touch with existing and prospect customers.</p>
+                            </div>
                         </div>
                     </div>
 
@@ -277,18 +321,19 @@ include 'include/functions.php';
 </body>
 
 </html>
+<script src="assets/js/validateRegister.js"></script>
+<script>
 <script>
 document.getElementById("reg").disabled = true;
 
-function toggleRegister(){
+function toggleRegister() {
     var terms = document.getElementById("terms");
 
-    if(terms.checked == true){
+    if (terms.checked == true) {
         document.getElementById("reg").disabled = false;
-    }else{
+    } else {
         document.getElementById("reg").disabled = true;
     }
 }
-
 </script>
 <?php include "bottomScripts.php"; ?>

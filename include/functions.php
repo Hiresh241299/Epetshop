@@ -58,11 +58,11 @@ function verifyOrderDetails($orderID, $productLineID){
 }
 
 //add user
-function addUser($fname, $lname, $gender, $dob, $street, $town, $district, $email, $mobile, $reg, $pass, $status, $role)
+function addUser($fname, $lname,$nic, $gender, $dob, $street, $town, $district, $email, $mobile, $reg, $pass, $status, $long, $lat, $lastLogin, $role)
 {
     include "dbConnection.php";
 
-    $sql = "CALL sp_addUser('$fname', '$lname', '$gender', '$dob', '$street', '$town', '$district', '$email', '$mobile', '$reg', '$pass', '$status', '$role');";
+    $sql = "CALL sp_addUser('$fname', '$lname', '$nic', '$gender', '$dob', '$street', '$town', '$district', '$email', '$mobile', '$reg', '$pass', '$status', '$long', '$lat', '$lastLogin', '$role');";
     $result = mysqli_query($conn, $sql);
 
     return $result;
@@ -126,10 +126,19 @@ function getUserID($email)
 //add petshop
 //by default petshop status is 0
 //admin must accept petshop, then vendor can post product etc.
-function addPetshop($pname, $desc, $street, $town, $district, $long, $lat, $status, $userID, $specialityID, $dateReg)
+function addPetshop($pname,$brn, $desc, $street, $town, $district, $long, $lat, $status, $userID, $dateReg)
 {
     include "dbConnection.php";
-    $sql = "CALL sp_addPetshop('$pname', '$desc', '$street', '$town', '$district', '$long', '$lat', '$status', '$userID', '$specialityID', '$dateReg');";
+    $sql = "CALL sp_addPetshop('$pname', '$brn', '$desc', '$street', '$town', '$district', '$long', '$lat', '$status', '$userID', '$dateReg');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
+
+//add petshop speciality
+function addPetshopSpeciality($petshopid, $petcatID, $date, $status){
+    include "dbConnection.php";
+    $sql = "CALL sp_addPetshopSpeciality('$petshopid', '$petcatID', '$date', '$status');";
     $result = mysqli_query($conn, $sql);
 
     return $result;
@@ -225,6 +234,16 @@ function updateSingleOrderDetailsStatus($orderID, $productLineID, $status){
 
     return $result;
 }
+
+//update user lastLoginDateTime
+function updateUserLogin($lastLogin, $userID){
+    include "dbConnection.php";
+    $sql = "CALL sp_updateUserLogin('$lastLogin', '$userID');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
+
 
 //get petshopID
 function getPetshopID($uid)

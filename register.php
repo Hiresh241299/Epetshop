@@ -51,47 +51,59 @@ ob_start();
                                             <p class="login-texthny mb-2 text-white">First Name</p>
                                             <input type="text" class="form-control" id="fname" placeholder=""
                                                 name="fname" data-parsley-maxlength="10" data-parsley-ui-enabled="true"
-                                                data-parsley-required="true" required>
+                                                data-parsley-required="true" onchange="validate(this.id)" required>
+                                            <p class="login-texthny mb-2 text-danger" id="fnameErrorMsg"></p>
                                         </div>
 
                                         <div class="form-group">
                                             <p class="login-texthny mb-2 text-white">Last Name</p>
                                             <input type="text" class="form-control" id="lname" placeholder=""
-                                                name="lname" required>
+                                                name="lname" onchange="validate(this.id)" required>
+                                            <p class="login-texthny mb-2 text-danger" id="lnameErrorMsg"></p>
                                         </div>
                                         <div class="form-group">
                                             <p class="login-texthny mb-2 text-white">NIC</p>
                                             <input type="text" class="form-control" id="nic" placeholder="" name="nic"
-                                                required>
+                                                onchange="validate(this.id)" required>
+                                            <p class="login-texthny mb-2 text-danger" id="nicErrorMsg"></p>
                                         </div>
                                         <div class="form-group">
                                             <p class="login-texthny mb-2 text-white">Email address</p>
                                             <input type="email" class="form-control" id="email" placeholder=""
-                                                name="email" required>
+                                                name="email" onchange="validate(this.id)" required>
+                                            <p class="login-texthny mb-2 text-danger" id="emailErrorMsg"></p>
                                             <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your
                                                 email
                                                 with anyone else.</small> -->
                                         </div>
 
                                         <div class="form-group">
-                                            <p class="login-texthny mb-2 text-white">Phone</p>
+                                            <p class="login-texthny mb-2 text-white">Mobile</p>
                                             <input type="text" class="form-control" id="phone" placeholder=""
-                                                name="phone" required>
+                                                name="phone" onchange="validate(this.id)" required>
+                                            <p class="login-texthny mb-2 text-danger" id="phoneErrorMsg"></p>
                                         </div>
                                         <div class="form-group" id="passwordDIV">
                                             <p class="login-texthny mb-2 text-white">Password</p>
-                                            <input type="password" class="form-control" id="password" placeholder=""
-                                                name="password" onchange="showconfirmbtn()" required>
+                                            <div class="input-group">
+                                                <input type="password" class="form-control" id="password" placeholder=""
+                                                    name="password" onchange="validate(this.id)" required>
+                                                    <div class="input-group-append">
+                                                    <div class="input-group-text text-black"><i class="fa fa-eye" id="togglePassword" style="cursor: pointer;" onclick="viewpassword()"></i></div>
+                                                </div>
+                                            </div>
+                                            <p class="login-texthny mb-2 text-danger" id="passwordErrorMsg"></p>
                                         </div>
                                         <div class="form-group" id="cpasswordDIV">
                                             <p class="login-texthny mb-2 text-white">Confirm Password</p>
                                             <input type="password" class="form-control" id="cpassword" placeholder=""
                                                 name="cpassword" onchange="checkpassword()" required>
+
                                         </div>
                                     </div>
 
                                     <input type="submit" class="btn btn-success submit-login btn mb-4" id="regis"
-                                        name="register" value="Register">
+                                        name="register" value="Register" title="">
 
 
                                 </form>
@@ -105,21 +117,27 @@ ob_start();
               
             $fname = $_POST['fname'];
             $lname = $_POST['lname'];
+            $nic = $_POST['nic'];
             //$gender = $_POST['gender'];
             //$dob = $_POST['dob'];
-            $street = "test";
-            $town = "test";
-            $district = "test";
+            $street = "";
+            $town = "";
+            $district = "";
             $email = $_POST['email'];
-            //$mobile = $_POST['phone'];
+            $mobile = $_POST['phone'];
             $reg = date("Y/m/d h:i:s");
             $psd = password_hash($_POST['password'], PASSWORD_DEFAULT); //hash password using md5
             $status = 1;
             $role = $_POST['options'];
 
+            //empty
+            $long = "";
+            $lat = "";
+            $lastLogin = "";
+
             // ********** If user not already exits (check email, phone)
             //addUser($fname, $lname, $gender, $dob, $street, $town, $district, $email, $mobile, $reg, $psd, $status, $role);
-            $result = addUser($fname, $lname, "Male", "12-12-2020", $street, $town, $district, $email, "12345678", $reg, $psd, $status, $role);
+            $result = addUser($fname, $lname, $nic, "", "", $street, $town, $district, $email, $mobile, $reg, $psd, $status,$long, $lat, $lastLogin, $role);
 
             if ($result) {
                 //**********get registration success message
@@ -131,9 +149,11 @@ ob_start();
 
                     //echo "<script>window.location.href='login.php';</script>";
                 } elseif ($role == 2) {
-                    //get userID and send as query parameter
+                    //get userID and send as query parameter xxx
+                    //create a session tmpUserID
                     $userID = getUserID($email);
-                    header('Location: registerPetshop.php?id='. $userID);
+                    $_SESSION['tmpUserID'] = $userID;
+                    header('Location: registerPetshop.php');
                     //    echo "<script>window.location.href='registerPetshop.php';</script>";
                 }
             } else {
@@ -213,7 +233,23 @@ ob_start();
 </body>
 
 </html>
+
+
+<script src="assets/js/validateRegister.js"></script>
 <script>
+
+//view password
+function viewpassword(){
+
+    var password = document.getElementById('password');
+    if(password.type === "password"){
+        password.type = "text";
+    }else{
+        password.type = "password";
+    }
+}
+
+
 //hide confirmbtn
 document.getElementById("cpasswordDIV").style.display = "none";
 
@@ -224,18 +260,21 @@ function showconfirmbtn() {
 
 //enable register button if password == confirmpassword
 document.getElementById("regis").disabled = true;
+document.getElementById("regis").title = "Fill form";
 
 function checkpassword() {
+    showconfirmbtn();
     var pass = document.getElementById("password").value;
     var cpass = document.getElementById("cpassword").value;
-    if (pass == cpass) {
+    if ((pass == cpass) && (pass != "")) {
         document.getElementById("regis").disabled = false;
+        document.getElementById("regis").title = "Register Now";
     } else {
 
         document.getElementById("regis").disabled = true;
+        document.getElementById("regis").title = "Fill form";
     }
 }
-
 
 //get radion button element by name
 

@@ -83,14 +83,18 @@ if (isset($_SESSION["roleid"])) {
                 $_SESSION['userid'] = getUserID($userEmail);
                 $_SESSION['roleid'] = getUserRole($userEmail);
 
+                $userID = $_SESSION['userid'];
+
+                //update user last login datetime
+                $lastLogin = date("Y/m/d h:i:s");
+                updateUserLogin($lastLogin, $userID);
+
                 //if remember me is check, create cookie
                 if(isset($_POST['remember'])){
                     //save emall and password in cookie
                 }else{
                     //delete cookie if exists
                 }
-
-                $userID = $_SESSION['userid'];
                 
                 saveCartInDb($userID);
                 //clear cookies

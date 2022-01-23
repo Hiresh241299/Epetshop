@@ -18,7 +18,7 @@ if(verifyOrderDetails(51868, 1) > 0){
 
 
 //add user
-//$res = addUser("newtest", "test", "Male", "1999-08-08", "test", "test", "test", "test@gmail.com", "52345678", "1999-08-08", password_hash("test123",PASSWORD_DEFAULT), 1, 1);
+//$res = addUser("newtest", "test","nic", "Male", "1999-08-08", "test", "test", "test", "test@gmail.com", "52345678", "1999-08-08", password_hash("test123",PASSWORD_DEFAULT), 1, 1);
 //echo "Add User :" . $res;
 
 //get user role
@@ -29,9 +29,22 @@ echo "\n";
 echo getUserID("hiresh@gmail.com"). "<br>";
 
 //add petshop
-//$addpetsh = addPetshop("Dy", "breeding", "tt", "tt", "tt", 12 , 12 , 1 , 31 , 1, "1999-08-08");
-//echo $addpetsh;
+//addPetshop($pname,$brn, $desc, $street, $town, $district, $long, $lat, $status, $userID, $dateReg)
+/*$result = addPetshop("Dy","12345", "breeding", "tt", "tt", 1, 12 , 12 , 1 , 31, "1999-08-08");
+if($result == 1){
+    echo "Petshop added !!" . "<br>";
+}else if ($result == 0){
+    echo "Petshop NOT added!!!!" . "<br>";
+}*/
 
+//add petshop speciality
+//addPetshopSpeciality($petshopid, $petcatID, $date, $status);
+$result = addPetshopSpeciality(18,1, "2021-09-14 09:22:26", 1);
+if($result == 1){
+    echo "Petshop Speciality added !!" . "<br>";
+}else if ($result == 0){
+    echo "Petshop Speciality NOT added!!!!" . "<br>";
+}
 
 //add product
 //addProduct($prodname, $brandID, $desc, $img, $prodcatid, $specialityid, $status, $dateposted, $lastmodif, $petshopid)
@@ -179,11 +192,11 @@ if($result){
 
 //add payment
 //addPayment($dateTime, $remark, $status, $orderID)
-$result = addPayment($dateTime, $remark, $status, $orderID);
-if($result){
-    echo "Payment added";
-
-}else{
-    echo "Payment not added";
-}
+//$result = addPayment($dateTime, $remark, $status, $orderID);
+//if($result){
+//    echo "Payment added";
+//
+//}else{
+//    echo "Payment not added";
+//}
 ?>
