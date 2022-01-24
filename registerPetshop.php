@@ -91,22 +91,29 @@ if (isset($_SESSION['tmpUserID'])){
                         <!--class = "wrap"-->
                         <div class="wrap bg-dark">
                             </br>
-                            <h4 class="text-center text-white mb-4">Pet Shop Details</h4>
+                            <h4 class="text-center text-white mb-4">BUSINESS REGISTRATION</h4>
 
                             <div class="login-bghny p-md-5 p-4 mx-auto mw-100">
 
+                                <small class="form-text text-warning">Required Field are marked *</small></br>
                                 <form action="" method="post">
-
                                     <div class="form-group">
-                                        <p class="login-texthny mb-2 text-white">Business Name</p>
+                                        <p class="login-texthny mb-2 text-white">Business Name <span
+                                                class="text-warning">*</span></p>
                                         <input type="text" class="form-control" id="pname" placeholder="" name="pname"
-                                        onchange="validatePetshop(this.id)" required>
+                                            onkeyup="validatePetshop(this.id); verifyUniqueness(this.id, this.value)"
+                                            required>
                                         <p class="login-texthny mb-2 text-danger" id="pnameErrorMsg"></p>
+                                        <p class="login-texthny mb-2 text-danger" id="pnameAjaxErrorMsg"></p>
                                     </div>
                                     <div class="form-group">
-                                        <p class="login-texthny mb-2 text-white">Business Registration Number</p>
+                                        <p class="login-texthny mb-2 text-white">Business Registration Number <span
+                                                class="text-warning">*</span></p>
                                         <input type="text" class="form-control" id="brn" placeholder="" name="brn"
+                                            onkeyup="validatePetshop(this.id); verifyUniqueness(this.id, this.value)"
                                             required>
+                                        <p class="login-texthny mb-2 text-danger" id="brnErrorMsg"></p>
+                                        <p class="login-texthny mb-2 text-danger" id="brnAjaxErrorMsg"></p>
                                     </div>
 
                                     <div class="form-group">
@@ -116,19 +123,22 @@ if (isset($_SESSION['tmpUserID'])){
                                     </div>
 
                                     <div class="form-group">
-                                        <p class="login-texthny mb-2 text-white">Street</p>
+                                        <p class="login-texthny mb-2 text-white">Street <span
+                                                class="text-warning">*</span></p>
                                         <input type="text" class="form-control" id="street" placeholder="" name="street"
                                             required>
                                     </div>
                                     <div class="form-group">
-                                        <p class="login-texthny mb-2 text-white">Town</p>
+                                        <p class="login-texthny mb-2 text-white">Town <span
+                                                class="text-warning">*</span></p>
                                         <input type="text" class="form-control" id="town" placeholder="" name="town"
                                             required>
                                     </div>
 
                                     <!-- Drop down location -->
                                     <div class="form-group">
-                                        <p class="login-texthny mb-2 text-white">District</p>
+                                        <p class="login-texthny mb-2 text-white">District <span
+                                                class="text-warning">*</span></p>
                                         <!--<input type="text" class="form-control" id="speciality" placeholder=""
                                             name="speciality" required> -->
                                         <select class="form-control" name="district" id="district" required>
@@ -212,7 +222,7 @@ if (isset($_SESSION['tmpUserID'])){
                             </div>
 
                             <div class="form-group">
-                                <input type="checkbox" id="terms" name="terms" onclick="toggleRegister()">
+                                <input type="checkbox" id="terms" name="terms" onclick="toggleRegister('1')">
                                 <label class="login-texthny mb-2 text-white">I agree to the <a
                                         href="TermsAndCondition.txt" class="text-warning" download>Terms and
                                         conditions</a></label>
@@ -322,18 +332,49 @@ if (isset($_SESSION['tmpUserID'])){
 
 </html>
 <script src="assets/js/validateRegister.js"></script>
-<script>
+
 <script>
 document.getElementById("reg").disabled = true;
 
-function toggleRegister() {
+function toggleRegister(isFormvalid) {
     var terms = document.getElementById("terms");
 
-    if (terms.checked == true) {
-        document.getElementById("reg").disabled = false;
+    if (isFormvalid == "1") {
+        if (terms.checked == true) {
+            document.getElementById("reg").disabled = false;
+        } else {
+            document.getElementById("reg").disabled = true;
+        }
     } else {
         document.getElementById("reg").disabled = true;
     }
 }
 </script>
 <?php include "bottomScripts.php"; ?>
+
+<script>
+//ajax call to verify NIC, email, phone
+function verifyUniqueness(field, value) {
+
+    if (value != "") {
+        $.ajax({
+            url: 'ajax/registerAction.php',
+            data: {
+                registerAction: field,
+                v: value
+            },
+            type: 'post',
+            success: function(data) {
+
+                $('#' + field + 'AjaxErrorMsg').html(data);
+                if (data != "") {
+                    //checkpassword(false);
+                    toggleRegister('0');
+                } else {
+                    toggleRegister('1');
+                }
+            }
+        });
+    }
+}
+</script>

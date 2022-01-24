@@ -26,10 +26,9 @@ ob_start();
             <div class="container py-lg-5">
                 <div class="row story-6-grids text-left">
                     <div class="col-lg-5 story-gd">
-                        <div class="wrap bg-dark">
+                        <div class="wrap bg-dark border rounded">
                             </br>
-                            <h4 class="text-center text-white mb-4">Register</h4>
-
+                            <h4 class="text-center text-white mb-4">REGISTRATION</h4>
                             <div class="login-bghny p-md-5 p-4 mx-auto mw-100">
 
                                 <form id="register" action="" method="post">
@@ -46,59 +45,69 @@ ob_start();
                                                 </label>
                                             </div>
                                         </div>
-
+                                        <small  class="form-text text-warning">Required Field are marked *</small></br>
                                         <div class="form-group">
-                                            <p class="login-texthny mb-2 text-white">First Name</p>
+                                            <p class="login-texthny mb-2 text-white">First Name <span class="text-warning">*</span></p>
                                             <input type="text" class="form-control" id="fname" placeholder=""
                                                 name="fname" data-parsley-maxlength="10" data-parsley-ui-enabled="true"
-                                                data-parsley-required="true" onchange="validate(this.id)" required>
+                                                data-parsley-required="true" onkeyup="validate(this.id)" required>
                                             <p class="login-texthny mb-2 text-danger" id="fnameErrorMsg"></p>
                                         </div>
 
                                         <div class="form-group">
-                                            <p class="login-texthny mb-2 text-white">Last Name</p>
+                                            <p class="login-texthny mb-2 text-white">Last Name <span class="text-warning">*</span></p>
                                             <input type="text" class="form-control" id="lname" placeholder=""
-                                                name="lname" onchange="validate(this.id)" required>
+                                                name="lname" onkeyup="validate(this.id)" required>
                                             <p class="login-texthny mb-2 text-danger" id="lnameErrorMsg"></p>
                                         </div>
                                         <div class="form-group">
-                                            <p class="login-texthny mb-2 text-white">NIC</p>
+                                            <p class="login-texthny mb-2 text-white">NIC <span class="text-warning">*</span></p>
                                             <input type="text" class="form-control" id="nic" placeholder="" name="nic"
-                                                onchange="validate(this.id)" required>
+                                                onkeyup="validate(this.id); verifyUniqueness(this.id, this.value)"
+                                                required>
                                             <p class="login-texthny mb-2 text-danger" id="nicErrorMsg"></p>
+                                            <p class="login-texthny mb-2 text-danger" id="nicAjaxErrorMsg"></p>
                                         </div>
                                         <div class="form-group">
-                                            <p class="login-texthny mb-2 text-white">Email address</p>
+                                            <p class="login-texthny mb-2 text-white">Email address <span class="text-warning">*</span></p>
                                             <input type="email" class="form-control" id="email" placeholder=""
-                                                name="email" onchange="validate(this.id)" required>
+                                                name="email"
+                                                onkeyup="validate(this.id); verifyUniqueness(this.id, this.value)"
+                                                required>
                                             <p class="login-texthny mb-2 text-danger" id="emailErrorMsg"></p>
+                                            <p class="login-texthny mb-2 text-danger" id="emailAjaxErrorMsg"></p>
                                             <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your
                                                 email
                                                 with anyone else.</small> -->
                                         </div>
 
                                         <div class="form-group">
-                                            <p class="login-texthny mb-2 text-white">Mobile</p>
+                                            <p class="login-texthny mb-2 text-white">Mobile <span class="text-warning">*</span></p>
                                             <input type="text" class="form-control" id="phone" placeholder=""
-                                                name="phone" onchange="validate(this.id)" required>
+                                                name="phone"
+                                                onkeyup="validate(this.id); verifyUniqueness(this.id, this.value)"
+                                                required>
                                             <p class="login-texthny mb-2 text-danger" id="phoneErrorMsg"></p>
+                                            <p class="login-texthny mb-2 text-danger" id="phoneAjaxErrorMsg"></p>
                                         </div>
                                         <div class="form-group" id="passwordDIV">
-                                            <p class="login-texthny mb-2 text-white">Password</p>
+                                            <p class="login-texthny mb-2 text-white">Password <span class="text-warning">*</span></p>
                                             <div class="input-group">
                                                 <input type="password" class="form-control" id="password" placeholder=""
-                                                    name="password" onchange="validate(this.id)" required>
-                                                    <div class="input-group-append">
-                                                    <div class="input-group-text text-black"><i class="fa fa-eye" id="togglePassword" style="cursor: pointer;" onclick="viewpassword()"></i></div>
+                                                    name="password" onkeyup="validate(this.id)" required>
+                                                <div class="input-group-append">
+                                                    <div class="input-group-text text-black"><i class="fa fa-eye"
+                                                            id="togglePassword" style="cursor: pointer;"
+                                                            onclick="viewpassword()"></i></div>
                                                 </div>
                                             </div>
                                             <p class="login-texthny mb-2 text-danger" id="passwordErrorMsg"></p>
                                         </div>
                                         <div class="form-group" id="cpasswordDIV">
-                                            <p class="login-texthny mb-2 text-white">Confirm Password</p>
+                                            <p class="login-texthny mb-2 text-white">Confirm Password <span class="text-warning">*</span></p>
                                             <input type="password" class="form-control" id="cpassword" placeholder=""
-                                                name="cpassword" onchange="checkpassword()" required>
-
+                                                name="cpassword" onkeyup="validate(this.id)" required>
+                                            <p class="login-texthny mb-2 text-danger" id="cpasswordErrorMsg"></p>
                                         </div>
                                     </div>
 
@@ -127,7 +136,7 @@ ob_start();
             $mobile = $_POST['phone'];
             $reg = date("Y/m/d h:i:s");
             $psd = password_hash($_POST['password'], PASSWORD_DEFAULT); //hash password using md5
-            $status = 1;
+            $status = -1;
             $role = $_POST['options'];
 
             //empty
@@ -135,15 +144,17 @@ ob_start();
             $lat = "";
             $lastLogin = "";
 
-            // ********** If user not already exits (check email, phone)
+            // ********** If user not already exits (check email, phone, NIC)
+            //give errror message
+
             //addUser($fname, $lname, $gender, $dob, $street, $town, $district, $email, $mobile, $reg, $psd, $status, $role);
-            $result = addUser($fname, $lname, $nic, "", "", $street, $town, $district, $email, $mobile, $reg, $psd, $status,$long, $lat, $lastLogin, $role);
+            $result = addUser($fname, $lname, $nic, "", "", $street, $town, $district, $email, $mobile, $reg, $psd, $status, $long, $lat, $lastLogin, $role);
 
             if ($result) {
                 //**********get registration success message
                 if ($role == 3) {
                     header('Location: login.php');
-                    //send notif to admin, a customer has join
+                //send notif to admin, a customer has join
                     //sendEmail("epetshopbse@gmail.com", "e", "petshop", "New Customer Registration", "A new customer has join e-petshop,
                     //Click to view customer details <br> Customer Name : $fname $lname");
 
@@ -237,42 +248,46 @@ ob_start();
 
 <script src="assets/js/validateRegister.js"></script>
 <script>
-
 //view password
-function viewpassword(){
+function viewpassword() {
 
     var password = document.getElementById('password');
-    if(password.type === "password"){
+    if (password.type === "password") {
         password.type = "text";
-    }else{
+    } else {
         password.type = "password";
     }
 }
 
 
 //hide confirmbtn
-document.getElementById("cpasswordDIV").style.display = "none";
+//document.getElementById("cpasswordDIV").style.display = "none";
 
 function showconfirmbtn() {
     //unhide confirmbtn
-    document.getElementById("cpasswordDIV").style.display = "block";
+    //document.getElementById("cpasswordDIV").style.display = "block";
 }
 
 //enable register button if password == confirmpassword
 document.getElementById("regis").disabled = true;
 document.getElementById("regis").title = "Fill form";
 
-function checkpassword() {
-    showconfirmbtn();
-    var pass = document.getElementById("password").value;
-    var cpass = document.getElementById("cpassword").value;
-    if ((pass == cpass) && (pass != "")) {
-        document.getElementById("regis").disabled = false;
-        document.getElementById("regis").title = "Register Now";
-    } else {
-
+function checkpassword(isvalid) {
+    //showconfirmbtn();
+    if (!isvalid) {
         document.getElementById("regis").disabled = true;
         document.getElementById("regis").title = "Fill form";
+    } else {
+        var pass = document.getElementById("password").value;
+        var cpass = document.getElementById("cpassword").value;
+        if ((pass == cpass) && (pass != "")) {
+            document.getElementById("regis").disabled = false;
+            document.getElementById("regis").title = "Register Now";
+        } else {
+
+            document.getElementById("regis").disabled = true;
+            document.getElementById("regis").title = "Fill form";
+        }
     }
 }
 
@@ -335,5 +350,25 @@ function backTab() {
 <?php include "bottomScripts.php"; ?>
 
 <script>
-$('register').parsley();
+//ajax call to verify NIC, email, phone
+function verifyUniqueness(field, value) {
+
+    if (value != "") {
+        $.ajax({
+            url: 'ajax/registerAction.php',
+            data: {
+                registerAction: field,
+                v: value
+            },
+            type: 'post',
+            success: function(data) {
+
+                $('#' + field + 'AjaxErrorMsg').html(data);
+                if(data != ""){
+                    checkpassword(false);
+                }
+            }
+        });
+    }
+}
 </script>

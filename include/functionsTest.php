@@ -16,6 +16,22 @@ if(verifyOrderDetails(51868, 1) > 0){
     echo "Product does exists in cart" . "<br>";
 }
 
+if(verifyEmail(51868) > 0){
+    echo "Email exists" . "<br>";
+}else{
+    echo "Email does not exists" . "<br>";
+}
+if(verifyMobile(51868) > 0){
+    echo "Mobile exists in cart" . "<br>";
+}else{
+    echo "Mobile does not exists" . "<br>";
+}
+if(verifyNIC(51868) > 0){
+    echo "NIC exists" . "<br>";
+}else{
+    echo "NIC does not exists" . "<br>";
+}
+
 
 //add user
 //$res = addUser("newtest", "test","nic", "Male", "1999-08-08", "test", "test", "test", "test@gmail.com", "52345678", "1999-08-08", password_hash("test123",PASSWORD_DEFAULT), 1, 1);

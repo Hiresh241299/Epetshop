@@ -40,6 +40,103 @@ function verifyUserCredentials($email, $passw)
     return $output;
 }
 
+//verify User email
+//sp_verifyUserCredentials
+function verifyEmail($email){
+    include "dbConnection.php";
+    $sql = "CALL sp_verifyUserCredentials('$email');";
+    $output = false;
+    //query Sql
+    $result = $conn->query($sql);
+    //result
+    
+    if ($result -> num_rows > 0) {
+        //output password form db
+        while ($row = $result->fetch_assoc()) {
+                $output = true;
+        }
+    }
+
+    return $output;
+}
+
+//verify User Phone
+function verifyMobile($mobile){
+    include "dbConnection.php";
+    $sql = "CALL sp_verifyUserMobile('$mobile');";
+    $output = false;
+    //query Sql
+    $result = $conn->query($sql);
+    //result
+    
+    if ($result -> num_rows > 0) {
+        //output password form db
+        while ($row = $result->fetch_assoc()) {
+                $output = true;
+        }
+    }
+
+    return $output;
+}
+
+//Verify User NIC
+function verifyNIC($nic){
+    include "dbConnection.php";
+    $sql = "CALL sp_verifyUserNIC('$nic');";
+    $output = false;
+    //query Sql
+    $result = $conn->query($sql);
+    //result
+    
+    if ($result -> num_rows > 0) {
+        //output password form db
+        while ($row = $result->fetch_assoc()) {
+                $output = true;
+        }
+    }
+
+    return $output;
+}
+
+//verify business name
+function verifyBusinessName($pname){
+    include "dbConnection.php";
+    $sql = "CALL sp_verifyPetshopName('$pname');";
+    $output = false;
+    //query Sql
+    $result = $conn->query($sql);
+    //result
+    
+    if ($result -> num_rows > 0) {
+        //output password form db
+        while ($row = $result->fetch_assoc()) {
+                $output = true;
+        }
+    }
+
+    return $output;
+}
+
+//verify brn
+function verifyBRN($brn){
+    include "dbConnection.php";
+    $sql = "CALL sp_verifyPetshopBRN('$brn');";
+    $output = false;
+    //query Sql
+    $result = $conn->query($sql);
+    //result
+    
+    if ($result -> num_rows > 0) {
+        //output password form db
+        while ($row = $result->fetch_assoc()) {
+                $output = true;
+        }
+    }
+
+    return $output;
+}
+
+
 //verify order Details
 function verifyOrderDetails($orderID, $productLineID){
     include "dbConnection.php";
