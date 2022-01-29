@@ -3,18 +3,18 @@
             <!-- notification menu start -->
             <div class="menu-right">
                 <div class="navbar user-panel-top">
-                    <div class="search-box">
+                    <!--<div class="search-box">
                         <form action="#search-results.html" method="get">
                             <input class="search-input" placeholder="Search Here..." type="search" id="search">
                             <button class="search-submit" value=""><span class="fa fa-search"></span></button>
                         </form>
-                    </div>
+                    </div>-->
                     <div class="user-dropdown-details d-flex">
                         <div class="profile_details_left">
                             <ul class="nofitications-dropdown">
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i
-                                            class="fa fa-bell-o"></i><span class="badge blue">3</span></a>
+                                            class="fa fa-bell"></i><span class="badge blue">3</span></a>
                                     <ul class="dropdown-menu">
                                         <li>
                                             <div class="notification_header">
@@ -51,7 +51,7 @@
                                 </li>
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i
-                                            class="fa fa-comment-o"></i><span class="badge blue">4</span></a>
+                                            class="fa fa-comment"></i><span class="badge blue">4</span></a>
                                     <ul class="dropdown-menu">
                                         <li>
                                             <div class="notification_header">
@@ -102,20 +102,14 @@
                                         aria-haspopup="true" aria-expanded="false">
                                         <div class="profile_img">
                                             <img src="adminassets/images/profileimg.jpg" class="rounded-circle" alt="" />
-                                            <div class="user-active">
-                                                <span></span>
-                                            </div>
                                         </div>
                                     </a>
                                     <ul class="dropdown-menu drp-mnu" aria-labelledby="dropdownMenu3">
                                         <li class="user-info">
-                                            <h5 class="user-name">John Deo</h5>
-                                            <span class="status ml-2">Available</span>
+                                            <h5 class="user-name">Hiresh Mohun</h5>
                                         </li>
                                         <li> <a href="#"><i class="lnr lnr-user"></i>My Profile</a> </li>
-                                        <li> <a href="#"><i class="lnr lnr-users"></i>1k Followers</a> </li>
                                         <li> <a href="#"><i class="lnr lnr-cog"></i>Setting</a> </li>
-                                        <li> <a href="#"><i class="lnr lnr-heart"></i>100 Likes</a> </li>
                                         <li class="logout"> <a href="login.php"><i class="fa fa-power-off"></i>
                                                 Logout</a> </li>
                                     </ul>

@@ -10,4 +10,5 @@ session_destroy();
 setcookie("cart", null, -1, '/');
 header("Location: index.php");
 //echo "<script>window.location.href='index.php';</script>"; 
+$_SESSION['NavActive']="";
 ?>
