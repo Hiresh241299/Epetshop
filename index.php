@@ -39,6 +39,10 @@ if ($session_roleID == 2) {
         height: 300px;
         overflow: hidden;
     }
+    .bimg {
+        width: 200px;
+        height: 200px;
+    }
     </style>
 </head>
 
@@ -290,10 +294,10 @@ if ($session_roleID == 2) {
                             $imgPath = $row['imgPath'];
 
                             echo '<div class="col-lg-2 col-md-4 col-6 welcome-image">
-                            <div class="boxhny13">
+                            <div class="boxhny13 bimg">
                                 <a href="#URL">
-                                    <!--<img src="brands/'.$imgPath.'" class="img-fluid" alt=""/>-->
-                                    <img src="" class="img-fluid" alt=""/>
+                                    <img src="brand/'.$imgPath.'" class="img-fluid" alt=""/>
+                                  <!--  <img src="" class="img-fluid" alt=""/>-->
                                     <div class="boxhny-content">
                                         <h3 class="title"> '.$name.'</h3>
                                     </div>

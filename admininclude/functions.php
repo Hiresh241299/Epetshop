@@ -60,4 +60,84 @@ function verifyPetCat($id){
 
     return $output;
 }
+
+//verify location
+function verifyLocation($id){
+    include "dbConnection.php";
+    $sql = "CALL sp_verifyLocation('$id');";
+    $output = false;
+    //query Sql
+    $result = $conn->query($sql);
+    //result
+    
+    if ($result -> num_rows > 0) {
+        //output password form db
+        while ($row = $result->fetch_assoc()) {
+                $output = true;
+        }
+    }
+
+    return $output;
+}
+
+
+//add pet category
+function addPetCat($name, $img, $date, $status)
+{
+    include "dbConnection.php";
+
+    $sql = "CALL sp_addPetCategory('$name', '$img', '$date', '$status');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
+
+//add brand
+function addBrand($name, $img, $date, $status)
+{
+    include "dbConnection.php";
+
+    $sql = "CALL sp_addBrand('$name', '$img', '$date', '$status');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
+
+//add location
+function addLocation($name, $status)
+{
+    include "dbConnection.php";
+
+    $sql = "CALL sp_addLocation('$name', '$status');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
+
+//update petCategory
+function updatePetCategory($id,$name, $img, $date, $status){
+    include "dbConnection.php";
+    $sql = "CALL sp_updatePetCategory('$id','$name', '$img', '$date', '$status');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
+
+//update brand
+function updateBrand($id,$name, $img, $date, $status){
+    include "dbConnection.php";
+    $sql = "CALL sp_updateBrand('$id','$name', '$img', '$date', '$status');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
+
+//update location
+function updateLocation($id,$name, $status){
+    include "dbConnection.php";
+    $sql = "CALL sp_updateLocation('$id','$name','$status');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
 ?>

@@ -287,6 +287,15 @@ function addPayment($dateTime, $remark, $status, $orderID){
     return $result;
 }
 
+//update user status
+function updateUserStatus($id, $status){
+    include "dbConnection.php";
+    $sql = "CALL sp_updateUserStatus('$id', '$status');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
+
 //update product
 function updateProduct($productID,$name, $brandID, $description, $imgpath, $prodCatID, $petCatID, $status, $lastMDT){
     include "dbConnection.php";

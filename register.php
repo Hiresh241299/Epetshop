@@ -45,9 +45,10 @@ ob_start();
                                                 </label>
                                             </div>
                                         </div>
-                                        <small  class="form-text text-warning">Required Field are marked *</small></br>
+                                        <small class="form-text text-warning">Required Field are marked *</small></br>
                                         <div class="form-group">
-                                            <p class="login-texthny mb-2 text-white">First Name <span class="text-warning">*</span></p>
+                                            <p class="login-texthny mb-2 text-white">First Name <span
+                                                    class="text-warning">*</span></p>
                                             <input type="text" class="form-control" id="fname" placeholder=""
                                                 name="fname" data-parsley-maxlength="10" data-parsley-ui-enabled="true"
                                                 data-parsley-required="true" onkeyup="validate(this.id)" required>
@@ -55,13 +56,15 @@ ob_start();
                                         </div>
 
                                         <div class="form-group">
-                                            <p class="login-texthny mb-2 text-white">Last Name <span class="text-warning">*</span></p>
+                                            <p class="login-texthny mb-2 text-white">Last Name <span
+                                                    class="text-warning">*</span></p>
                                             <input type="text" class="form-control" id="lname" placeholder=""
                                                 name="lname" onkeyup="validate(this.id)" required>
                                             <p class="login-texthny mb-2 text-danger" id="lnameErrorMsg"></p>
                                         </div>
                                         <div class="form-group">
-                                            <p class="login-texthny mb-2 text-white">NIC <span class="text-warning">*</span></p>
+                                            <p class="login-texthny mb-2 text-white">NIC <span
+                                                    class="text-warning">*</span></p>
                                             <input type="text" class="form-control" id="nic" placeholder="" name="nic"
                                                 onkeyup="validate(this.id); verifyUniqueness(this.id, this.value)"
                                                 required>
@@ -69,7 +72,8 @@ ob_start();
                                             <p class="login-texthny mb-2 text-danger" id="nicAjaxErrorMsg"></p>
                                         </div>
                                         <div class="form-group">
-                                            <p class="login-texthny mb-2 text-white">Email address <span class="text-warning">*</span></p>
+                                            <p class="login-texthny mb-2 text-white">Email address <span
+                                                    class="text-warning">*</span></p>
                                             <input type="email" class="form-control" id="email" placeholder=""
                                                 name="email"
                                                 onkeyup="validate(this.id); verifyUniqueness(this.id, this.value)"
@@ -82,7 +86,8 @@ ob_start();
                                         </div>
 
                                         <div class="form-group">
-                                            <p class="login-texthny mb-2 text-white">Mobile <span class="text-warning">*</span></p>
+                                            <p class="login-texthny mb-2 text-white">Mobile <span
+                                                    class="text-warning">*</span></p>
                                             <input type="text" class="form-control" id="phone" placeholder=""
                                                 name="phone"
                                                 onkeyup="validate(this.id); verifyUniqueness(this.id, this.value)"
@@ -91,7 +96,8 @@ ob_start();
                                             <p class="login-texthny mb-2 text-danger" id="phoneAjaxErrorMsg"></p>
                                         </div>
                                         <div class="form-group" id="passwordDIV">
-                                            <p class="login-texthny mb-2 text-white">Password <span class="text-warning">*</span></p>
+                                            <p class="login-texthny mb-2 text-white">Password <span
+                                                    class="text-warning">*</span></p>
                                             <div class="input-group">
                                                 <input type="password" class="form-control" id="password" placeholder=""
                                                     name="password" onkeyup="validate(this.id)" required>
@@ -104,7 +110,8 @@ ob_start();
                                             <p class="login-texthny mb-2 text-danger" id="passwordErrorMsg"></p>
                                         </div>
                                         <div class="form-group" id="cpasswordDIV">
-                                            <p class="login-texthny mb-2 text-white">Confirm Password <span class="text-warning">*</span></p>
+                                            <p class="login-texthny mb-2 text-white">Confirm Password <span
+                                                    class="text-warning">*</span></p>
                                             <input type="password" class="form-control" id="cpassword" placeholder=""
                                                 name="cpassword" onkeyup="validate(this.id)" required>
                                             <p class="login-texthny mb-2 text-danger" id="cpasswordErrorMsg"></p>
@@ -113,8 +120,6 @@ ob_start();
 
                                     <input type="submit" class="btn btn-success submit-login btn mb-4" id="regis"
                                         name="register" value="Register" title="">
-
-
                                 </form>
 
                             </div>
@@ -153,7 +158,17 @@ ob_start();
             if ($result) {
                 //**********get registration success message
                 if ($role == 3) {
-                    header('Location: login.php');
+                    //activate account first
+                    //send email
+                    //hash user id
+                    $userID = getUserID($email);
+                    $hashid = password_hash($userID, PASSWORD_DEFAULT);
+                    $subject="Activate Your E-Petshop Account";
+                    $body='Click <a href="http://localhost/epetshop/activated.php?key='.$hashid.'" target="_blank">here</a> to activate your key <br><br>
+                    If you did not make this request, please disregard this email.';
+
+                    sendEmail($email, $fname, $lname, $subject, $body);
+                    header('Location: activateAccount.php');
                 //send notif to admin, a customer has join
                     //sendEmail("epetshopbse@gmail.com", "e", "petshop", "New Customer Registration", "A new customer has join e-petshop,
                     //Click to view customer details <br> Customer Name : $fname $lname");
@@ -364,7 +379,7 @@ function verifyUniqueness(field, value) {
             success: function(data) {
 
                 $('#' + field + 'AjaxErrorMsg').html(data);
-                if(data != ""){
+                if (data != "") {
                     checkpassword(false);
                 }
             }
