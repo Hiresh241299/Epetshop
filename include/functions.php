@@ -287,6 +287,33 @@ function addPayment($dateTime, $remark, $status, $orderID){
     return $result;
 }
 
+//add notification
+//status 1 send, 2 read
+function addNotif($userID, $title, $message, $date, $status){
+    include "dbConnection.php";
+    $sql = "CALL sp_addNotification('$userID', '$title', '$message', '$date', '$status');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
+
+//get admin id
+//works for only 1 admin
+function getAdminID()
+{
+    include "dbConnection.php";
+    $adminID = "";
+    //fetch petshop id from db
+    $sql = "CALL sp_getAdminID();";
+    $result = $conn->query($sql);
+    if ($result -> num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $adminID = $row['userID'];
+        }
+    }
+    return $adminID;
+}
+
 //update user status
 function updateUserStatus($id, $status){
     include "dbConnection.php";

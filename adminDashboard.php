@@ -1,6 +1,5 @@
 <?php
 include 'admininclude/verifyLogin.php';
-include "admininclude/functions.php";
 $_SESSION['NavActive']="adminhome";
 
 ?>

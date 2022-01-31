@@ -41,17 +41,12 @@ if(!isset($_SESSION)){
                                 </a></h4>
                             <div class="login-bghny p-md-5 p-4 mx-auto mw-100">
 
+                            
 
                             <?php
-                            if(isset($_GET['key'])){
-                                $key = $_GET['key'];
-                                if(password_verify($key, 190)){
-                                    echo "match";
-                                }else{
-                                    echo "NOT MATCH";
-                                }
-                                echo "test";
-
+                            $accountActivated = "notActivated";
+                            if(isset($_GET['key']) && ($_GET['key'] != "")){
+                                $UserID = $_GET['key'];
                                 //search user by id and match with key
                                 //Load all users from database
                                 $sql = "CALL sp_getAllUsers('1');";
@@ -59,21 +54,52 @@ if(!isset($_SESSION)){
                                 if ($result -> num_rows > 0) {
                                     //output data for each row
                                     while ($row = $result->fetch_assoc()) {
-                                        if(password_verify($key, 188)){
+                                        if(password_verify($row['userID'], $_GET['key'])){
                                             //update status
-                                            updateUserStatus(188, 1);
+                                            if ($row['status'] == -1) {
+                                                updateUserStatus($row['userID'], 1);
+                                                $accountActivated = "activated";
+                                            }
+                                            if ($row['status'] == 1){
+                                                $accountActivated = "accountAlreadyActivated";
+                                            }
+                                            if ($row['status'] == 0){
+                                                $accountActivated = "accountBlocked";
+                                            }
+                                            //$_SESSION['activateUserID'] = 0;
                                         }
                                     }
                                 }
+                                $result->close();
+                                $conn->next_result();
 
                             }
-                            ?>
-                                <!--/login-form-->
+                            if($accountActivated == "activated"){
+                                echo '
+                                <p class="login-texthny mb-2 text-success">Your Account has been activated</p>
+                                <a class="btn btn-success" href="login.php">Proceed to Login</a>
+                                ';
+                            }
+                            if($accountActivated == "notActivated"){
+                                echo '
                                 <h5 class="text-white">Please click the activation link we sent to your email.</h5>
                                 <p class="login-texthny mb-2 text-white"><span class="text-warning">If you do not click
                                         the link your account will remain inactive.<span></p>
-                                <!--//login-form-->
+                                ';
+                            }
+                            if($accountActivated == "accountAlreadyActivated"){
+                                echo '
+                                <p class="login-texthny mb-2 text-success">Your Account has already been Activated.</p>
                                 <a class="btn btn-success" href="login.php">Proceed to Login</a>
+                                ';
+                            }
+                            if($accountActivated == "accountBlocked"){
+                                echo '
+                                <h5 class="text-danger">Your account has been blocked</h5>
+                                <p class="login-texthny mb-2 text-white"><span class="text-warning">Please contact the administrator.<span></p>
+                                ';
+                            }
+                            ?>                                
                             </div>
                         </div>
                     </div>

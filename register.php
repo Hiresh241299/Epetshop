@@ -139,7 +139,7 @@ ob_start();
             $district = "";
             $email = $_POST['email'];
             $mobile = $_POST['phone'];
-            $reg = date("Y/m/d h:i:s");
+            $reg = date("Y/m/d G:i:s");
             $psd = password_hash($_POST['password'], PASSWORD_DEFAULT); //hash password using md5
             $status = -1;
             $role = $_POST['options'];
@@ -163,11 +163,22 @@ ob_start();
                     //hash user id
                     $userID = getUserID($email);
                     $hashid = password_hash($userID, PASSWORD_DEFAULT);
+                    //$_SESSION['activateUserID'] = $userID;
                     $subject="Activate Your E-Petshop Account";
                     $body='Click <a href="http://localhost/epetshop/activated.php?key='.$hashid.'" target="_blank">here</a> to activate your key <br><br>
                     If you did not make this request, please disregard this email.';
-
                     sendEmail($email, $fname, $lname, $subject, $body);
+
+                    //get admin id
+                    $adminID = getAdminID();
+                    //send admin notif
+                    //addNotif($userID, $title, $message, $date, $status)
+                    $ntitle = "New Customer Registered";
+                    $nmessage = $userID;
+                    $ndate = date("Y/m/d G:i:s");
+                    $nstatus = 1;
+                    addNotif($adminID, $ntitle, $nmessage, $ndate, $nstatus);
+
                     header('Location: activateAccount.php');
                 //send notif to admin, a customer has join
                     //sendEmail("epetshopbse@gmail.com", "e", "petshop", "New Customer Registration", "A new customer has join e-petshop,

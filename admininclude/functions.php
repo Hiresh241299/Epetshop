@@ -140,4 +140,66 @@ function updateLocation($id,$name, $status){
 
     return $result;
 }
+
+//update location
+function updateNotif($id, $status){
+    include "dbConnection.php";
+    $sql = "CALL sp_updateNotif('$id','$status');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
+
+//get userdetials
+function getUserDetails($userID,$field){
+    include "dbConnection.php";
+    $sql = "CALL sp_getUserDetails($userID);";
+    $result = $conn->query($sql);
+    $output = "";
+
+    if ($result -> num_rows > 0) {
+    //output data for each row
+        while ($row = $result->fetch_assoc()) {
+             //check for active orders for this user
+             if ($field == "fullName") {
+                 $output = $row['firstName'] . " " . $row['lastName'];
+             }
+             if ($field == "lastname") {
+                $output = $row['lastName'];
+            }
+        }
+    }
+    return $output;
+}
+
+
+
+function time_elapsed_string($datetime, $full = false) {
+    $now = new DateTime;
+    $ago = new DateTime($datetime);
+    $diff = $now->diff($ago);
+
+    $diff->w = floor($diff->d / 7);
+    $diff->d -= $diff->w * 7;
+
+    $string = array(
+        'y' => 'year',
+        'm' => 'month',
+        'w' => 'week',
+        'd' => 'day',
+        'h' => 'hour',
+        'i' => 'minute',
+        's' => 'second',
+    );
+    foreach ($string as $k => &$v) {
+        if ($diff->$k) {
+            $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
+        } else {
+            unset($string[$k]);
+        }
+    }
+
+    if (!$full) $string = array_slice($string, 0, 1);
+    return $string ? implode(' ', $string) . ' ago' : 'just now';
+}
 ?>

@@ -2,7 +2,7 @@
 if(!isset($_SESSION)){
     session_start();
 }
-include '../include/functions.php';
+include '../admininclude/functions.php';
 $output = "";
 if((isset($_POST['adminAction'])) && (isset($_POST['v']))){
 
@@ -16,6 +16,15 @@ if((isset($_POST['adminAction'])) && (isset($_POST['v']))){
 
     //p,pro,loc
 
+}
+
+if((isset($_POST['UpdateNotif'])) && (isset($_POST['adminID']))){
+    //brand
+    if($_POST['UpdateNotif'] == 2){
+        //update notif, set status 2
+        updateNotif($_POST['adminID'], 2);
+        $output = 0;
+    }
 }
 echo $output;
 ?>

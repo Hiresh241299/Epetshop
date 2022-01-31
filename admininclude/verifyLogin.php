@@ -1,5 +1,6 @@
 <?php
 //verify admin session
+include "functions.php";
 include "dbConnection.php";
 if(!isset($_SESSION)){
     session_start();
