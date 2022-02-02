@@ -1,0 +1,3 @@
+Petshop details
+
+available products

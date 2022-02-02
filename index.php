@@ -21,27 +21,22 @@ if ($session_roleID == 2) {
 
 
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title><?php echo $title?></title>
-    <!-- CSS -->
-    <link rel="stylesheet" href="assets/css/style-liberty.css">
-    <!-- CSS -->
-    <link href="//fonts.googleapis.com/css?family=Oswald:300,400,500,600&display=swap" rel="stylesheet">
-    <link href="//fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,900&display=swap" rel="stylesheet">
-    <link rel="icon" href="assets/image/icon/icon.jpg">
-    <!-- CSS -->
-
+    <?php
+    include 'include/header.php';
+    ?>
     <style>
     .pimg {
         width: 300px;
         height: 300px;
         overflow: hidden;
     }
+
     .bimg {
         width: 200px;
         height: 200px;
+    }
+    .cardbg{
+        background-color:#f4f4f4;
     }
     </style>
 </head>
@@ -145,7 +140,7 @@ if ($session_roleID == 2) {
     <!--//Navbar & Carousel -->
 
     <!--Posters-->
-    <section class="w3l-ecommerce-main bg-light">
+    <section class="w3l-ecommerce-main">
         <!-- /products-->
         <div class="ecom-contenthny py-5">
             <div class="container py-lg-5">
@@ -162,56 +157,67 @@ if ($session_roleID == 2) {
                     //gets error details
                     //mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-                    $sql = "CALL sp_getRecentlyAddedProducts();";
-                    $result = $conn->query($sql);
+                    $sql = "CALL sp_getAllProductLineDetailsWithLimits(0,12);";
+$result = $conn->query($sql);
 
-                    if ($result -> num_rows > 0) {
-                        //output data for each row
-                        while ($row = $result->fetch_assoc()) {
-                            $pid = $row['productID'];
-                            $pname = $row['pname'];
-                            $brand = $row['bname'];
-                            $desc= $row['description'];
-                            $img = $row['imgPath'];
-                            $prodcat = $row['pcname'];
-                            $petCat = $row['sname'];
-                            $price = "100";
+$output = "";
+if ($result -> num_rows < 1) {
+    $output .="<h3>No products available</h3>";
+}else{
+	//output data for each row
+	while ($row = $result->fetch_assoc()) {
+		$pid = $row['plID'];
+		$pname = $row['pname'];
+		$brand = $row['bname'];
+		$desc= $row['description'];
+		$img = $row['imgPath'];
+		$prodcat = $row['pcname'];
+		$petCat = $row['sname'];
+		$postedDT = $row['postedDateTime'];
+		$lastMDT = $row['lastModifiedDateTime'];
+		$petshopID = $row['petshopID'];
+		$petshopName = $row['petshop'];
+		$unit = $row['unit'];
+		$number = $row['number'];
+		$qoh = $row['qoh'];
+		$price = $row['price'];
                             
-                            echo '<div class="col-lg-3 col-6 product-incfhny mt-4">
+                            echo '<div class="col-lg-2 col-6 product-incfhny mb-4 cardbg border border-white border-rounded">
+                            </br>
                             <div class="product-grid2 transmitv">
                                 <div class="product-image2">
-                                    <div class="pimg">
-                                    <a href="#">
+                                    <a href="ecommerce-single.html">
                                         <img class="pic-1 img-fluid" src="product/'.$img.'">
                                         <img class="pic-2 img-fluid" src="product/'.$img.'">
                                     </a>
-                                    </div>
-
                                     <ul class="social">
-                                        <li><a href="#" data-tip="Quick View"><span class="fa fa-eye"></span></a></li>
-        
-                                        <li><a href="#" data-tip="Add to Cart"><span class="fa fa-shopping-bag"></span></a>
+                                        <li><a href="#" data-tip="Quick View"><span class="fa fa-eye"></span></a>
                                         </li>
+
+                                        <!--<li><a href="ecommerce.html" data-tip="Add to Cart"><span
+                                                    class="fa fa-shopping-bag"></span></a>
+                                        </li>-->
                                     </ul>
                                     <div class="transmitv single-item">
-                                        <form action="#" method="post">
-                                            <input type="hidden" name="cmd" value="_cart">
-                                            <input type="hidden" name="add" value="1">
-                                            <input type="hidden" name="transmitv_item" value="'.$pname.'">
-                                            <input type="hidden" name="amount" value="'.$price.'">
-                                            <button type="submit" class="transmitv-cart ptransmitv-cart add-to-cart">
-                                                Add to Cart
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
-                                <div class="product-content">
-                                    <h3 class="title"><a href="#">'.$pname.'</a> | <a href="#">'.$brand.'</a></h3>
-                                    <!-- <span class="price"><del>$975.00</del>Rs2200</span> -->
-                                    <span class="price">Rs '.$price.'</span>
+                                    <form action="#" method="post">
+                                        <input type="hidden" name="id" value="'.$pid.'" id="'.$pid.'">
+                                        <input type="hidden" name="quantity" value="1" id="quantity'.$pid.'">
+                                        <input type="hidden" name="name" value="'.$pname. " ".$number. " " .$unit.'" id="name'.$pid.'">
+                                        <input type="hidden" name="price" value="'.$price.'" id="price'.$pid.'">
+                                        <button type="submit" class="transmitv-cart ptransmitv-cart add-to-cart add_cart" name="add" id="'.$pid.'">
+                                            Add to Cart
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
-                        </div>';
+                            <div class="product-content">
+                                <h3 class="title"><a href="#">'.$pname . " ".$number. " " .$unit.'</a> | <a href="#">'.$brand.'</a></h3>
+                                <!-- <span class="price"><del>$975.00</del>Rs2200</span>-->
+                                <span class="price">Rs '.$price.'</span></br>
+                                    <small><a href="viewPetshopDetails.php?psid='.$petshopID.'"><u>'.$petshopName.'</u></a></small>
+                            </div>
+                        </div>
+                    </div>';
                         }
                     }
                     $result->close();
@@ -406,3 +412,74 @@ if ($session_roleID == 2) {
 
 </html>
 <?php include "bottomScripts.php"; ?>
+<script type="text/javascript">
+$(document).ready(function() {
+
+    load_data();
+
+    function load_data(page) {
+
+
+        $.ajax({
+            url: "ajax/load_data.php",
+            method: "POST",
+            data: {
+                page: page
+            },
+            dataType: "JSON",
+            success: function(data) {
+                $(".show_data").html(data.output);
+                $("#pagination").html(data.pagination);
+            }
+        });
+    }
+
+    $(document).on("click", ".pagination a", function(event) {
+        event.preventDefault();
+        var id = $(this).attr("id");
+        load_data(id);
+    });
+
+    function show_mycart() {
+        $.ajax({
+            url: "ajax/show_mycart.php",
+            method: "POST",
+            dataType: "JSON",
+            success: function(data) {
+                $("#cart").text(data.da);
+            }
+        });
+    }
+
+});
+
+$(document).on("click", ".add_cart", function(event) {
+    event.preventDefault();
+    //alert("test");
+    var id = $(this).attr("id");
+    var name = $("#name" + id + "").val();
+    var quantity = $("#quantity" + id + "").val();
+    var price = $("#price" + id + "").val();
+    //var id = 1;
+    //var name = "";
+    //var quantity = 1;
+    //var price = 1;
+    var action = "add";
+    $.ajax({
+        url: "ajax/cart_action.php",
+        method: "POST",
+        dataType: "JSON",
+        data: {
+            id: id,
+            name: name,
+            price: price,
+            quantity: quantity,
+            action: action
+        },
+        success: function(data) {
+
+        }
+    });
+    toastr.success('Product added');
+});
+</script>

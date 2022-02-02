@@ -312,8 +312,8 @@ if((!isset($_GET['id'])) || (($_GET['id']) == NULL)){
                                         $prodcatid = $_POST['prodcat'];
                                         $specialityid = $_POST['petcat'];
                                         $status = 1;
-                                        $dateposted = date("Y/m/d h:i:s");
-                                        $lastmodif = date("Y/m/d h:i:s");
+                                        $dateposted = date("Y/m/d G:i:s");
+                                        $lastmodif = date("Y/m/d G:i:s");
                                         $petshopid= getPetshopID($userid);
 
                                         //add img field to form
@@ -357,7 +357,7 @@ if((!isset($_GET['id'])) || (($_GET['id']) == NULL)){
                                         $prodcatid = $_POST['prodcat'];
                                         $specialityid = $_POST['petcat'];
                                         $status = 1;
-                                        $lastmodif = date("Y/m/d h:i:s");
+                                        $lastmodif = date("Y/m/d G:i:s");
                                         //$petshopid= getPetshopID($userid);
 
 

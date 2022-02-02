@@ -536,7 +536,7 @@ function saveCartInDb($userID){
                         $orderID = getActiveUserOrder($userID);
                     } else {
                         //create a new order for this user
-                        $createdDT= date("Y/m/d h:i:s");
+                        $createdDT= date("Y/m/d G:i:s");
                         $status="active";
                         $result = addOrder($createdDT, $status, $userID);
                     }

@@ -34,7 +34,7 @@ if(!isset($_SESSION)){
                     <div class="col-lg-3 story-gd"></div>
                     <div class="col-lg-6 story-gd">
                         <!-- <img src="assets/images/left2.jpg" class="img-fluid" alt="/"> -->
-                        <div class="wrap bg-dark">
+                        <div class="wrap bg-dark border rounded">
                             </br>
                             <h4 class="text-center text-white mb-4"><a class="navbar-brand" href="index.php">
                                     <h3 class="hny-title text-white"><span>E </span>Petshop</h3>
@@ -76,8 +76,9 @@ if(!isset($_SESSION)){
                             }
                             if($accountActivated == "activated"){
                                 echo '
-                                <p class="login-texthny mb-2 text-success">Your Account has been activated</p>
-                                <a class="btn btn-success" href="login.php">Proceed to Login</a>
+                                <h5 class="text-success">Your Account has been activated.</h5>
+                                <!--<p class="login-texthny mb-2 text-success">Your Account has been activated</p>
+                                <a class="btn btn-success" href="login.php">Proceed to Login</a>-->
                                 ';
                             }
                             if($accountActivated == "notActivated"){
@@ -89,8 +90,9 @@ if(!isset($_SESSION)){
                             }
                             if($accountActivated == "accountAlreadyActivated"){
                                 echo '
-                                <p class="login-texthny mb-2 text-success">Your Account has already been Activated.</p>
-                                <a class="btn btn-success" href="login.php">Proceed to Login</a>
+                                <h5 class="text-success">Your Account has already been Activated.</h5>
+                                <!--<p class="login-texthny mb-2 text-success">Your Account has already been Activated.</p>
+                                <a class="btn btn-success" href="login.php">Proceed to Login</a>-->
                                 ';
                             }
                             if($accountActivated == "accountBlocked"){

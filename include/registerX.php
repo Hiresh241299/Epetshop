@@ -96,7 +96,7 @@
             $district = "test";
             $email = $_POST['email'];
             //$mobile = $_POST['phone'];
-            $reg = date("Y/m/d h:i:s");
+            $reg = date("Y/m/d G:i:s");
             $psd = password_hash($_POST['password'], PASSWORD_DEFAULT); //hash password using md5
             $status = 1;
             $role = $_POST['options'];

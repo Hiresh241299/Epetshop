@@ -65,7 +65,7 @@ if (isset($_GET['loc'])) {
         $name = $_POST['lname'];
         //$img = $_POST['image'];
         $status = 1;
-        $date = date("Y/m/d h:i:s");
+        $date = date("Y/m/d G:i:s");
                 $result = updateLocation($lid,$name,$status);
                 if ($result) {
                     //**********

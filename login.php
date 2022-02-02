@@ -67,7 +67,7 @@ if (isset($_SESSION["roleid"])) {
                                     </div>
                                     <input type="submit" class="btn btn-success submit-login btn mb-4" name="login"
                                         value="Login">
-
+                                    <small class="form-text text-white">Don't have an account? <a href="register.php" class="text-warning">Register Now</a></small></br>
                                 </form>
                                 <!--//login-form-->
                                 <?php
@@ -86,7 +86,7 @@ if (isset($_SESSION["roleid"])) {
                 $userID = $_SESSION['userid'];
 
                 //update user last login datetime
-                $lastLogin = date("Y/m/d h:i:s");
+                $lastLogin = date("Y/m/d G:i:s");
                 updateUserLogin($lastLogin, $userID);
 
                 //if remember me is check, create cookie
@@ -121,7 +121,7 @@ if (isset($_SESSION["roleid"])) {
                         $orderID = getActiveUserOrder($userID);
                     } else {
                         //create a new order for this user
-                        $createdDT= date("Y/m/d h:i:s");
+                        $createdDT= date("Y/m/d G:i:s");
                         $status="active";
                         $result = addOrder($createdDT, $status, $userID);
                     }

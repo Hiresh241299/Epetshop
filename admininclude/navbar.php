@@ -29,7 +29,7 @@
                                                 $NID = $row['NID'];
                                                 $date = $row['createdDateTime'];
                                                 $status = $row['status'];
-                                                $timeLapsed = time_elapsed_string($date, true);
+                                                $timeLapsed = time_elapsed_string($date, false);
                                                 if($status == 1){
                                                     $count++;
                                                 }
@@ -52,7 +52,7 @@
                 <div class="profile_details_left">
                     <ul class="nofitications-dropdown">
                         <li class="dropdown">
-                            <a href="#" onclick="UpdateNotif(166)" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i
+                            <a href="#" onclick="UpdateNotif(<?php echo $adminid;?>)" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i
                                     class="fa fa-bell"></i><span id="notifbadge" class="badge blue"><?php echo $count;?></span></a>
                             <ul class="dropdown-menu">
                                 <?php echo $notifOutput;?>
@@ -63,6 +63,7 @@
                                 </li>
                             </ul>
                         </li>
+                        <!--
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i
                                     class="fa fa-comment"></i><span class="badge blue">4</span></a>
@@ -106,7 +107,7 @@
                                     </div>
                                 </li>
                             </ul>
-                        </li>
+                        </li>-->
                     </ul>
                 </div>
                 <div class="profile_details">

@@ -66,7 +66,7 @@
                                             $name = $_POST['pname'];
                                             //$img = $_POST['image'];
                                             $status = 1;
-                                            $date = date("Y/m/d h:i:s");
+                                            $date = date("Y/m/d G:i:s");
                                             //add img field to form
                                             $statusMsg = '';
                                             $targetDir = "category/";
@@ -102,7 +102,7 @@
                                             $name = $_POST['pname'];
                                             //$img = $_POST['image'];
                                             $status = 1;
-                                            $date = date("Y/m/d h:i:s");
+                                            $date = date("Y/m/d G:i:s");
                                             //add img field to form
                                             $statusMsg = '';
                                             $targetDir = "category/";

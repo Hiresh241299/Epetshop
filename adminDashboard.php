@@ -191,19 +191,19 @@ $_SESSION['NavActive']="adminhome";
                                                     <tr role="row">
                                                         <th class="sorting" tabindex="0" rowspan="1" colspan="1"
                                                             aria-label="Emp. Name: activate to sort column ascending"
-                                                            style="width: 239px;" aria-sort="descending">Ref</th>
+                                                            style="width: 239px;" aria-sort="descending">Owner</th>
                                                         <th class="sorting" tabindex="0" rowspan="1" colspan="1"
                                                             aria-label="Emp. Name: activate to sort column ascending"
-                                                            style="width: 239px;">User Name</th>
+                                                            style="width: 239px;">Petshop</th>
                                                         <th class="sorting" tabindex="0" rowspan="1" colspan="1"
                                                             aria-label="Designation: activate to sort column ascending"
-                                                            style="width: 362px;">Joining Date</th>
+                                                            style="width: 362px;">BRN</th>
                                                         <th class="sorting" tabindex="0" rowspan="1" colspan="1"
                                                             aria-label="Joining date: activate to sort column ascending"
-                                                            style="width: 188px;">Last Login</th>
+                                                            style="width: 188px;">Description</th>
                                                         <th class="sorting" tabindex="0" rowspan="1" colspan="1"
                                                             aria-label="Emp. Status: activate to sort column ascending"
-                                                            style="width: 195px;">Status</th>
+                                                            style="width: 195px;">Joining Date</th>
                                                         <th class="sorting" tabindex="0" rowspan="1" colspan="1"
                                                             aria-label="Emp. Status: activate to sort column ascending"
                                                             style="width: 195px;">Action</th>
@@ -212,11 +212,13 @@ $_SESSION['NavActive']="adminhome";
                                                 </thead>
                                                 <tbody>
                                                     <?php
-                                                    //get all users
-                                                    //sp_getAllUsers (where roleID != '')
+                                                    //load petshop where status = -1
+                                                    //-1 pending request
+                                                    //1 accepted
+                                                    //0 rejected
 
                                                     //Load all users from database
-                                                    $sql = "CALL sp_getAllUsers('1');";
+                                                    $sql = "CALL sp_getAllPetshop('-1');";
                                                     $result = $conn->query($sql);
                                                     $limit = 0;
                                                     $oddOrEven = "even";
@@ -225,47 +227,28 @@ $_SESSION['NavActive']="adminhome";
                                                         //output data for each row
                                                         while (($row = $result->fetch_assoc()) && ($limit < 5)) {
                                                             $limit++;
-                                                            $fname = $row['firstName'];
-                                                            $lname = $row['lastName'];
-                                                            $joinDate = date('d-m-Y h:m:s', strtotime($row['registrationDate']));
-                                                            //$status = $row['status'];
-
-                                                            if($row['status'] == -1){
-                                                                $status = '<td><span class="badge badge-danger">Invalid</span></td>';
-                                                            }
-                                                            if($row['status'] == 0){
-                                                                $status = '<td><span class="badge badge-warning">Inactive</span></td>';
-                                                            }
-                                                            if($row['status'] == 1){
-                                                                $status = '<td><span class="badge badge-success">Active</span></td>';
-                                                            }
-
-                                                            $lastLogin = date('d-m-Y h:m:s', strtotime($row['lastLoginDateTime']));
-                                                            if($row['roleID'] == 1){
-                                                                $userRole = "Admin";
-                                                            }
-                                                            if($row['roleID'] == 2){
-                                                                $userRole = "Petshop Owner";
-                                                            }
-                                                            if($row['roleID'] == 3){
-                                                                $userRole = "Customer";
-                                                            }
-
+                                                            $userID = $row['userID'];
+                                                            $psid = $row['petshopID'];
+                                                            $petshopname = $row['name'];
+                                                            $brn = $row['brn'];
+                                                            $desc = $row['description'];
+                                                            $joinDate = date('d-m-Y G:m', strtotime($row['registrationDate']));
+                                                        
                                                             if($oddOrEven == "odd")
                                                             {
                                                                 $oddOrEven = "even";
                                                             }else{
                                                                 $oddOrEven = "odd";
                                                             }
-                                                        
+
                                                             echo '
                                                         <tr role="row" class="'.$oddOrEven.'">
-                                                            <td>'.$userRole.'</span></td>
-                                                            <td class=""><img src="assets/images/avatar5.jpg" class="rounded-circle mr-2" width="40px" alt="">'.$fname . " ". $lname.'</td>
+                                                            <td>'.getUserDetails($userID,"fullName").'</span></td>
+                                                            <td class="">'.$petshopname.'</td>
+                                                            <td class="">'.$brn.'</td>
+                                                            <td class="">'.$desc.'</td>
                                                             <td class="">'.$joinDate.'</td>
-                                                            <td class="">'.$lastLogin.'</td>
-                                                            '.$status.'
-                                                            <td>BTN</span></td>
+                                                            <td><a href="adminViewPetshopRequests.php?psid='.$psid.'&type=request" class="btn btn-success"> View Details </a></span></td>
                                                         </tr>
                                                             ';
                                                         

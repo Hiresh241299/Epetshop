@@ -33,7 +33,15 @@
                     <li><a href="adminviewUsers.php?rid=3">Customer</a></li>
                 </ul>
             </li>
-            <li class='<?php (($_SESSION['NavActive'] == "adminPetshop")? $x ="active":$x =""); echo $x;?>'><a href="adminviewpetshop.php"><i class="fa fa-store"></i> <span>Petshop</span></a></li>
+            <li class='menu-list <?php (($_SESSION['NavActive'] == "adminPetshop")? $x ="active":$x =""); echo $x;?>'>
+                <a href="#"><i class="fa fa-store"></i>
+                    <span>Petshop<i class="lnr lnr-chevron-right"></i></span></a>
+                <ul class="sub-menu-list">
+                    <li><a href="adminviewpetshop.php">All Petshop</a> </li>
+                    <li><a href="adminviewpetshopRequests.php?type=request">Petshop Join Requests</a></li>
+                </ul>
+            </li>
+            <!--<li class='<a href="adminviewpetshop.php"><i class="fa fa-store"></i> <span>Petshop</span></a></li>-->
             <li class='menu-list <?php (($_SESSION['NavActive'] == "adminContent")? $x ="active":$x =""); echo $x;?>'><a
                     href="#"><i class="fa fa-th"></i>
                     <span>Content<i class="lnr lnr-chevron-right"></i></span></a>

@@ -141,10 +141,19 @@ function updateLocation($id,$name, $status){
     return $result;
 }
 
-//update location
+//update notif
 function updateNotif($id, $status){
     include "dbConnection.php";
     $sql = "CALL sp_updateNotif('$id','$status');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
+
+//update petshop
+function updatePetshopStatus($id, $status){
+    include "dbConnection.php";
+    $sql = "CALL sp_updatePetshopStatus('$id','$status');";
     $result = mysqli_query($conn, $sql);
 
     return $result;
@@ -174,7 +183,9 @@ function getUserDetails($userID,$field){
 
 
 
-function time_elapsed_string($datetime, $full = false) {
+
+
+function time_elapsed_string($datetime, $full) {
     $now = new DateTime;
     $ago = new DateTime($datetime);
     $diff = $now->diff($ago);

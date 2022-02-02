@@ -16,19 +16,15 @@ if (isset($_SESSION["roleid"])) {
 <html lang="en">
 
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title><?php echo $title?></title>
-    <!-- Template CSS -->
-    <link rel="stylesheet" href="assets/css/style-liberty.css">
-    <!-- Template CSS -->
-    <link href="//fonts.googleapis.com/css?family=Oswald:300,400,500,600&display=swap" rel="stylesheet">
-    <link href="//fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,900&display=swap" rel="stylesheet">
-    <link rel="icon" href="assets/image/icon/icon.jpg">
-    <!-- Template CSS -->
-
+    <?php
+    include 'include/header.php';
+    ?>
 </head>
+<style>
+    .cardbg{
+        background-color:#f4f4f4;
+    }
+</style>
 
 <body>
     <section class="w3l-banner-slider-main inner-pagehny">
@@ -37,7 +33,7 @@ if (isset($_SESSION["roleid"])) {
             <div class="top-header-content">
                 <header class="tophny-header">
                     <!-- Include Navbar -->
-                <?php
+                    <?php
             if ($session_roleID == 3) {
                 include 'include/navbarCustomer.php';
             }else{
@@ -410,71 +406,76 @@ if (isset($_SESSION["roleid"])) {
 
 <!-- cart -->
 <script type="text/javascript">
-		
-       $(document).ready(function(){
-           
-             load_data();
-           function load_data(page){
+$(document).ready(function() {
+
+    load_data();
+
+    function load_data(page) {
 
 
-           	$.ajax({
-               url: "ajax/load_data.php",
-               method: "POST",
-               data:{page:page},
-               dataType:"JSON",
-               success:function(data){
+        $.ajax({
+            url: "ajax/load_data.php",
+            method: "POST",
+            data: {
+                page: page
+            },
+            dataType: "JSON",
+            success: function(data) {
                 $(".show_data").html(data.output);
                 $("#pagination").html(data.pagination);
-               }
-           	});
-           }
+            }
+        });
+    }
 
-        $(document).on("click", ".pagination a",function(event){
+    $(document).on("click", ".pagination a", function(event) {
         event.preventDefault();
-          var id  = $(this).attr("id");
-          load_data(id);
-       });
-           function show_mycart(){
-              $.ajax({
-              url: "ajax/show_mycart.php",
-              method:"POST",
-              dataType:"JSON",
-              success:function(data){
+        var id = $(this).attr("id");
+        load_data(id);
+    });
+
+    function show_mycart() {
+        $.ajax({
+            url: "ajax/show_mycart.php",
+            method: "POST",
+            dataType: "JSON",
+            success: function(data) {
                 $("#cart").text(data.da);
-              }
-           });
-           }
+            }
+        });
+    }
 
-       });
+});
 
-       $(document).on("click",".add_cart", function(event){
-       	event.preventDefault();
-           //alert("test");
-           var id = $(this).attr("id");
-           var name = $("#name"+id+"").val();
-           var quantity = $("#quantity"+id+"").val();
-           var price = $("#price"+id+"").val();
-           //var id = 1;
-           //var name = "";
-           //var quantity = 1;
-           //var price = 1;
-           var action = "add";
+$(document).on("click", ".add_cart", function(event) {
+    event.preventDefault();
+    //alert("test");
+    var id = $(this).attr("id");
+    var name = $("#name" + id + "").val();
+    var quantity = $("#quantity" + id + "").val();
+    var price = $("#price" + id + "").val();
+    //var id = 1;
+    //var name = "";
+    //var quantity = 1;
+    //var price = 1;
+    var action = "add";
+    $.ajax({
+        url: "ajax/cart_action.php",
+        method: "POST",
+        dataType: "JSON",
+        data: {
+            id: id,
+            name: name,
+            price: price,
+            quantity: quantity,
+            action: action
+        },
+        success: function(data) {
 
-           $.ajax({
-              url: "ajax/cart_action.php",
-              method:"POST",
-              dataType:"JSON",
-              data: {id:id,name:name,price:price,quantity:quantity,action:action},
-              success:function(data){
-                 
-              }
-           });
-
-
-       });
-
-
-	</script>
+        }
+    });
+    toastr.success('Product added');
+});
+</script>
 
 <!--Price Range-->
 <script src="assets/js/jquery-ui.js"></script>

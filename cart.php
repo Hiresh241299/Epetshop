@@ -38,17 +38,9 @@ if(isset($_SESSION["userid"])){
 <html lang="en">
 
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title><?php echo $title?></title>
-    <!-- CSS -->
-    <link rel="stylesheet" href="assets/css/style-liberty.css">
-    <!-- CSS -->
-    <link href="//fonts.googleapis.com/css?family=Oswald:300,400,500,600&display=swap" rel="stylesheet">
-    <link href="//fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,900&display=swap" rel="stylesheet">
-    <link rel="icon" href="assets/image/icon/icon.jpg">
-    <!-- CSS -->
+    <?php
+    include 'include/header.php';
+    ?>
 
     <style>
     .pimg {
@@ -169,9 +161,9 @@ if(isset($_SESSION["userid"])){
                                                 } else {
                                                     //user not logged in
                                                     echo '<p>Please 
-                                                <a href="login.php">Login</a>
+                                                <a class="text-warning" href="login.php"><b>Login</b></a>
                                                  or
-                                                <a href="register.php">Register</a> for payment</p>';
+                                                <a class="text-warning" href="register.php"><b>Register</b></a> for payment</p>';
                                                 }
                                             }
                                         }

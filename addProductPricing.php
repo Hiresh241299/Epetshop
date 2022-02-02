@@ -400,8 +400,8 @@ if((!isset($_GET['id'])) || (($_GET['id']) == NULL)){
                                         //$prodcatid = $_POST['prodcat'];
                                         //$specialityid = $_POST['petcat'];
                                         $F_status = 1;
-                                        //$dateposted = date("Y/m/d h:i:s");
-                                        $F_lastmodif = date("Y/m/d h:i:s");
+                                        //$dateposted = date("Y/m/d G:i:s");
+                                        $F_lastmodif = date("Y/m/d G:i:s");
                                         //$petshopid= getPetshopID($userid);
 
                                         

@@ -120,6 +120,7 @@ ob_start();
 
                                     <input type="submit" class="btn btn-success submit-login btn mb-4" id="regis"
                                         name="register" value="Register" title="">
+                                        <small class="form-text text-white">Already have an account? <a href="login.php" class="text-warning">Login</a></small></br>
                                 </form>
 
                             </div>
@@ -190,7 +191,33 @@ ob_start();
                     //create a session tmpUserID
                     $userID = getUserID($email);
                     $_SESSION['tmpUserID'] = $userID;
-                    header('Location: registerPetshop.php');
+
+                    //activate account first
+                    //send email
+                    //hash user id
+                    $userID = getUserID($email);
+                    $hashid = password_hash($userID, PASSWORD_DEFAULT);
+                    //$_SESSION['activateUserID'] = $userID;
+                    $subject="Activate Your E-Petshop Account";
+                    $body='Click <a href="http://localhost/epetshop/activated.php?key='.$hashid.'&ref=2" target="_blank">here</a> to activate your key <br><br>
+                    If you did not make this request, please disregard this email.';
+                    sendEmail($email, $fname, $lname, $subject, $body);
+
+                    //send notif to admin
+                    //get admin id
+                    $adminID = getAdminID();
+                    //send admin notif
+                    //addNotif($userID, $title, $message, $date, $status)
+                    $ntitle = "New Petshop-Owner Registered";
+                    $nmessage = $userID;
+                    $ndate = date("Y/m/d G:i:s");
+                    $nstatus = 1;
+                    addNotif($adminID, $ntitle, $nmessage, $ndate, $nstatus);
+
+                    //activate account => then registerpetshop
+                    header('Location: activateAccount.php');
+
+                    //header('Location: registerPetshop.php');
                     //    echo "<script>window.location.href='registerPetshop.php';</script>";
                 }
             } else {

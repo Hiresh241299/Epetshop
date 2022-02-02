@@ -18,11 +18,22 @@ if((isset($_POST['adminAction'])) && (isset($_POST['v']))){
 
 }
 
+//update notif
 if((isset($_POST['UpdateNotif'])) && (isset($_POST['adminID']))){
-    //brand
+    //notif
     if($_POST['UpdateNotif'] == 2){
         //update notif, set status 2
         updateNotif($_POST['adminID'], 2);
+        $output = 0;
+    }
+}
+
+//update petshop status
+if((isset($_POST['UpdatePetshop'])) && (isset($_POST['sts']))){
+
+    if(updatePetshopStatus($_POST['UpdatePetshop'], $_POST['sts'])){
+        $output = 1;
+    }else{
         $output = 0;
     }
 }

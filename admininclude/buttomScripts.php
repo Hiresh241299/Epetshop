@@ -91,7 +91,6 @@ $(window).load(function() {
 
 <!--Update notification status-->
 <script>
-
 function UpdateNotif(aid) {
     //alert("Update Notif Status");
     $.ajax({
@@ -105,5 +104,44 @@ function UpdateNotif(aid) {
             $('#notifbadge').text(data);
         }
     });
+}
+</script>
+<!--Update Petshop Status-->
+
+<script>
+function petshopStatus(id, status) {
+    //ajax call to update status
+    $.ajax({
+        url: 'ajax/adminAction.php',
+        data: {
+            UpdatePetshop: id,
+            sts: status
+        },
+        type: 'post',
+        success: function(data) {
+            //$('#notifbadge').text(data);
+            //change btn value :Accepted or Rejected
+            if (data == 1) { //update success 
+                if (status == -1) { //Rejected
+                    $('#btnReject').text('Rejected');
+                    $('#btnReject').attr("disabled",true);
+                    //hide accept
+                    $('#btnAccept').hide();
+                }
+                if (status == 1) { //Accpted
+                    $('#btnAccept').text('Accepted');
+                    $('#btnAccept').attr("disabled",true);
+                    //hide reject
+                    $('#btnReject').hide();
+
+                }
+                if (status == 0) { //Blocked
+                    $('#btnBlock').text('Blocked');
+                    $('#btnBlock').attr("disabled",true);
+                }
+            }
+        }
+    });
+
 }
 </script>

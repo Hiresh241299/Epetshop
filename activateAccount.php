@@ -41,7 +41,18 @@ if(!isset($_SESSION)){
                                 <h5 class="text-white">Please click the activation link we sent to your email.</h5>
                                 <p class="login-texthny mb-2 text-white"><span class="text-warning">If you do not click the link your account will remain inactive.<span></p>
                                 <!--//login-form-->
-                                <a class="btn btn-success" href="login.php">Proceed to Login</a>
+                                <?php
+                                if(isset($_SESSION['tmpUserID'])){
+                                    echo '
+                                    <a class="btn btn-success" href="registerPetshop.php">Register Petshop</a>
+                                    ';
+                                }else{
+                                    echo '
+                                    <a class="btn btn-success" href="login.php">Proceed to Login</a>
+                                    ';
+                                }
+                                ?>
+                                
                             </div>
                         </div>
                     </div>

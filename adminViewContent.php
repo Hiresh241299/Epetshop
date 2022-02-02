@@ -1,6 +1,5 @@
 <?php
 include 'admininclude/verifyLogin.php';
-include "admininclude/functions.php";
 //solves header issue
 ob_start();
 $_SESSION['NavActive']="content";

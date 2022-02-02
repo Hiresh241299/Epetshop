@@ -1,4 +1,3 @@
-
 <script src="assets/js/jquery-3.3.1.min.js"></script>
 <script src="assets/js/jquery-2.1.4.min.js"></script>
 <script src="assets/js/parsley.js"></script>
@@ -35,30 +34,31 @@ $('.overlay-close2').on('click', function() {
 <!--//register-->
 
 <script>
-function cart(){
-    window.location.href='cart.php';
+function cart() {
+    window.location.href = 'cart.php';
 }
 </script>
 
 <script type="text/javascript">
-    $(document).ready(function(){
-            
-            show_mycart();
-           function show_mycart(){
-              $.ajax({
-              url: "ajax/show_mycart.php",
-              method:"POST",
-              dataType:"JSON",
-              success:function(data){
+$(document).ready(function() {
+
+    show_mycart();
+
+    function show_mycart() {
+        $.ajax({
+            url: "ajax/show_mycart.php",
+            method: "POST",
+            dataType: "JSON",
+            success: function(data) {
                 $(".get_cart").html(data.out);
                 $("#cart").text(data.da);
-              }
-           });
-           }
+            }
+        });
+    }
 
-           setInterval(show_mycart,1000);
+    setInterval(show_mycart, 1000);
 
-    });
+});
 </script>
 
 <script>
@@ -124,58 +124,66 @@ $(".btn-group-toggle").twbsToggleButtons();
 
 <!--cart.php-->
 <script type="text/javascript">
-	 	$(document).ready(function(){
-            
-            show_mycart();
-           function show_mycart(){
-              $.ajax({
-              url: "ajax/show_mycart.php",
-              method:"POST",
-              dataType:"JSON",
-              success:function(data){
-              	$("#get_cart").html(data.out);
+$(document).ready(function() {
+
+    show_mycart();
+
+    function show_mycart() {
+        $.ajax({
+            url: "ajax/show_mycart.php",
+            method: "POST",
+            dataType: "JSON",
+            success: function(data) {
+                $("#get_cart").html(data.out);
                 $("#cart").text(data.da);
                 $("#total").text(data.total);
                 $("#totalValue").val(data.totalValue);
-              }
-           });
-           }
+            }
+        });
+    }
 
-           setInterval(show_mycart,1000);
+    setInterval(show_mycart, 1000);
 
-	 	});
+});
 
-	 	$(document).on("click",".remove",function(){
-             var id = $(this).attr("id");
+$(document).on("click", ".remove", function() {
+    var id = $(this).attr("id");
 
-             var action = "delete";
+    var action = "delete";
 
-              $.ajax({
-              url: "ajax/cart_action.php",
-              method:"POST",
-              data:{id:id,action:action},
-              dataType:"JSON",
-              success:function(data){
-              
-              }
-           });
-	 	});
+    $.ajax({
+        url: "ajax/cart_action.php",
+        method: "POST",
+        data: {
+            id: id,
+            action: action
+        },
+        dataType: "JSON",
+        success: function(data) {
 
-	 		$(document).on("click",".clearall",function(){
-             var id = $(this).attr("id");
+        }
+    });
+    toastr.warning('Product removed');
+});
 
-             var action = "clearall";
+$(document).on("click", ".clearall", function() {
+    var id = $(this).attr("id");
 
-              $.ajax({
-              url: "ajax/cart_action.php",
-              method:"POST",
-              data:{id:id,action:action},
-              dataType:"JSON",
-              success:function(data){
-              
-              }
-           });
-	 	});
-	 </script>
+    var action = "clearall";
+
+    $.ajax({
+        url: "ajax/cart_action.php",
+        method: "POST",
+        data: {
+            id: id,
+            action: action
+        },
+        dataType: "JSON",
+        success: function(data) {
+
+        }
+    });
+    toastr.warning('Cart cleared');
+});
+</script>
 <!--cart.php-->
-

@@ -13,7 +13,7 @@ $pagination = '<div >
 <ul class="pagination">';
 
 
-$limit = 6;
+$limit = 8;
 $start = ($page - 1)* $page;
 
 //$pages = mysqli_query($connect,"SELECT count(productLineID) AS id FROM productline;");
@@ -69,20 +69,21 @@ if ($result -> num_rows < 1) {
 		 
 		 $output .= '
 		 <!-- Post Starts-->
-		 <div class="col-lg-4 col-6 product-incfhny mb-4">
+		 <div class="col-lg-3 col-6 product-incfhny mb-4 cardbg border border-white border-rounded">
+         </br>
                                 <div class="product-grid2 transmitv">
                                     <div class="product-image2">
-                                        <a href="ecommerce-single.html">
+                                        <a href="viewProductDetails.php?prodid='.$pid.'">
                                             <img class="pic-1 img-fluid" src="product/'.$img.'">
                                             <img class="pic-2 img-fluid" src="product/'.$img.'">
                                         </a>
                                         <ul class="social">
-                                            <li><a href="#" data-tip="Quick View"><span class="fa fa-eye"></span></a>
+                                            <li><a href="viewProductDetails.php?prodid='.$pid.'" data-tip="Quick View"><span class="fa fa-eye"></span></a>
                                             </li>
 
-                                            <li><a href="ecommerce.html" data-tip="Add to Cart"><span
+                                            <!--<li><a href="ecommerce.html" data-tip="Add to Cart"><span
                                                         class="fa fa-shopping-bag"></span></a>
-                                            </li>
+                                            </li>-->
                                         </ul>
                                         <div class="transmitv single-item">
                                         <form action="#" method="post">
@@ -97,10 +98,10 @@ if ($result -> num_rows < 1) {
                                     </div>
                                 </div>
                                 <div class="product-content">
-                                    <h3 class="title"><a href="#">'.$pname . " ".$number. " " .$unit.'</a> | <a href="#">'.$brand.'</a></h3>
-                                    <!-- <span class="price"><del>$975.00</del>Rs2200</span> 
-                                    <a href="#">'.$petshopName.'</a></br>-->
-                                    <span class="price">Rs '.$price.'</span>
+                                    <h3 class="title"><a href="viewProductDetails.php?prodid='.$pid.'">'.$pname . " ".$number. " " .$unit.'</a> | <a href="#brand">'.$brand.'</a></h3>
+                                    <!-- <span class="price"><del>$975.00</del>Rs2200</span> -->
+                                    <span class="price">Rs '.$price.'</span></br>
+                                    <small><a href="viewPetshopDetails.php?psid='.$petshopID.'"><u>'.$petshopName.'</u></a></small>
                                 </div>
                             </div>
                         </div>

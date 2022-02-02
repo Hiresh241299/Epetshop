@@ -91,14 +91,14 @@ if (isset($_SESSION['tmpUserID'])){
                         <!--class = "wrap"-->
                         <div class="wrap bg-dark">
                             </br>
-                            <h4 class="text-center text-white mb-4">BUSINESS REGISTRATION</h4>
+                            <h4 class="text-center text-white mb-4">PETSHOP REGISTRATION</h4>
 
                             <div class="login-bghny p-md-5 p-4 mx-auto mw-100">
 
                                 <small class="form-text text-warning">Required Field are marked *</small></br>
                                 <form action="" method="post">
                                     <div class="form-group">
-                                        <p class="login-texthny mb-2 text-white">Business Name <span
+                                        <p class="login-texthny mb-2 text-white">Petshop Name <span
                                                 class="text-warning">*</span></p>
                                         <input type="text" class="form-control" id="pname" placeholder="" name="pname"
                                             onkeyup="validatePetshop(this.id); verifyUniqueness(this.id, this.value)"
@@ -247,8 +247,8 @@ if (isset($_SESSION['tmpUserID'])){
             $district = $_POST['district'];
             $long = "1";
             $lat = "1";
-            $status = "1";
-            $reg = date("Y/m/d h:i:s");
+            $status = "-1";
+            $reg = date("Y/m/d G:i:s");
             //$userID = $_GET['id'];
 
             //$addpetsh = addPetshop("Dy", "breeding", "tt", "tt", "tt", 12 , 12 , 1 , 31 , 1, "1999-08-08");
@@ -270,7 +270,7 @@ if (isset($_SESSION['tmpUserID'])){
                             $name = $row['name'];
 
                             //specialities
-                            $date = date("Y/m/d h:i:s");
+                            $date = date("Y/m/d G:i:s");
                             $status = 1;
                             if (isset($_POST[$id])){
                             //call function addPetshopSpecialities
@@ -280,6 +280,19 @@ if (isset($_SESSION['tmpUserID'])){
                     }
                 $result->close();
                 $conn->next_result();
+
+                //send notif to admin to accept petshop
+                //send notif to admin
+                    //get admin id
+                    $adminID = getAdminID();
+                    //send admin notif
+                    //addNotif($userID, $title, $message, $date, $status)
+                    $ntitle = "Verify Petshop";
+                    //petshop id
+                    $nmessage = $userID;
+                    $ndate = date("Y/m/d G:i:s");
+                    $nstatus = 1;
+                    addNotif($adminID, $ntitle, $nmessage, $ndate, $nstatus);
 
                 $_SESSION['tmpUserID'] = null;
                 header('Location: login.php');

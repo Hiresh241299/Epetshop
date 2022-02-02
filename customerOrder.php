@@ -32,7 +32,7 @@ if(isset($_GET['p'])){
         setcookie("cart", null, -1, '/');
 
         //save in payment
-        $dateTime = date("Y/m/d h:i:s");
+        $dateTime = date("Y/m/d G:i:s");
         $remark = "";
         $status = "Payment Completed";
         addPayment($dateTime, $remark, $status, $orderID);
