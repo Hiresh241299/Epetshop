@@ -135,6 +135,123 @@ if (isset($_POST['action'])) {
         
 	}
 
+    if ($_POST['action'] == "addQTY") {
+		
+		//check if user is login
+		//user login save in db
+        if ($userID != null) {
+            //create order if order not already exists
+            //loop until OrderID is obtain to created OrderDetails
+			
+            //while ($orderID <= 0) {
+
+                if (getActiveUserOrder($userID) > 0) {
+                        $orderID = getActiveUserOrder($userID);
+                } else {
+                    //create a new order for this user
+                    $createdDT= date("Y/m/d G:i:s");
+                    $status="active";
+                    $result = addOrder($createdDT, $status, $userID);
+                }
+				while($orderID <= 0){
+					$orderID = getActiveUserOrder($userID);
+				}
+
+            //create orderDetails using the OrderID obtain
+            //Insert Into orderDetails
+            if ($orderID > 0) {
+                //get productLineDetails
+				$productLineID = $_POST['id'];
+                //if productLineID already exists, add quantity then update quantity only
+				$existingQuantity = verifyOrderDetails($orderID, $productLineID);
+                if ($existingQuantity > 0) {
+                    //already exists
+                    $quantity = $existingQuantity + 1;
+                    updateOrderDetailsQuantity($orderID, $productLineID, $quantity);
+                }
+            }
+        }
+
+		//user not login save in cookies
+		
+
+		if (isset($_SESSION['mycart'])) {
+
+			$is_available = 0;
+		     
+			//check if product in already in cart, then only update quantity
+            foreach ($_SESSION['mycart'] as $key => $value) {
+            	
+            	if ($_SESSION['mycart'][$key]['id'] == $_POST['id'] ) {
+            		$is_available++;
+
+            		$_SESSION['mycart'][$key]['quantity'] = $_SESSION['mycart'][$key]['quantity'] + 1;
+            	}
+            }
+
+		}
+
+        
+	}
+
+    if ($_POST['action'] == "reduceQTY") {
+		
+		//check if user is login
+		//user login save in db
+        if ($userID != null) {
+            //create order if order not already exists
+            //loop until OrderID is obtain to created OrderDetails
+			
+            //while ($orderID <= 0) {
+
+                if (getActiveUserOrder($userID) > 0) {
+                        $orderID = getActiveUserOrder($userID);
+                } else {
+                    //create a new order for this user
+                    $createdDT= date("Y/m/d G:i:s");
+                    $status="active";
+                    $result = addOrder($createdDT, $status, $userID);
+                }
+				while($orderID <= 0){
+					$orderID = getActiveUserOrder($userID);
+				}
+
+            //create orderDetails using the OrderID obtain
+            //Insert Into orderDetails
+            if ($orderID > 0) {
+                //get productLineDetails
+				$productLineID = $_POST['id'];
+                //if productLineID already exists, add quantity then update quantity only
+				$existingQuantity = verifyOrderDetails($orderID, $productLineID);
+                if ($existingQuantity > 0) {
+                    //already exists
+                    $quantity = $existingQuantity - 1;
+                    updateOrderDetailsQuantity($orderID, $productLineID, $quantity);
+                }
+            }
+        }
+
+		//user not login save in cookies
+		
+
+		if (isset($_SESSION['mycart'])) {
+
+			$is_available = 0;
+		     
+			//check if product in already in cart, then only update quantity
+            foreach ($_SESSION['mycart'] as $key => $value) {
+            	
+            	if ($_SESSION['mycart'][$key]['id'] == $_POST['id'] ) {
+            		$is_available++;
+
+            		$_SESSION['mycart'][$key]['quantity'] = $_SESSION['mycart'][$key]['quantity'] - 1;
+            	}
+            }
+
+		}
+
+        
+	}
 
     if ($_POST['action'] != null) {
         //save in cookies

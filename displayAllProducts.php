@@ -446,6 +446,20 @@ $(document).ready(function() {
 
 });
 
+function show_mycart() {
+    $.ajax({
+        url: "ajax/show_mycart.php",
+        method: "POST",
+        dataType: "JSON",
+        success: function(data) {
+            $(".get_cart").html(data.out);
+            $("#cart").text(data.da);
+            $("#total").text(data.total);
+            $("#totalValue").val(data.totalValue);
+        }
+    });
+}
+
 $(document).on("click", ".add_cart", function(event) {
     event.preventDefault();
     //alert("test");
@@ -473,6 +487,7 @@ $(document).on("click", ".add_cart", function(event) {
 
         }
     });
+    show_mycart();
     toastr.success('Product added');
 });
 </script>

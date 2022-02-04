@@ -51,6 +51,80 @@ if(isset($_SESSION["userid"])){
     </style>
 </head>
 
+<style>
+/* -- quantity box -- */
+
+.quantity {
+    display: inline-block;
+}
+
+.quantity .input-text.qty {
+    width: 35px;
+    height: 39px;
+    padding: 0 5px;
+    text-align: center;
+    background-color: transparent;
+    border: 1px solid #efefef;
+}
+
+.quantity.buttons_added {
+    text-align: left;
+    position: relative;
+    white-space: nowrap;
+    vertical-align: top;
+}
+
+.quantity.buttons_added input {
+    display: inline-block;
+    margin: 0;
+    vertical-align: top;
+    box-shadow: none;
+}
+
+.quantity.buttons_added .minus,
+.quantity.buttons_added .plus {
+    padding: 7px 10px 8px;
+    height: 41px;
+    background-color: #ffffff;
+    border: 1px solid #efefef;
+    cursor: pointer;
+}
+
+.quantity.buttons_added .minus {
+    border-right: 0;
+}
+
+.quantity.buttons_added .plus {
+    border-left: 0;
+}
+
+.quantity.buttons_added .minus:hover,
+.quantity.buttons_added .plus:hover {
+    background: #eeeeee;
+}
+
+.quantity input::-webkit-outer-spin-button,
+.quantity input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    margin: 0;
+}
+
+.quantity.buttons_added .minus:focus,
+.quantity.buttons_added .plus:focus {
+    outline: none;
+}
+
+
+#btnminus {
+    background-color: #ff7315;
+}
+
+#btnplus {
+    background-color: #ff7315;
+}
+</style>
+
 <body>
 
     <!--Banner-->
@@ -75,7 +149,7 @@ if(isset($_SESSION["userid"])){
                                 <h3 class="text-center">Payment Cancelled</h3>
                             </div>
                             <a class="close" href="#">×</a>
-                            
+
                         </div>
 
                         <!--<div id="paymentCompleted" class="pop-overlay">
@@ -141,7 +215,7 @@ if(isset($_SESSION["userid"])){
                                         echo '<p>No product in cart</p>';
                                     }
                                     ?>
-                                    
+
                                     <hr>
                                     <h5>Total <p class="float-right">
                                         <h4 id="total"></h4>
@@ -199,8 +273,8 @@ if(isset($_SESSION["userid"])){
 
 
 </body>
+</html>
 
-<?php include "bottomScripts.php"; ?>
 
 <!--pop-up-box-->
 <script src="assets/js/jquery.magnific-popup.js"></script>
@@ -220,10 +294,74 @@ $(document).ready(function() {
     });
 
 });
-
-    
 </script>
-<!--//search-bar-->
+
+<script>
+function show_mycart() {
+    $.ajax({
+        url: "ajax/show_mycart.php",
+        method: "POST",
+        dataType: "JSON",
+        success: function(data) {
+            $(".get_cart").html(data.out);
+            $("#cart").text(data.da);
+            $("#total").text(data.total);
+            $("#totalValue").val(data.totalValue);
+        }
+    });
+}
+$(document).on("click", ".addQTY", function(event) {
+    event.preventDefault();
+    //alert("test");
+    var id = $(this).attr("name");
+    //var id = 1;
+    //var name = "";
+    //var quantity = 1;
+    //var price = 1;
+    var action = "addQTY";
+    $.ajax({
+        url: "ajax/cart_action.php",
+        method: "POST",
+        dataType: "JSON",
+        data: {
+            id: id,
+            action: action
+        },
+        success: function(data) {
+
+        }
+    });
+    show_mycart();
+    toastr.success('Quantity added');
+});
+
+$(document).on("click", ".reduceQTY", function(event) {
+    event.preventDefault();
+    //alert("test");
+    var id = $(this).attr("name");
+    //var id = 1;
+    //var name = "";
+    //var quantity = 1;
+    //var price = 1;
+    var action = "reduceQTY";
+    $.ajax({
+        url: "ajax/cart_action.php",
+        method: "POST",
+        dataType: "JSON",
+        data: {
+            id: id,
+            action: action
+        },
+        success: function(data) {
+
+        }
+    });
+    show_mycart();
+    toastr.success('Quantity reduced');
+});
+
+
+</script>
 
 
 <script
@@ -231,4 +369,4 @@ $(document).ready(function() {
 </script>
 <script src="paypal/index.js"></script>
 
-</html>
+<?php include "bottomScripts.php"; ?>

@@ -215,6 +215,9 @@ function getUserID($email)
     return $output;
 }
 
+
+
+
 //get product line details
 //function getProductLineDetailsByOrderID($orderID){
 //
@@ -246,6 +249,16 @@ function addProduct($prodname, $brandID, $desc, $img, $prodcatid, $specialityid,
 {
     include "dbConnection.php";
     $sql = "CALL sp_addProduct('$prodname', '$brandID', '$desc', '$img','$prodcatid', '$specialityid', '$status', '$dateposted','$lastmodif', '$petshopid');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
+
+//add product view
+function addProductReview($review, $date, $status, $userID, $productID)
+{
+    include "dbConnection.php";
+    $sql = "CALL sp_addProductReview('$review', '$date', '$status', '$userID', '$productID');";
     $result = mysqli_query($conn, $sql);
 
     return $result;
@@ -318,6 +331,15 @@ function getAdminID()
 function updateUserStatus($id, $status){
     include "dbConnection.php";
     $sql = "CALL sp_updateUserStatus('$id', '$status');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
+
+//update product review status
+function updateProductReviewStatus($id, $status){
+    include "dbConnection.php";
+    $sql = "CALL sp_updateProductReview('$id', '$status');";
     $result = mysqli_query($conn, $sql);
 
     return $result;
@@ -487,6 +509,45 @@ function getProductDetailsByProductID($productID){
         return $result;
     }
     return $output;
+}
+
+//get petshop specialities
+function getPetshopSpecialities($petshopID){
+    include "dbConnection.php";
+    $sql = "CALL sp_getPetshopSpecialities('$petshopID');";
+    $result = $conn->query($sql);
+    $output = 0;
+
+    if ($result -> num_rows > 0) {
+        return $result;
+    }
+    return null;
+}
+
+//get user Details by userID
+function getUserDetails($userID){
+    include "dbConnection.php";
+    $sql = "CALL sp_getUserDetails('$userID');";
+    $result = $conn->query($sql);
+    $output = 0;
+
+    if ($result -> num_rows > 0) {
+        return $result;
+    }
+    return null;
+}
+
+//get available brands at a petshop
+function getavailableBrandsAtPetshop($petshopID){
+    include "dbConnection.php";
+    $sql = "CALL sp_getavailableBrandsAtPetshop('$petshopID');";
+    $result = $conn->query($sql);
+    $output = 0;
+
+    if ($result -> num_rows > 0) {
+        return $result;
+    }
+    return null;
 }
 
 

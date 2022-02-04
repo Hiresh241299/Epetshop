@@ -66,6 +66,7 @@ if ($result -> num_rows < 1) {
 		$number = $row['number'];
 		$qoh = $row['qoh'];
 		$price = $row['price'];
+        $productID = $row['productID'];
 		 
 		 $output .= '
 		 <!-- Post Starts-->

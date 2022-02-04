@@ -70,10 +70,21 @@ if (!empty($_SESSION['mycart'])) {
                                         <h5>Rs '.$value['price'].'</h5>
                                       </div>
                                       <div class="col-md-2">
+                                      </br>
                                         <p class="text-center" ><b>Quantity</b></p>
-                                        <p class="text-center" ><i class="fa fa-angle-up"></i></p>
-                                        <p class="text-center">'.$value['quantity'].'</p>
-                                        <p class="text-center" ><i class="fa fa-angle-down"></i></p>
+                                        <div class="quantity buttons_added">
+
+                                        <input type="button" id="btnminus" name="'.$value['id'].'" value="-" class="minus col-4 reduceQTY">
+                                        
+                                        <input
+                                        type="text" step="1" min="1" max="100" name="quantity"
+                                        id="quantity" value="'.$value['quantity'].'" title="Qty"
+                                        class="input-text qty text bg-white col-4" size="4" pattern=""
+                                        inputmode="">
+
+                                        <input type="button" id="btnplus" name="'.$value['id'].'" value="+" class="plus col-4 addQTY">
+                                                                                
+                                        </div>
                                       </div>
                                     </div>
                                     <!--<div class="entry-meta d-flex mt-3"><span class="entry-author">By <a href="#">
@@ -110,7 +121,7 @@ if (!empty($_SESSION['mycart'])) {
 $output .='
 <div class="row">
   <div class="col-md-4">
-    <button class="btn btn-danger btn-block clearall" id="'.$value['id'].'" title="Delete All Products">Clear All</button>
+    <button class="btn btn-danger btn-block clearall" title="Delete All Products">Clear All</button>
   </div>
 </div>
 ';
