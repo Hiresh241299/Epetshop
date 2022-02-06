@@ -81,10 +81,10 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="about.html">My Petshop</a>
+                    <a class="nav-link" href="viewMyPetshop.php">My Petshop</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="about.html">Orders & Delivery</a>
+                    <a class="nav-link" href="viewMyOrderDelivery.php">Orders & Delivery</a>
                 </li>
 
                 <li class="nav-item dropdown">

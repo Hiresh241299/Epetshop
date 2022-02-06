@@ -65,6 +65,7 @@ if (!empty($_SESSION['mycart'])) {
                                       </div>
                                       <div class="col-md-6">
                                         <h5>'.$number." ".$unit." ".$pname. " | " .$brand.'</h5>
+                                        <small><a href="viewPetshops.php#petshop'.$petshopID.'"><u>'.$petshopName.'</u></a></small>
                                         <p><b>Pet: </b> '.$petCat."  ".'<b>Type: </b>'.$prodcat.'</p>
                                         <p>'.$desc.'</p>
                                         <h5>Rs '.$value['price'].'</h5>

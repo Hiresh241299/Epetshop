@@ -157,32 +157,36 @@ if ($session_roleID == 2) {
                     //gets error details
                     //mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-                    $sql = "CALL sp_getAllProductLineDetailsWithLimits(0,12);";
+$sql = "CALL sp_getAllProductLineDetailsWithLimits(0,12);";
 $result = $conn->query($sql);
+$arrayPosted = array();
 
 $output = "";
 if ($result -> num_rows < 1) {
     $output .="<h3>No products available</h3>";
 }else{
 	//output data for each row
-	while ($row = $result->fetch_assoc()) {
-		$pid = $row['plID'];
-		$pname = $row['pname'];
-		$brand = $row['bname'];
-		$desc= $row['description'];
-		$img = $row['imgPath'];
-		$prodcat = $row['pcname'];
-		$petCat = $row['sname'];
-		$postedDT = $row['postedDateTime'];
-		$lastMDT = $row['lastModifiedDateTime'];
-		$petshopID = $row['petshopID'];
-		$petshopName = $row['petshop'];
-		$unit = $row['unit'];
-		$number = $row['number'];
-		$qoh = $row['qoh'];
-		$price = $row['price'];
-                            
-                            echo '<div class="col-lg-2 col-6 product-incfhny mb-4 cardbg border border-white border-rounded">
+    while ($row = $result->fetch_assoc()) {
+        $pid = $row['plID'];
+        $pname = $row['pname'];
+        $brand = $row['bname'];
+        $desc= $row['description'];
+        $img = $row['imgPath'];
+        $prodcat = $row['pcname'];
+        $petCat = $row['sname'];
+        $postedDT = $row['postedDateTime'];
+        $lastMDT = $row['lastModifiedDateTime'];
+        $petshopID = $row['petshopID'];
+        $petshopName = $row['petshop'];
+        $unit = $row['unit'];
+        $number = $row['number'];
+        $qoh = $row['qoh'];
+        $price = $row['price'];
+        $postedProductID = $row['productID'];
+
+        //check if not exists in array then post
+        if (!in_array($postedProductID, $arrayPosted)) {
+            echo '<div class="col-lg-2 col-6 product-incfhny mb-4 cardbg border border-white border-rounded">
                             </br>
                             <div class="product-grid2 transmitv">
                                 <div class="product-image2">
@@ -214,11 +218,14 @@ if ($result -> num_rows < 1) {
                                 <h3 class="title"><a href="viewProductDetails.php?prodid='.$pid.'">'.$pname . " ".$number. " " .$unit.'</a> | <a href="#">'.$brand.'</a></h3>
                                 <!-- <span class="price"><del>$975.00</del>Rs2200</span>-->
                                 <span class="price">Rs '.$price.'</span></br>
-                                    <small><a href="viewPetshopDetails.php?psid='.$petshopID.'"><u>'.$petshopName.'</u></a></small>
+                                <small><a href="viewPetshops.php#petshop'.$petshopID.'"><u>'.$petshopName.'</u></a></small>
                             </div>
                         </div>
                     </div>';
-                        }
+        }
+        //add $postedProductID in array
+        array_push($arrayPosted, $postedProductID);
+    }
                     }
                     $result->close();
                     $conn->next_result();

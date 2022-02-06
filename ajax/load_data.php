@@ -9,6 +9,12 @@ if (isset($_POST['page'])) {
 	$page = 1;
 }
 
+if (isset($_POST['petshopID'])) {
+	$_petshopID = $_POST['petshopID'];
+}else{
+    $_petshopID = 0;
+}
+
 $pagination = '<div >
 <ul class="pagination">';
 
@@ -18,7 +24,11 @@ $start = ($page - 1)* $page;
 
 //$pages = mysqli_query($connect,"SELECT count(productLineID) AS id FROM productline;");
 
-$sql = "CALL sp_countProductLine();";
+if($_petshopID > 0){
+    $sql = "CALL sp_countMyProducts($_petshopID);";
+}else{
+    $sql = "CALL sp_countProductLine();";
+}
 $result = $conn->query($sql);
 while ($row = $result->fetch_assoc()) {
     $total = $row['id'];
@@ -41,9 +51,10 @@ $conn->next_result();
 //$pagination="";
 
 
-
 $sql = "CALL sp_getAllProductLineDetailsWithLimits($start, $limit);";
 $result = $conn->query($sql);
+
+$outputRow = "";
 
 $output = "";
 if ($result -> num_rows < 1) {
@@ -68,7 +79,7 @@ if ($result -> num_rows < 1) {
 		$price = $row['price'];
         $productID = $row['productID'];
 		 
-		 $output .= '
+		 $outputRow = '
 		 <!-- Post Starts-->
 		 <div class="col-lg-3 col-6 product-incfhny mb-4 cardbg border border-white border-rounded">
          </br>
@@ -102,12 +113,19 @@ if ($result -> num_rows < 1) {
                                     <h3 class="title"><a href="viewProductDetails.php?prodid='.$pid.'">'.$pname . " ".$number. " " .$unit.'</a> | <a href="#brand">'.$brand.'</a></h3>
                                     <!-- <span class="price"><del>$975.00</del>Rs2200</span> -->
                                     <span class="price">Rs '.$price.'</span></br>
-                                    <small><a href="viewPetshopDetails.php?psid='.$petshopID.'"><u>'.$petshopName.'</u></a></small>
+                                    <small><a href="viewPetshops.php#petshop'.$petshopID.'"><u>'.$petshopName.'</u></a></small>
                                 </div>
                             </div>
                         </div>
 
 		 ';
+        if($_petshopID > 0){
+            if($_petshopID == $petshopID){
+                $output .= $outputRow;
+            }
+        }else{
+            $output .= $outputRow;
+        }
 	}
 }
 $result->close();

@@ -15,6 +15,13 @@ if (isset($_SESSION["roleid"])) {
 if ($session_roleID == 2) {
     header('Location: petshopHome.php');
 }
+
+//check if user is logged in
+if (isset($_SESSION["userid"])) {
+    $session_userid = $_SESSION["userid"];
+}else{
+    $session_userid = 0;
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -188,7 +195,7 @@ if ($session_roleID == 2) {
 
                                                 echo '
                                                 <!--/Petshop-->
-                                <div class="row author-listhny mt-lg-0 mt-4 '.(($bg == 1)?"cardbg":"").' border rounded">
+                                <div class="row author-listhny mt-lg-0 mt-4 '.(($bg == 1)?"cardbg":"").' border rounded" id="petshop'.$psid.'">
                                     <div class="author-left col-sm-3 mb-sm-0 mb-4">
                                         <a href="#">
 
@@ -204,7 +211,7 @@ if ($session_roleID == 2) {
                                         </h4>
                                         <p>Address: '.$street.", ".$town.", ".$district.'
                                         </br>
-                                        <a href="https://www.google.com/maps/search/?api=1&query='.$long.','.$lat.'" target="_blank">OPEN MAP</a></p>
+                                        <a class="textorange" href="https://www.google.com/maps/search/?api=1&query='.$long.','.$lat.'" target="_blank"><b>OPEN MAPS</b></a></p>
                                         <h5 class="sp_title mb-3">Description</h5>
                                         <p class="para-team">'.$desc.'</p>
                                         <div class="occasional">
@@ -225,7 +232,7 @@ if ($session_roleID == 2) {
                                             '.$availableBrands.'
                                         </p>
                                     </div>
-                                    <a href="viewPetshopDetails.php?psid='.$psid.'" class="btn btn-info mt-auto" style="position:absolute; right:10px; bottom:10px;"> View Store</a>
+                                    <a href="viewPetshopProducts.php?psid='.$psid.'" class="btn btn-info mt-auto" style="position:absolute; right:10px; bottom:10px;"> View Store</a>
                                     </div>
 
                                 </div>

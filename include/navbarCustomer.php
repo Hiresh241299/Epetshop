@@ -72,13 +72,12 @@
                         Products
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="displayAllProducts.php">All Products</a>
-                        <a class="dropdown-item" href="ecommerce-single.html">Ecommerce Single</a>
-
-                    </div>
+                    <a class="dropdown-item" href="ecommerce-single.html">My Favorite Products</a>
+                    <a class="dropdown-item" href="displayAllProducts.php">All Products</a>
+                                            </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="about.html">PETSHOPS</a>
+                    <a class="nav-link" href="viewPetshops.php">PETSHOPS</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="customerOrder.php">My Orders</a>

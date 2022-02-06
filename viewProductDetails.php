@@ -359,7 +359,7 @@ if(isset($_GET['r']) &&($_GET['r'] == 1)){
                             <div class="occasional">
                                 <h5 class="sp_title mb-3">
                                     <p><a
-                                            href="viewPetshopDetails.php?psid=<?php echo $petshopID?>"><u><?php echo $petshopName?></u></a>
+                                            href="viewPetshops.php#petshop<?php echo $petshopID?>"><u><?php echo $petshopName?></u></a>
                                     </p>
                                 </h5>
                                 <ul class="single_specific">

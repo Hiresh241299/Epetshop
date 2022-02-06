@@ -245,7 +245,7 @@ if((!isset($_GET['id'])) || (($_GET['id']) == NULL)){
 
                                             <div class="description mb-4">
                                                 <h5>Product Price</h5>
-                                                <table border="3">
+                                                <table border="3" width="100%">
                                                     <thead class="bg-primary">
                                                         <td> Unit </td>
                                                         <td> Price </td>

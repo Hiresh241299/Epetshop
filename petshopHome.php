@@ -40,9 +40,18 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2)) {
         z-index: 1;
         color: white;
     }
+
     .tinted {
         filter: brightness(50%);
-        }
+    }
+
+    .cardbg {
+        background-color: black;
+    }
+
+    .bgrow{
+        background-color:#BEBEBE;
+    }
     </style>
 </head>
 
@@ -57,6 +66,30 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2)) {
                     <?php
                         include 'include/navbarVendor.php';
                     ?>
+                    <!--/search-right-->
+                    <div class="search-right">
+                        <!-- search popup -->
+                        <div id="delivery" class="pop-overlay">
+                            <div class="popup">
+                                <h3>Please Click to confirm the delivery &nbsp
+                                    <button type="button" class="btn btn-success"
+                                        onclick="itemDelivered()">Confirm Delivery</button>
+                                </h3>
+                            </div>
+                            <a class="close" href="petshopHome.php#corders">×</a>
+
+                        </div>
+
+                        <!--<div id="paymentCompleted" class="pop-overlay">
+                            <div class="popup">
+                                <h3 class="text-center">Payment Completed</h3>
+                            </div>
+                            <a class="close" href="#">×</a>
+                            
+                        </div>-->
+                        <!-- /search popup -->
+                    </div>
+                    <!--//search-right-->
                 </header>
                 <div class="breadcrumb-contentnhy">
                     <div class="container">
@@ -120,12 +153,12 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2)) {
                         //loop and echo the code below
 
                         $countProduct = getCountMyProducts($userid);
-                        $countCustomer = 0;
-                        $countSpecialities = 0;
-                        $countSales = 0;
+                        $countCustomer = getCountMyPetshopCustomers($userid);
+                        $countSpecialities = getCountMyPetshopSpecialities($userid);
+                        $countOrders = getCountMyPetshopOrders($userid);
 
-                        $staName = array("PRODUCTS", "CUSTOMERS", "SPECIALITIES", "SALES");
-                        $staCount = array($countProduct, $countCustomer, $countSpecialities, $countSales);
+                        $staName = array("PRODUCTS", "CUSTOMERS", "SPECIALITIES", "ORDERS");
+                        $staCount = array($countProduct, $countCustomer, $countSpecialities, $countOrders);
                         $imgName = array("s1", "s2", "s3", "s4");
 
                         for($i = 0; $i < sizeof($staCount); $i++){
@@ -154,7 +187,7 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2)) {
                     <br><br>
 
                     <!-- Customer Order Collapsible-->
-                    <div class="rounded bg-light">
+                    <div class="rounded bg-light" id="corders">
                         <h2>
                             Customer Orders
                             <button class="btn btn-primary rounded float-right" id="orderplus" data-toggle="collapse"
@@ -165,67 +198,127 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2)) {
                         </h2>
 
                         <div class="collapse show " id="collapseExample2">
-                            <div class="card card-body">
+                            <div class="card card-body col-12">
                                 <!--place content here-->
                                 <!-- Datatable -->
-                                <table id="table_id" class="display" width="100%">
+                                <table id="" class="display" width="100%">
                                     <thead>
-                                        <tr>
-                                            <th>Customer Name</th>
-                                            <th>Address</th>
-                                            <th>Product Name</th>
-                                            <th>Quantity</th>
-                                            <th>price</th>
-                                            <th>Total</th>
-                                            <th>Action</th>
-
+                                        <tr class="bg-warning">
+                                            <th width="12%">&nbspCustomer</th>
+                                            <th width="18%">Address</th>
+                                            <th width="18%">Product</th>
+                                            <th width="8%">Quantity</th>
+                                            <th width="8%">price</th>
+                                            <th width="8%">Total</th>
+                                            <th width="6%">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <!-- repeat within body-->
                                         <?php
-                                        /*
+                                        
                                 
                                 //fetch product from database, using session userid
                                 $psid = getPetshopID($userid);
-                                $sql = "CALL sp_getMyProductDetails($psid);";
+                                $sql = "CALL sp_getMyCustomerOrders($psid);";
                             $result = $conn->query($sql);
+                            $output = "";
+                            $rowSpan = 1 ;
+                            $previousID = 0;
+                            $bg = 0;
+                            $total = 0;
 
                             if ($result -> num_rows > 0) {
                                 //output data for each row
                                 while ($row = $result->fetch_assoc()) {
-                                    $img = $row['imgPath'];
-                                    $name = $row['pname'];
-                                    $brand = $row['brand'];
-                                    $desc = $row['description'];
-                                    $pcname = $row['pcname'];
-                                    $sname = $row['sname'];
-                                    $qoh = $row['qoh'];
-                                    $price = $row['price'];
-                                    echo '<tr>
-                                <td width="16%"><img src="assets/images/productKoiking.jpg" alt="Img" width="100%"
-                                        height="100%"></td>
-                                <td><b><span style="text-transform:uppercase">'.$brand.'</span></b> - '.$name.'</td>
-                                <td>'.$desc.'</td>
-                                <td>'.$sname.' '.$pcname.' food</td>
-                                <td>'.$qoh.'</td>
-                                <td>'.$price.'</td>
-                                <td width="15%">
-                                    <button class="btn btn-primary" title="View"><i class="fa fa-eye iblack"
-                                            aria-hidden="true"></i></button>
-                                    <button class="btn btn-warning" title="Edit"><i class="fa fa-edit iblack"
-                                            aria-hidden="true"></i></button>
-                                    <button class="btn btn-danger" title="Delete"><i class="fa fa-trash iblack"
-                                            aria-hidden="true"></i></button>
+                                    //$img = $row['imgPath'];
+                                    $_id = $row['id'];
+                                    $_pname = $row['name'];
+                                    //$brand = $row['brand'];
+                                    //$desc = $row['description'];
+                                    //$pcname = $row['pcname'];
+                                    //$sname = $row['sname'];
+                                    $_unit = $row['unit'];
+                                    $_number = $row['number'];
+                                    $_price = $row['price'];
+                                    $_quantity = $row['quantity'];
+                                    $_img = $row['imgPath'];
+                                    $_CustomerName = $row['firstName'] . " " . $row['lastName'];
 
-                                </td>
-                                </tr>';
+                                //get delivery schedule for address and maps location
+                                        $street = "";
+                                        $town = "";
+                                        $district = "";
+                                        $postcode = "";
+                                        $longitude = "";
+                                        $latitude = "";
+                                        $fulladdress = "";
+                                $arrayResult = getDeliverySchedule($_id);
+                                if ($arrayResult != null) {
+                                    if ($arrayResult -> num_rows > 0) {
+                                        //output data for each row
+                                        while ($row1 = $arrayResult->fetch_assoc()) {
+                                            $street = $row1['street'];
+                                            $town = $row1['town'];
+                                            $district = $row1['name'];
+                                            $postcode = $row1['postcode'];
+                                            $longitude = $row1['longitude'];
+                                            $latitude = $row1['latitude'];
+                                            $fulladdress = $street. " ".$town.", ". $district;
+                                        }
+                                    }
+                                    $arrayResult->close();
+                                    $conn->next_result();
+                                }
+                                
+
+                                if ($previousID != $_id) {
+                                    if ($bg == 0) {
+                                        $bg = 1;
+                                    } else {
+                                        $bg = 0;
+                                    }
+                                }
+                                $rowSpan =  countProductLineInOrder($_id,$userid);
+                                $total = getPaidOrderDetailsTotalsByPetshopID($_id,$userid);
+                                $firstRow = '
+                                        <tr class="'.(($bg == 1)?"bgrow":"bg-light").'">
+                                            <td rowspan="'.$rowSpan.'">&nbsp'.$_CustomerName.'</td>
+                                            <td rowspan="'.$rowSpan.'">'.$fulladdress.'</td>
+                                            <td><img src="product/'.$_img.'" style="width:18%; height:18%;">
+                                            '.$_pname. " ".$_number . $_unit.'
+                                            </td>
+                                            <td>'.$_quantity.'</td>
+                                            <td>Rs'.$_price.'</td>
+                                            <td rowspan="'.$rowSpan.'">Rs'.$total.'</td>
+                                            <td rowspan="'.$rowSpan.'">
+                                            <a href="https://www.google.com/maps/search/?api=1&query='.$longitude.','.$latitude.'" target="_blank" class="btn btn-info text-center col-6" style="padding:2px; margin:1px;" title="Get map direction"><i class="fa fa-map-marker text-center" aria-hidden="true"></i></a>
+                                            <a href="petshopHome.php#delivery" class="btn btn-success text-center col-6" onclick="setOrderid('.$_id.')" title="Delivery completed" style="padding:2px; margin:1px;"><i class="fa fa-check text-center"  aria-hidden="true"></i></a>
+                                            </td>
+                                        </tr>
+                                ';
+
+                                $addons = '
+                                        <tr class="'.(($bg == 1)?"bgrow":"bg-light").'">
+                                            <td><img src="product/'.$_img.'" style="width:18%; height:18%;">'.$_pname. " ".$_number . $_unit.'</td>
+                                            <td>'.$_quantity.'</td>
+                                            <td>Rs'.$_price.'</td>
+                                            <!--<td><button type="button" class="btn btn-success" onclick="itemDelivered('.$_id.')">Deliver</button></td>-->
+                                        </tr>
+                                ';
+
+                                if($previousID == $_id){
+                                    $output .= $addons;
+                                }else{
+                                    $output .= $firstRow;
+                                }
+                                $previousID = $_id;
                                 }
                             }
+                            echo $output;
                              $result->close();
                              $conn->next_result();
 
-                             */
                                 ?>
                                         <!-- //repeat body-->
                                     </tbody>
@@ -239,10 +332,11 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2)) {
                     <!-- Customer Order collapsible-->
 
                     <br><br>
+                    <input type="text" id="setorderID" name="setorderID" disabled hidden>
 
                     <!-- collapsible-->
                     <div class="sing-post-thumb mb-lg-5 mb-4 row">
-                        <div class="col-6">
+                        <div class="col-12">
                             <!-- Low stock collapsible -->
                             <div class="rounded bg-light">
                                 <h2>
@@ -255,36 +349,79 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2)) {
                                 </h2>
 
                                 <div class="collapse show " id="collapseLowStock">
-                                    <div class="card card-body">
-                                        <!--place content here-->
-                                        
-                                        <!--//place content here-->
-                                    </div>
+                                <div class="card card-body col-12">
+                                <!--place content here-->
+                                <!-- Datatable -->
+                                <table id="" class="display" width="100%">
+                                    <thead>
+                                        <tr class="bg-warning">
+                                            <th width="20%">&nbsp Product</th>
+                                            <th width="14%">Unit</th>
+                                            <th width="14%">Price</th>
+                                            <th width="12%">Quantity Available</th>
+                                            <th width="20%">Last Restock Date</th>
+                                            <th width="20%">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- repeat within body-->
+                                        <?php
+                                        $sql = "CALL sp_countMyProducts($psid);";
+                                        $result = $conn->query($sql);
+                                        $bg = 0;
+            
+                                        if ($result -> num_rows > 0) {
+                                            //output data for each row
+                                            while ($row = $result->fetch_assoc()) {
+                                                $pid_ = $row['plid'];
+                                                $name_ = $row['name'];
+                                                $img_ = $row['imgPath'];
+                                                $unit_ = $row['unit'];
+                                                $number_ = $row['number'];
+                                                $qoh_ = $row['qoh'];
+                                                $price_ = $row['price'];
+                                                $date_ = date('d-m-Y h:m:s', strtotime($row['lastModifiedDateTime']));
+
+
+                                                if ($qoh_ < 5) {
+
+                                                    if ($bg == 0) {
+                                                        $bg = 1;
+                                                    } else {
+                                                        $bg = 0;
+                                                    }
+                                                    echo'
+                                                <tr class="'.(($bg == 1)?"bgrow":"bg-light").'">
+                                                <td><img src="product/'.$img_.'" style="width:25%; height:25%;"> &nbsp '.$name_.'</td>
+                                                <td>'.$number_ . " " . $unit_.'</td>
+                                                <td>Rs'.$price_.'</td>
+                                                <td>'.$qoh_.'</td>
+                                                <td>'.$date_.'</td>
+                                                <td>
+                                                <input type="number" id="inputQOH'.$pid_.'" class="col-4" name="productQOH" style="display:none;">
+                                                <Button type="button" id="YesQOH'.$pid_.'" onclick="updateProductStock('.$pid_.')" class="btn btn-success col-3" style="padding:2px; margin:1px; display:none;" ><i class="fa fa-check text-center"  aria-hidden="true"></i></Button>
+                                                <Button type="cancel" id="NoQOH'.$pid_.'" onclick="hideButtons('.$pid_.')" class="btn btn-danger col-3" style="padding:2px; margin:1px; display:none;" ><i class="fa fa-times text-center" aria-hidden="true"></i></Button>
+                                                <Button type="button" id="ReStockQOH'.$pid_.'" onclick="showButtons('.$pid_.')" class="btn btn-success">Re Stock</Button>
+                                                <Button type="button" id="Details'.$pid_.'" class="btn btn-info">View Details</Button>
+                                                </td>
+                                                </tr>
+                                                ';
+                                                }
+                                            }
+                                        }
+                                        $result->close();
+                                        $conn->next_result();
+                                        ?>
+                                        <!-- //repeat body-->
+                                    </tbody>
+
+                                </table>
+                                <!-- //Datatable -->
+                                <!--//place content here-->
+                            </div>
                                 </div>
                             </div>
                             <!-- //Low stock collapsible -->
-                        </div>
-                        <div class="col-6">
-                            <!-- Messages collapsible -->
-                            <div class="rounded bg-light">
-                                <h2>
-                                    Messages
-                                    <button class="btn btn-primary rounded float-right" id="msgBtn"
-                                        data-toggle="collapse" href="#collapsemsg" aria-expanded="true"
-                                        onclick="changeSign('msg');" aria-controls="collapsemsg">
-                                        <i class="fa fa-minus" id="msg"></i>
-                                    </button>
-                                </h2>
-
-                                <div class="collapse show " id="collapsemsg">
-                                    <div class="card card-body">
-                                        <!--place content here-->
-                                        
-                                        <!--//place content here-->
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- // Messages collapsible -->
                         </div>
                     </div>
                     <!-- collapsible-->
@@ -319,7 +456,6 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2)) {
 </html>
 
 <script>
-
 function changeSign(docId) {
     var msgBtn = document.getElementById(docId);
     if (msgBtn.className == "fa fa-minus") {
@@ -328,8 +464,6 @@ function changeSign(docId) {
         msgBtn.className = "fa fa-minus";
     }
 }
-
-
 </script>
 
 <?php include "bottomScripts.php"; ?>
@@ -340,4 +474,46 @@ function changeSign(docId) {
 $(document).ready(function() {
     $('#table_id').DataTable();
 });
+</script>
+
+<script>
+//Customer Orders
+function setOrderid(id){
+//set id input
+document.getElementById('setorderID').value = id;
+}
+
+function itemDelivered(){
+    //get id from input, should not be null
+    orderID = document.getElementById('setorderID').value;
+    alert(orderID);
+    //ajax call to change status of delivery schedule
+}
+
+
+//Low Stock Product
+function showButtons(id){
+    document.getElementById('inputQOH'+id).style.display = "inline";
+    document.getElementById('YesQOH'+id).style.display = "inline";
+    document.getElementById('NoQOH'+id).style.display = "inline";
+    document.getElementById('ReStockQOH'+id).style.display = "none";
+    document.getElementById('Details'+id).style.display = "none";
+}
+function hideButtons(id){
+    document.getElementById('inputQOH'+id).style.display = "none";
+    document.getElementById('YesQOH'+id).style.display = "none";
+    document.getElementById('NoQOH'+id).style.display = "none";
+    document.getElementById('ReStockQOH'+id).style.display = "inline";
+    document.getElementById('Details'+id).style.display = "inline";
+}
+function updateProductStock(id){
+    document.getElementById('inputQOH'+id).style.display = "none";
+    document.getElementById('YesQOH'+id).style.display = "none";
+    document.getElementById('NoQOH'+id).style.display = "none";
+    document.getElementById('ReStockQOH'+id).style.display = "inline";
+    document.getElementById('Details'+id).style.display = "inline";
+
+    //ajax call
+    //give toastr msg
+}
 </script>

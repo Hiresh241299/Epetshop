@@ -1,10 +1,10 @@
-var total = document.getElementById("totalValue").value;
 paypal.Buttons({
     style : {
         color: 'blue',
         shape: 'pill'
     },
     createOrder: function (data, actions) {
+        var total = document.getElementById("totalValue").value;
         return actions.order.create({
             purchase_units : [{
                 description: "Pet accessories",

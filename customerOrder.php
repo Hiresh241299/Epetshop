@@ -36,6 +36,7 @@ if(isset($_GET['p'])){
         $remark = "";
         $status = "Payment Completed";
         addPayment($dateTime, $remark, $status, $orderID);
+
     }
 }
 
@@ -62,6 +63,10 @@ if(isset($_GET['p'])){
     <style>
     .iblack {
         color: black;
+    }
+
+    .cardbg {
+        background-color: #f4f4f4;
     }
     </style>
 
@@ -146,7 +151,7 @@ if(isset($_GET['p'])){
                                 //output data for each row
                                 while ($row = $result->fetch_assoc()) {
                                     $orderNo = $row['orderID'];
-                                    $date = $row['createdDateTime'];
+                                    $date = date('d-m-Y h:m:s', strtotime($row['createdDateTime']));
                                     $remark = $row['status'];
                                     $qty = getPaidOrderDetailsNoOFProducts($orderNo);
                                     $total = getPaidOrderDetailsTotals($orderNo);
@@ -163,7 +168,7 @@ if(isset($_GET['p'])){
                                 <td>'.$remark.'</td>
                                 <td>'.$delivery.'</td>
                                 <td class="text-center">
-                                    <a  href="CustomerOrder.php?viewOrderDetails='.$orderNo.'"  class="btn btn-primary" title="View Order"><i class="fa fa-eye iblack"
+                                    <a  href="CustomerOrder.php?viewOrderDetails='.$orderNo.'#orderdetails"  class="btn btn-primary" title="View Order"><i class="fa fa-eye iblack"
                                             aria-hidden="true"></i></a>
                                 </td>
                                 </tr>';
@@ -185,7 +190,7 @@ if(isset($_GET['p'])){
                     $orderID = $_GET['viewOrderDetails'];
                     echo'</br></br><div class="blog-inner-grids">
 
-                    <h3 class="hny-title mb-0">Order['.$orderID.'] <span>Details</span>
+                    <h3 class="hny-title mb-0" id="orderdetails">Order['.$orderID.'] <span>Details</span>
                     <a href="CustomerOrder.php" class="float-right bg-danger border rounded">&nbsp x &nbsp</a>
                     </h3>
                     </br>
@@ -195,10 +200,10 @@ if(isset($_GET['p'])){
                             <tr class="bg-warning">
                                 <th>Product IMG</th>
                                 <th>Name</th>
-                                <th>Pet</th>
-                                <th>Type</th>
+                                <th>Category</th>
                                 <th>Quantity</th>
                                 <th>price</th>
+                                <th>Delivery</th>
                             </tr>
                         </thead>
                         <tbody>';
@@ -207,6 +212,8 @@ if(isset($_GET['p'])){
                                 //fetch product from database, using session userid
                                 $sql = "CALL sp_getProductLineDetailsByOrderID($orderID, 'Order paid');";
                                 $result = $conn->query($sql);
+                                $bg=0;
+                                $oldpetshop = 0;
 
                             if ($result -> num_rows > 0) {
                                 //output data for each row
@@ -216,11 +223,17 @@ if(isset($_GET['p'])){
                                     $pid = $row['productID'];
                                     $unit = $row['unit'];
                                     $number = $row['number'];
+                                    $status = $row['status'];
+                                    if($status == "Order Paid"){
+                                        $status = "Pending";
+                                    }
                                     //$qty = getPaidOrderDetailsNoOFProducts($orderNo);
                                     //$total = getPaidOrderDetailsTotals($orderNo);
 
                                     //Get product detail
                                     $resultArr = getProductDetailsByProductID($pid);
+                                    
+                                    
                                     if ($resultArr -> num_rows > 0) {
                                         //output data for each row
                                         while ($row = $resultArr->fetch_assoc()) {
@@ -230,25 +243,43 @@ if(isset($_GET['p'])){
                                             $img = $row['imgPath'];
                                             $pcname = $row['pcname'];
                                             $pdname = $row['prodname'];
+                                            //petshop details
+                                            $psname = $row['psname'];
+                                            $psid = $row['petshopID'];
+
                                         
                                         }
                                     }
                                     $resultArr->close();
                                     $conn->next_result();
+                                    
+                                    //background
+                                    if($bg == 0){
+                                        $bg = 1;
+                                    }else{
+                                        $bg = 0;
+                                    }
 
-                                    echo '<tr>
+                                    if ($oldpetshop != $psid){
+                                        $oldpetshop = $psid;
+                                        echo '
+                                    <tr class="text-center bg-dark"><td colspan="6"><a class="text-white" href="viewPetshops.php#petshop'.$psid.'">'.strtoupper($psname).'</a></td></tr>';
+                                    }
+
+                                    echo '
+                                    <tr class="'.(($bg == 1)?"cardbg":"").'">
                                 <td width="16%"><img src="product/'.$img.'" alt="Img" width="100%" height="100%"></td>
                                 <td>'.$number." ".$unit." ".$pname. " | " .$bname.'</td>
-                                <td>'.$pcname.'</td>
-                                <td>'.$pdname.'</td>
+                                <td>'.$pcname." " .$pdname.'</td>
                                 <td>'.$qty.'</td>
                                 <td>'.$price.'</td>
+                                <td>'.$status.'</td>
                                 </tr>';
                                 }
                             }
                              $result->close();
                              $conn->next_result();
-echo'
+                            echo'
                             <!-- repeat body-->
                         </tbody>
 
@@ -259,15 +290,13 @@ echo'
                 //fetch product from database, using session userid
                 $sql = "CALL sp_getPaidOrderByUserID($userid);";
                 $result = $conn->query($sql);
-                $output = "";
+                $output = "<h3>This order NO is not available!</h3>";
 
                 if ($result -> num_rows > 0) {
                     //output data for each row
                     while ($row = $result->fetch_assoc()) {
                         if($row['orderID']  == $_GET['viewOrderDetails']){
                             $output=  "";
-                        }else{
-                            $output= '<h3>This order NO is not available!</h3>';
                         }
                     }
                     echo $output;

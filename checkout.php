@@ -18,20 +18,8 @@ if ($session_roleID == 2) {
 $userID = 0;
 if(isset($_SESSION["userid"])){
     $userID = $_SESSION["userid"];
-
-    /*saveCartInDb($userID);
-    //clear cookies
-    //clear session if exists
-    unset($_SESSION['mycart']);
-    $_SESSION['total_price'] = 0;
-    setcookie("cart", null, -1, '/');
-    //load cart
-    //check if user have active order
-    if (getActiveUserOrder($userID) > 0) {
-        $orderID = getActiveUserOrder($userID);
-        loadcart($orderID);
-    }*/
-    
+}else{
+    header('Location: cart.php');
 }
 ?>
 <!doctype html>
@@ -41,6 +29,14 @@ if(isset($_SESSION["userid"])){
     <?php
     include 'include/header.php';
     ?>
+    <style type="text/css">
+    #map {
+        width: 300px;
+        height: 300px;
+    }
+    </style>
+    <script type="text/javascript"
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRgy7_Ok-92VGq375mOuQIuGg5QHF7nBs"></script>
 
     <style>
     .pimg {
@@ -48,83 +44,17 @@ if(isset($_SESSION["userid"])){
         height: 300px;
         overflow: hidden;
     }
+
+    .cardbg {
+        background-color: #f4f4f4;
+    }
     </style>
 </head>
 
 <style>
-/* -- quantity box -- */
-
-.quantity {
-    display: inline-block;
+.not-allowed {
+    cursor: not-allowed;
 }
-
-.quantity .input-text.qty {
-    width: 35px;
-    height: 39px;
-    padding: 0 5px;
-    text-align: center;
-    background-color: transparent;
-    border: 1px solid #efefef;
-}
-
-.quantity.buttons_added {
-    text-align: left;
-    position: relative;
-    white-space: nowrap;
-    vertical-align: top;
-}
-
-.quantity.buttons_added input {
-    display: inline-block;
-    margin: 0;
-    vertical-align: top;
-    box-shadow: none;
-}
-
-.quantity.buttons_added .minus,
-.quantity.buttons_added .plus {
-    padding: 7px 10px 8px;
-    height: 41px;
-    background-color: #ffffff;
-    border: 1px solid #efefef;
-    cursor: pointer;
-}
-
-.quantity.buttons_added .minus {
-    border-right: 0;
-}
-
-.quantity.buttons_added .plus {
-    border-left: 0;
-}
-
-.quantity.buttons_added .minus:hover,
-.quantity.buttons_added .plus:hover {
-    background: #eeeeee;
-}
-
-.quantity input::-webkit-outer-spin-button,
-.quantity input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    margin: 0;
-}
-
-.quantity.buttons_added .minus:focus,
-.quantity.buttons_added .plus:focus {
-    outline: none;
-}
-
-
-#btnminus {
-    background-color: #ff7315;
-}
-
-#btnplus {
-    background-color: #ff7315;
-}
-
-.not-allowed {cursor: not-allowed;}
 </style>
 
 <body>
@@ -198,12 +128,55 @@ if(isset($_SESSION["userid"])){
         <div class="mag-content-inf py-5">
             <div class="container py-lg-5 px-lg-5">
                 <div class="blog-inner-grids row ">
-                    <!--Display carts-->
-                    <div class="mag-post-left-hny col-lg-8 get_cart">
+                    <!--Select Delivery location, address etc-->
+                    <div class="mag-post-left-hny col-lg-8 cardbg">
 
+                        <div class="side-bar-hny-recent mb-5">
+                            </br>
+                            <h4 class="side-title">Delivery <span>Details</span></h4>
+                            <hr>
+                            </h5>
+                            <div class="mag-small-post">
+                                <form id="register" action="" method="post">
+                                    <div class="form-group">
+                                        <p class="login-texthny mb-2 text-dark">Mobile</p>
+                                        <input type="text" class="form-control col-3" id="fname" placeholder=""
+                                            name="mobile" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <p class="login-texthny mb-2 text-dark">Full Address</p>
+                                        <input type="text" class="form-control col-6" id="address" placeholder=""
+                                            name="mobile" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                    <p class="login-texthny mb-2 text-dark">Select Map Location</p>
+                                        <!--map div-->
+                                        <div id="map"></div>
+
+                                        <!--our form-->
+                                        <h2>Chosen Location</h2>
+                                        <form method="post">
+                                            <input type="text" id="lat" readonly="yes"><br>
+                                            <input type="text" id="lng" readonly="yes">
+                                        </form>
+
+                                        <div class="mapouter">
+                                            <div class="gmap_canvas">
+                                                <iframe width="600" height="500" id="gmap_canvas" src="https://maps.google.com/maps?q=dy%20fish&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+                                                    <a href="https://123movies-to.org"></a>
+                                                    <br>
+                                                    <style>.mapouter{position:relative;text-align:right;height:500px;width:600px;}</style>
+                                                    <a href="https://www.embedgooglemap.net">embed google maps in web page</a>
+                                                    <style>.gmap_canvas {overflow:hidden;background:none!important;height:500px;width:600px;}</style></div></div>
+
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
 
                     </div>
-                    <!--Display carts-->
+                    <!--Select Delivery location, address etc-->
 
                     <!--Display total-->
                     <div class="mag-post-right-hny col-lg-4">
@@ -231,17 +204,11 @@ if(isset($_SESSION["userid"])){
                                             if ($_SESSION['total_price'] > 0) {
                                                 //check if user is logged in
                                                 if ($userID > 0) {
-                                                    /*echo '<div id="paypal-payment-button"></div>
+                                                    echo '<div id="paypal-payment-button"></div>
                                         <input id="totalValue" value="'.$_SESSION['total_price'].'" hidden disabled>
-                                        ';*/
-                                        echo '
-                                        <a href="checkout.php" class="col-12 btn btn-success border rounded-pill"><b>Checkout</b></a>
                                         ';
                                                 } else {
                                                     //user not logged in
-                                                    echo '
-                                        <button type="button" class="col-12 btn btn-success border rounded-pill not-allowed" disabled><b>Checkout</b></button>
-                                        ';
                                                     echo '<p>Please 
                                                 <a class="text-warning" href="login.php"><b>Login</b></a>
                                                  or
@@ -305,75 +272,9 @@ $(document).ready(function() {
 });
 </script>
 
-<script>
-function show_mycart() {
-    $.ajax({
-        url: "ajax/show_mycart.php",
-        method: "POST",
-        dataType: "JSON",
-        success: function(data) {
-            $(".get_cart").html(data.out);
-            $("#cart").text(data.da);
-            $("#total").text(data.total);
-            $("#totalValue").val(data.totalValue);
-        }
-    });
-}
-$(document).on("click", ".addQTY", function(event) {
-    event.preventDefault();
-    //alert("test");
-    var id = $(this).attr("name");
-    //var id = 1;
-    //var name = "";
-    //var quantity = 1;
-    //var price = 1;
-    var action = "addQTY";
-    $.ajax({
-        url: "ajax/cart_action.php",
-        method: "POST",
-        dataType: "JSON",
-        data: {
-            id: id,
-            action: action
-        },
-        success: function(data) {
-
-        }
-    });
-    show_mycart();
-    toastr.success('Quantity added');
-});
-
-$(document).on("click", ".reduceQTY", function(event) {
-    event.preventDefault();
-    //alert("test");
-    var id = $(this).attr("name");
-    //var id = 1;
-    //var name = "";
-    //var quantity = 1;
-    //var price = 1;
-    var action = "reduceQTY";
-    $.ajax({
-        url: "ajax/cart_action.php",
-        method: "POST",
-        dataType: "JSON",
-        data: {
-            id: id,
-            action: action
-        },
-        success: function(data) {
-
-        }
-    });
-    show_mycart();
-    toastr.success('Quantity reduced');
-});
-</script>
-
-
 <script
     src="https://www.paypal.com/sdk/js?client-id=AbWcm8GgWdLQvjia0I1vJWaa2F6GsxpX_KOWGWOOlY4uSPzOUyPTJDSs0PRk9urbdVaodQnv9WGjLIdm&disable-funding=credit,card">
 </script>
 <script src="paypal/index.js"></script>
-
+<script type="text/javascript" src="map.js"></script>
 <?php include "bottomScripts.php"; ?>

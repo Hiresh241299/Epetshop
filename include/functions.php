@@ -458,7 +458,108 @@ function getCountMyProducts($uid)
     $result = $conn->query($sql);
     if ($result -> num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            $count = $row['COUNT(petshopID)'];
+            $count++;
+        }
+    }
+    return $count;
+}
+
+//count my products by petshopID
+function getCountMyProductsByPetshopID($pid)
+{
+    include "dbConnection.php";
+    $count = "";
+    //fetch petshop id from db
+    $sql = "CALL sp_countMyProducts($pid);";
+    $result = $conn->query($sql);
+    if ($result -> num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $count++;
+        }
+    }
+    return $count;
+}
+
+//count my petshop specialities
+function getCountMyPetshopSpecialities($uid)
+{
+    include "dbConnection.php";
+    $pid = getPetshopID($uid);
+    $count = 0;
+    //fetch petshop id from db
+    $sql = "CALL sp_getPetshopSpecialities($pid);";
+    $result = $conn->query($sql);
+    if ($result -> num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $count++;
+        }
+    }
+    return $count;
+}
+
+//count my petshop Orders
+function getCountMyPetshopOrders($uid)
+{
+    include "dbConnection.php";
+    $pid = getPetshopID($uid);
+    $count = 0;
+    //fetch petshop id from db
+    $sql = "CALL sp_getCountMyOrders($pid);";
+    $result = $conn->query($sql);
+    if ($result -> num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $count++;
+        }
+    }
+    return $count;
+}
+
+//count my petshop Orders
+function getCountMyPetshopCustomers($uid)
+{
+    include "dbConnection.php";
+    $pid = getPetshopID($uid);
+    $count = 0;
+    //fetch petshop id from db
+    $sql = "CALL sp_getCountMyCustomers($pid);";
+    $result = $conn->query($sql);
+    if ($result -> num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $count++;
+        }
+    }
+    return $count;
+}
+
+//count my petshop Orders
+function countProductLineInOrder($orderID, $uid)
+{
+    include "dbConnection.php";
+    $pid = getPetshopID($uid);
+    $count = 0;
+    //fetch petshop id from db
+    $sql = "CALL sp_countProductLineInOrder($orderID,$pid);";
+    $result = $conn->query($sql);
+    if ($result -> num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $count = $row['countID'];
+        }
+    }
+    return $count;
+}
+
+//get totals
+function getPaidOrderDetailsTotalsByPetshopID($orderID, $uid)
+{
+    include "dbConnection.php";
+    $pid = getPetshopID($uid);
+    $count = 0;
+    //fetch petshop id from db
+    $sql = "CALL sp_getPaidOrderDetailsTotalsByPetshopID($orderID,$pid);";
+    $result = $conn->query($sql);
+    if ($result -> num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            return  $row['total'];
         }
     }
     return $count;
@@ -549,6 +650,33 @@ function getavailableBrandsAtPetshop($petshopID){
     }
     return null;
 }
+
+//get delivery schedule
+function getDeliverySchedule($orderID){
+    include "dbConnection.php";
+    $sql = "CALL sp_getDeliverySchedule('$orderID');";
+    $result = $conn->query($sql);
+    $output = 0;
+
+    if ($result -> num_rows > 0) {
+        return $result;
+    }
+    return null;
+}
+
+//get productline
+function getProductLine($productID){
+    include "dbConnection.php";
+    $sql = "CALL sp_getProductLine('$productID');";
+    $result = $conn->query($sql);
+    $output = 0;
+
+    if ($result -> num_rows > 0) {
+        return $result;
+    }
+    return null;
+}
+
 
 
 //get customer productline
