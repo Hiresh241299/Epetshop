@@ -21,9 +21,9 @@ if (isset($_SESSION["roleid"])) {
     ?>
 </head>
 <style>
-    .cardbg{
-        background-color:#f4f4f4;
-    }
+.cardbg {
+    background-color: #f4f4f4;
+}
 </style>
 
 <body>
@@ -78,16 +78,16 @@ if (isset($_SESSION["roleid"])) {
                                 <div class="single-gd mb-5">
 
                                     <h4>Search <span>here</span></h4>
-                                    <form action="#" method="post" class="search-trans-form">
-                                        <input class="form-control" type="search" name="search"
-                                            placeholder="Search here..." required="">
-                                        <button class="btn read-2">
-                                            <span class="fa fa-search"></span>
-                                        </button>
+                                        <form action="#" method="post" class="search-trans-form">
+                                            <input class="form-control" name="searchcriterie" id="searchcriterie"
+                                                placeholder="Search by product, brand, category, petshop .." title="Search by product name, brand, category, petshop .." value="" onkeyup="reloadData();">
+                                            <button type="button" class="btn read-2" onclick="reloadData();">
+                                                <span class="fa fa-search"></span>
+                                            </button>
 
-                                    </form>
+                                        </form>
                                 </div>
-                                <!-- /Gallery-imgs -->
+                                <!-- /Gallery-imgs 
 
                                 <div class="single-gd mb-5">
                                     <h4>Product <span>Categories</span></h4>
@@ -109,7 +109,7 @@ if (isset($_SESSION["roleid"])) {
                                             <span class="badge badge-primary badge-pill">10</span>
                                         </li>
                                     </ul>
-                                </div>
+                                </div>-->
                                 <!--
                                 <div class="single-gd mb-5">
                                     <h4>Filter by <span>Price</span></h4>
@@ -254,27 +254,29 @@ if (isset($_SESSION["roleid"])) {
                         <!--Filters-->
                     </div>
                     <div class="ecommerce-right-hny col-lg-8">
-                        <!--Sort results
+                        <!--Sort results-->
                         <div class="row ecomhny-topbar">
                             <div class="col-6 ecomhny-result">
-                                <h4 class="ecomhny-result-count"> Showing all 9 Results</h4>
+                                <h4 class="ecomhny-result-count"> Showing all <span id="showingResult"></span> Results
+                                </h4>
                             </div>
-                            <div class="col-6 ecomhny-topbar-ordering">
+                            <div class="col-3 ecomhny-topbar-ordering float-right">
+                            </div>
+                            <div class="col-3 ecomhny-topbar-ordering float-right">
 
                                 <div class="ecom-ordering-select d-flex">
                                     <span class="fa fa-angle-down" aria-hidden="true"></span>
-                                    <select>
-                                        <option value="menu_order" selected="selected">Default Sorting</option>
-                                        <option value="popularity">Sort by Popularity</option>
-                                        <option value="rating">Sort by Average rating</option>
-                                        <option value="date">Sort by latest</option>
-                                        <option value="price">Sort by Price: low to high</option>
-                                        <option value="price-desc">Sort by Price: high to low</option>
+                                    <select onchange="reloadData()" id="perpage">
+                                        <option value="" disabled>No of products</option>
+                                        <option value="10" selected>10</option>
+                                        <option value="20">20</option>
+                                        <option value="50">50</option>
+                                        <option value="all">All</option>
                                     </select>
                                 </div>
 
                             </div>
-                        </div>-->
+                        </div>
                         <!--Sort results-->
 
                         <!-- Products-->
@@ -412,17 +414,23 @@ $(document).ready(function() {
 
     function load_data(page) {
 
+        perpage_ = document.getElementById("perpage").value;
+        search_ = document.getElementById("searchcriterie").value;
+        //toastr.success(search_);
 
         $.ajax({
             url: "ajax/load_data.php",
             method: "POST",
             data: {
-                page: page
+                page: page,
+                searchv : search_,
+                perpage: perpage_
             },
             dataType: "JSON",
             success: function(data) {
                 $(".show_data").html(data.output);
                 $("#pagination").html(data.pagination);
+                $("#showingResult").html(data.showresult);
             }
         });
     }
@@ -490,6 +498,33 @@ $(document).on("click", ".add_cart", function(event) {
     show_mycart();
     toastr.success('Product added');
 });
+</script>
+
+<script>
+function load_data(page) {
+
+    perpage_ = document.getElementById("perpage").value;
+    search_ = document.getElementById("searchcriterie").value;
+    $.ajax({
+        url: "ajax/load_data.php",
+        method: "POST",
+        data: {
+            page: page,
+            searchv : search_,
+            perpage: perpage_
+        },
+        dataType: "JSON",
+        success: function(data) {
+            $(".show_data").html(data.output);
+            $("#pagination").html(data.pagination);
+            $("#showingResult").html(data.showresult);
+        }
+    });
+}
+
+function reloadData() {
+    load_data();
+}
 </script>
 
 <!--Price Range-->

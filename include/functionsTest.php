@@ -89,6 +89,15 @@ if($result == 1){
     echo "Fail to add order!!!!" . "<br>";
 }
 
+//add delivery schedule
+//addDeliverySchedule($street, $locality, $town, $district, $postcode, $lng, $lat, $date, $status, $oid)
+    $result = addDeliverySchedule("Test", "Test", "Test", 1, 123456, 1, 1, "2021-09-14 09:22:26", "Pending", 51963);
+    if($result == 1){
+        echo "Delivery schedule added !!" . "<br>";
+    }else if ($result == 0){
+        echo "Fail to add Delivery schedule !!!!" . "<br>";
+    }
+
 //add order Details
 //addOrderDetails($quantity, $price, $remark, $status, $orderID, $productLineID)
     $result = addOrderDetails(3, 200, "", "1", 1, 5);
@@ -128,6 +137,15 @@ if($result == 1){
     echo "Product Updated!!" . "<br>";
 }else if ($result == 0){
     echo "Product not Updated!!" . "<br>";
+}
+
+//update productline
+//function updateProductLine($prodLineID, $unit, $num, $qoh, $price, $date);
+$result = updateProductLine(1, "kg", 2, 10, 350, "2021-09-14 09:22:26");
+if($result == 1){
+    echo "Product Line Updated!!" . "<br>";
+}else if ($result == 0){
+    echo "Product Line not Updated!!" . "<br>";
 }
 
 //update order details quantity

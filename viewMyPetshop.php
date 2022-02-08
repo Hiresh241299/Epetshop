@@ -120,6 +120,7 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                             if ($result -> num_rows > 0) {
                                 //output data for each row
                                 while ($row = $result->fetch_assoc()) {
+                                    $prodID = $row['productID'];
                                     $pname = $row['pname'];
                                     $bname = $row['bname'];
                                     $description = $row['description'];
@@ -132,17 +133,35 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                                                     if ($result1 -> num_rows > 0) {
                                                         //output data for each row
                                                         while ($row = $result1->fetch_assoc()) {
+                                                            $productLineID = $row['productLineID'];
                                                             $unit = $row['unit'];
                                                             $number = $row['number'];
                                                             $qoh = $row['qoh'];
                                                             $price = $row['price'];
+                                                            $priceDisplay = 'Rs'  . $price ;
                                                             $lastMDT = $row['lastModifiedDateTime'];
+
+                                                            //get discount
+                                                            $arrayResult = getDiscount($productLineID, "active");
+                                                            if ($arrayResult != null) {
+                                                                if ($arrayResult -> num_rows > 0) {
+                                                                    //output data for each row
+                                                                    while ($row1 = $arrayResult->fetch_assoc()) {
+                                                                        $percentage = $row1['percentage'];
+                                                                        $newprice = (($price * $percentage)*0.01);
+                                                                        $priceDisplay = '<del>'.$priceDisplay.'</del>' ." " .'<b class="text-danger">Rs'  . $newprice .'</b>';
+                                                                    }
+                                                                }
+                                                                $arrayResult->close();
+                                                                $conn->next_result();
+                                                            }
+
+                                                            
 
                                                             $output.= '<tr>
                                                             <td> ' . $number . " ". $unit . ' </td>
-                                                            <td> Rs'  . $price . ' </td>
+                                                            <td>'  . $priceDisplay . ' </td>
                                                             <td> '.$qoh.' </td>
-                                                            <td>btn</td>
                                                             </tr>';
                         
                                                         }
@@ -157,9 +176,10 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                                                     }
 
                                                      echo '
-                                                     </br>
-                                                     <div class="sp-store-single-page row '.(($bg == 1)?"":"bg-light").'"">
+                                                     <div class="sp-store-single-page row '.(($bg == 1)?"bg-light":"bgrow").'"">
+                                                     
                                         <div class="col-lg-5 single-right-left">
+                                        </br>
                                             <div class="flexslider1">
 
 
@@ -179,6 +199,7 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                                             </div>
                                         </div>
                                         <div class="col-lg-7 single-right-left pl-lg-4">
+                                        </br>
                                             <h3>'.$bname . " | " . $pname.'</h3>
 
                                             <div class="caption">
@@ -198,21 +219,22 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
 
                                 <div class="description mb-4">
                                     <h5>Product Price</h5>
-                                    <table border="3" width="100%">
+                                    <table border="2" width="100%">
                                         <thead class="bg-primary">
                                             <td> Unit </td>
                                             <td> Price </td>
                                             <td> Quantity in stock </td>
-                                            <td>Action</td>
                                         </thead>
 
                                         '.$output.'
 
-                                    </table>
+                                    </table></br>
+                                    <a href="addproductpricing.php?id='.$prodID.'" class="btn btn-info float-right">Modify</a></br>
                                 </div>
 
                             </div>
-                        </div></br>
+                        </div>
+
                         ';
                         $output="";
 

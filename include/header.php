@@ -9,6 +9,7 @@
 <link href="//fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,900&display=swap" rel="stylesheet">
 <link rel="icon" href="assets/image/icon/icon.jpg">
 <!-- CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.1/css/jquery.dataTables.css">
 
 <!--Toaster-->
 <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>

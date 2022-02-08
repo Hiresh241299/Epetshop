@@ -154,6 +154,27 @@ function verifyOrderDetails($orderID, $productLineID){
     return $output;
 }
 
+//verify all product Delivered
+function verifyAllProductDelivered($orderID){
+    include "dbConnection.php";
+    $sql = "CALL sp_verifyAllProductDelivered('$orderID');";
+    $result = $conn->query($sql);
+    $output = 0;
+    //result
+    if ($result -> num_rows > 0) {
+        //output password form db
+        while ($row = $result->fetch_assoc()) {
+            if($row['status'] == "Delivered"){
+                $output = 1;
+            }else{
+                $output = 0;
+            }
+        }
+    }
+
+    return $output;
+}
+
 //add user
 function addUser($fname, $lname,$nic, $gender, $dob, $street, $town, $district, $email, $mobile, $reg, $pass, $status, $long, $lat, $lastLogin, $role)
 {
@@ -173,6 +194,8 @@ function addUser($fname, $lname,$nic, $gender, $dob, $street, $town, $district, 
         //echo "<script>window.location.href='register.php';</script>";
     //}
 }
+
+
 
 //get user role
 function getUserRole($email)
@@ -310,6 +333,16 @@ function addNotif($userID, $title, $message, $date, $status){
     return $result;
 }
 
+//add delivery schedule
+function addDeliverySchedule($street, $locality, $town, $district, $postcode, $long, $lat, $date, $status, $orderID){
+    include "dbConnection.php";
+    $sql = "CALL sp_addDeliverySchedule('$street', '$locality', '$town','$district', '$postcode', '$long', '$lat', '$date', '$status', '$orderID');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
+
+
 //get admin id
 //works for only 1 admin
 function getAdminID()
@@ -326,6 +359,7 @@ function getAdminID()
     }
     return $adminID;
 }
+
 
 //update user status
 function updateUserStatus($id, $status){
@@ -345,10 +379,37 @@ function updateProductReviewStatus($id, $status){
     return $result;
 }
 
+//update my customer order details status to delivered
+function updateMyCustomerOrderDetailsStatus($id, $status){
+    include "dbConnection.php";
+    $sql = "CALL sp_updateMyCustomerOrderDetailsStatus('$id', '$status');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
+
+//update Delivery Schedule Status
+function updateDeliveryScheduleStatus($id, $status){
+    include "dbConnection.php";
+    $sql = "CALL sp_updateDeliveryScheduleStatus('$id', '$status');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
+
 //update product
 function updateProduct($productID,$name, $brandID, $description, $imgpath, $prodCatID, $petCatID, $status, $lastMDT){
     include "dbConnection.php";
     $sql = "CALL sp_updateProduct('$productID','$name', '$brandID', '$description', '$imgpath', '$prodCatID', '$petCatID', '$status', '$lastMDT');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
+
+//update productline
+function updateProductLine($prodLineID, $unit, $num, $qoh, $price, $date){
+    include "dbConnection.php";
+    $sql = "CALL sp_updateProductLine('$prodLineID', '$unit', '$num', '$qoh', '$price', '$date');";
     $result = mysqli_query($conn, $sql);
 
     return $result;
@@ -362,6 +423,16 @@ function updateOrderDetailsQuantity($orderID, $productLineID, $quantity){
 
     return $result;
 }
+
+//update productline quantity on hand
+function updateProductLineQOH($productLineID, $quantity){
+    include "dbConnection.php";
+    $sql = "CALL sp_updateProductLineQOH('$productLineID', '$quantity');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
+
 
 //update orders Status
 function updateOrderStatus($orderID, $status){
@@ -447,6 +518,8 @@ function getActiveUserOrder($userID){
     return $output;
 }
 
+
+
 //count my products
 function getCountMyProducts($uid)
 {
@@ -498,6 +571,25 @@ function getCountMyPetshopSpecialities($uid)
 }
 
 //count my petshop Orders
+function getCountMyPetshopDeliveries($uid)
+{
+    include "dbConnection.php";
+    $pid = getPetshopID($uid);
+    $count = 0;
+    //fetch petshop id from db
+    $sql = "CALL sp_getCountMyDeliveries($pid);";
+    $result = $conn->query($sql);
+    if ($result -> num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            if ($row['status'] == "Delivered") {
+                $count++;
+            }
+        }
+    }
+    return $count;
+}
+
+//count my petshop Orders
 function getCountMyPetshopOrders($uid)
 {
     include "dbConnection.php";
@@ -508,7 +600,7 @@ function getCountMyPetshopOrders($uid)
     $result = $conn->query($sql);
     if ($result -> num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            $count++;
+                $count++;
         }
     }
     return $count;
@@ -664,6 +756,34 @@ function getDeliverySchedule($orderID){
     return null;
 }
 
+//get discount
+function getDiscount($productLineID, $status){
+    include "dbConnection.php";
+    $sql = "CALL sp_getDiscount('$productLineID', '$status');";
+    $result = $conn->query($sql);
+    $output = 0;
+
+    if ($result -> num_rows > 0) {
+        return $result;
+    }
+    return null;
+}
+
+//get delivery schedule
+function getDeliveryScheduleStatus($orderID){
+    include "dbConnection.php";
+    $sql = "CALL sp_getDeliverySchedule('$orderID');";
+    $result = $conn->query($sql);
+    $output = "Pending";
+
+    if ($result -> num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $output = $row['status'];
+        }
+    }
+    return $output;
+}
+
 //get productline
 function getProductLine($productID){
     include "dbConnection.php";
@@ -683,7 +803,7 @@ function getProductLine($productID){
 //load Cart from dataabase
 function loadCart($orderID){
     include "dbConnection.php";
-    $sql = "CALL sp_getProductLineDetailsByOrderID($orderID,'active');";
+    $sql = "CALL sp_getProductLineDetailsByOrderIDActive($orderID,'active');";
     $result = $conn->query($sql);
     $output = false;
     if ($result -> num_rows > 0) {
@@ -780,3 +900,13 @@ function sendEmail($email, $fname, $lname, $subject, $body)
 //check number
 
 //create user
+
+
+//get number of days left
+function daysleft($endDate){
+    $now = time(); // or your date as well
+    $your_date = strtotime($endDate);
+    $datediff = $now - $your_date;
+    
+    return round(-$datediff / (60 * 60 * 24));
+}

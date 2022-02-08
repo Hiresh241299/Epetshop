@@ -131,7 +131,7 @@ if(isset($_GET['p'])){
                         <thead>
                             <tr class="bg-warning">
                                 <th>Order No</th>
-                                <th>Date</th>
+                                <th>Date Paid</th>
                                 <th>Product(Qty)</th>
                                 <th>Total price</th>
                                 <th>Remark</th>
@@ -156,7 +156,7 @@ if(isset($_GET['p'])){
                                     $qty = getPaidOrderDetailsNoOFProducts($orderNo);
                                     $total = getPaidOrderDetailsTotals($orderNo);
 
-                                    $delivery = "Pending";
+                                    $delivery = getDeliveryScheduleStatus($orderNo);
 
                                                                                        
                                    

@@ -24,17 +24,9 @@ if((!isset($_GET['id'])) || (($_GET['id']) == NULL)){
 <html lang="en">
 
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title><?php echo $title?></title>
-    <!-- Template CSS -->
-    <link rel="stylesheet" href="assets/css/style-liberty.css">
-    <!-- Template CSS -->
-    <link href="//fonts.googleapis.com/css?family=Oswald:300,400,500,600&display=swap" rel="stylesheet">
-    <link href="//fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,900&display=swap" rel="stylesheet">
-    <link rel="icon" href="assets/image/icon/icon.jpg">
-    <!-- Template CSS -->
+    <?php
+    include 'include/header.php';
+    ?>
 
 </head>
 
@@ -111,6 +103,7 @@ if((!isset($_GET['id'])) || (($_GET['id']) == NULL)){
                             if ($result -> num_rows > 0) {
                                 //output data for each row
                                 while ($row = $result->fetch_assoc()) {
+                                    $petshopid = $row['petshopID'];
                                     $pname = $row['pname'];
                                     $bname = $row['bname'];
                                     $description = $row['description'];
@@ -128,7 +121,7 @@ if((!isset($_GET['id'])) || (($_GET['id']) == NULL)){
 
                                 <!-- Product -->
                                 </br>
-                                <h3 class="hny-title mb-0">Product <span>Details</span></h3>
+                                <h3 class="hny-title mb-0" id="prodDetails">Product <span>Details</span></h3>
                                 <div class="maghny-gd-1 blog-pt-grid mb-lg-5 mb-4">
                                     </br>
 
@@ -140,21 +133,13 @@ if((!isset($_GET['id'])) || (($_GET['id']) == NULL)){
 
 
                                                 <div class="clearfix"></div>
-                                                <div class="flex-viewport"
-                                                    style="overflow: hidden; position: relative;">
-                                                    <ul>
-                                                        <li data-thumb="product/<?php echo $imgpath; ?>" class="clone"
-                                                            style="width: 445px; float: left; display: block;">
-                                                            <div class="thumb-image"> <img
-                                                                    src="product/<?php echo $imgpath; ?>"
-                                                                    data-imagezoom="true" class="img-fluid" alt=" ">
-                                                            </div>
-                                                        </li>
-                                                    </ul>
+                                                <div class="flex-viewport">
+                                                    <img src="product/<?php echo $imgpath; ?>" data-imagezoom="false"
+                                                        class="img-fluid" alt=" "></br></br>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-lg-7 single-right-left pl-lg-4">
+                                        <div class="col-lg-12 single-right-left pl-lg-4">
                                             <h3><?php echo $bname . " | " . $pname ?></h3>
 
                                             <div class="caption">
@@ -243,35 +228,88 @@ if((!isset($_GET['id'])) || (($_GET['id']) == NULL)){
                                                 <p><?php echo $description; ?></p>
                                             </div>
 
-                                            <div class="description mb-4">
+                                            <div class="description mb-4" id="tableprice">
                                                 <h5>Product Price</h5>
-                                                <table border="3" width="100%">
+                                                <table border="2" width="100%">
                                                     <thead class="bg-primary">
-                                                        <td> Unit </td>
-                                                        <td> Price </td>
-                                                        <td> Quantity in stock </td>
-                                                        <td>Action</td>
+                                                        <th width="8%"> Unit </th>
+                                                        <th width="18%"> Price </th>
+                                                        <th width="20%"> Quantity Available </th>
+                                                        <th width="15%"> Discount %</th>
+                                                        <th width="25%"> Discount Date</th>
+                                                        <th width="1%">Action</th>
                                                     </thead>
 
                                                     <?php
                                                     //fetch data from product line for this particular product
                                                     $sql = "CALL sp_getProductLine($productID);";
                                                     $result = $conn->query($sql);
+                                                            $_unit ="";
+                                                            $_number = "";
+                                                            $_price ="";
+                                                            $_qoh = "";
+                                                            $_id="";
+                                                            $update = false;
                         
                                                     if ($result -> num_rows > 0) {
                                                         //output data for each row
                                                         while ($row = $result->fetch_assoc()) {
+                                                            $productLineID  = $row['productLineID'];
                                                             $unit = $row['unit'];
                                                             $number = $row['number'];
                                                             $qoh = $row['qoh'];
                                                             $price = $row['price'];
+                                                            $priceDisplay = 'Rs'  . $price ;
                                                             $lastMDT = $row['lastModifiedDateTime'];
 
-                                                            echo '<tr>
-                                                            <td> ' . $number . " ". $unit . ' </td>
-                                                            <td> Rs'  . $price . ' </td>
+                                                            //get value of m from url
+                                                            if(isset($_GET['m'])){
+                                                                //get value
+                                                                if(($_GET['m']) == $row['productLineID']){
+                                                                $_unit =$row['unit'];
+                                                                $_number = $row['number'];
+                                                                $_price = $row['price'];
+                                                                $_qoh = $row['qoh'];
+                                                                $_id=$_GET['m'];
+                                                                $update = true;
+                                                                }
+                                                            }
+
+                                                            //get discount
+                                                            $percentage = "";
+                                                            $start = "";
+                                                            $end = "";
+                                                            $date = "";
+                                                            $percentageDisplay="";
+                                                            $arrayResult = getDiscount($productLineID, "active");
+                                                            if ($arrayResult != null) {
+                                                                if ($arrayResult -> num_rows > 0) {
+                                                                    //output data for each row
+                                                                    while ($row1 = $arrayResult->fetch_assoc()) {
+                                                                        $percentage = $row1['percentage'];
+                                                                        $percentageDisplay = $percentage . '%';
+                                                                        $start = date('d-m-Y', strtotime($row1['startDate']));
+                                                                        $end = date('d-m-Y', strtotime($row1['endDate']));
+                                                                        $date = $start . " to " . $end;
+                                                                        $newprice = (($price * $percentage)*0.01);
+                                                                        $priceDisplay = '<del>'.$priceDisplay.'</del>' ." " .'<b class="text-danger">Rs'  . $newprice .'</b>';
+                                                                    }
+                                                                }
+                                                                $arrayResult->close();
+                                                                $conn->next_result();
+                                                            }
+                                                            
+
+                                                            echo '<tr id="rowNum'.$row['productLineID'].'">
+                                                            <td>' . $number . " ". $unit . ' </td>
+                                                            <td>'  . $priceDisplay . ' </td>
                                                             <td> '.$qoh.' </td>
-                                                            <td>btn</td>
+                                                            <td> '.$percentageDisplay.'</td>
+                                                            <td> '.$date.'</td>
+                                                            <td class="text-center" width="25%">
+                                                            <a href="addproductpricing.php?id='.$productID.'&m='.$productLineID.'#tableprice"  class="btn btn-info" title="Edit Product-line" style="margin:3px"><i class="fa fa-edit" aria-hidden="true"></i></a>
+                                                            <button type="button" class="btn btn-info" onclick="showDiscount(1, '.$productLineID.')" title="Add Discount" style="margin:3px"><i class="fa fa-tag" aria-hidden="true"></i></button>
+                                                            </td>
                                                             </tr>';
                         
                                                         }
@@ -281,6 +319,9 @@ if((!isset($_GET['id'])) || (($_GET['id']) == NULL)){
                                                     ?>
 
                                                 </table>
+                                                </br>
+                                                <button type="button" class="btn btn-success" id="newProductLine"
+                                                    onclick="showProductPricing(1)">New Product Line</button>
                                             </div>
 
                                         </div>
@@ -300,24 +341,32 @@ if((!isset($_GET['id'])) || (($_GET['id']) == NULL)){
                                         <p class="mb-4 text-white text-center bg-dark">
                                             Pricing Details
                                         </p>
-
+                                        <input type="number" name="prodid" id="prodid" value="<?php echo $_id;?>"
+                                            disabled hidden>
+                                        <input type="number" name="productID" id="productID"
+                                            value="<?php echo $productID;?>" disabled hidden>
                                         <div class="input-grids row">
                                             <div class="form-group col-lg-6">
                                                 <label>Unit *</label>
                                                 <select class="form-control" name="unit" id="unit" required>
                                                     <option value="" selected="true" disabled="disabled">Unit</option>
-                                                    <option value="g">g</option>
-                                                    <option value="kg">kg</option>
-                                                    <option value="ml">ml</option>
-                                                    <option value="cl">cl</option>
-                                                    <option value="l">l</option>
+                                                    <option value="g" <?php if($_unit == "g"){echo "selected";}?>>g
+                                                    </option>
+                                                    <option value="kg" <?php if($_unit == "kg"){echo "selected";}?>>kg
+                                                    </option>
+                                                    <option value="ml" <?php if($_unit == "ml"){echo "selected";}?>>ml
+                                                    </option>
+                                                    <option value="cl" <?php if($_unit == "cl"){echo "selected";}?>>cl
+                                                    </option>
+                                                    <option value="l" <?php if($_unit == "l"){echo "selected";}?>>l
+                                                    </option>
 
                                                 </select>
                                             </div>
                                             <div class="form-group col-lg-6">
                                                 <label>Amount * </label>
-                                                <input type="number" name="amount" class="form-control"
-                                                    placeholder="Amount" required="">
+                                                <input type="text" name="amount" id="am" class="form-control"
+                                                    placeholder="Amount" value="<?php echo $_number?>" required="">
                                             </div>
                                         </div>
 
@@ -330,47 +379,27 @@ if((!isset($_GET['id'])) || (($_GET['id']) == NULL)){
                                                     <div class="input-group-prepend border border-dark rounded">
                                                         <div class="input-group-text">Rs</div>
                                                     </div>
-                                                    <input type="number" name="price" class="form-control"
-                                                        placeholder="Price" required="">
+                                                    <input type="number" name="price" id="price" class="form-control"
+                                                        placeholder="Price" value="<?php echo $_price?>" required="">
                                                 </div>
                                             </div>
                                             <div class="form-group col-lg-6">
                                                 <label>Quantity Available * </label>
-                                                <input type="number" name="qoh" class="form-control"
-                                                    placeholder="Quantity in stock" required="">
+                                                <input type="number" name="qoh" id="qoh" class="form-control"
+                                                    placeholder="Quantity in stock" value="<?php echo $_qoh?>"
+                                                    required="">
                                             </div>
                                         </div>
 
-                                        <!-- Discount -->
-                                        <!--<div class="input-grids row">
-                                            <div class="form-group col-lg-6">
-                                                <label>Discount</label>
-                                                <select class="form-control" name="disc" id="disc"
-                                                    onchange="switchDisc();" required>
-                                                    <option value="0" selected="true">No</option>
-                                                    <option value="1">Yes</option>
-                                                </select>
-                                            </div>
-                                        </div> 
-
-                                        <div class="input-grids row" id="discountDetails">
-
-                                            <div class="form-group col-lg-6">
-                                                <label>% Discount * </label>
-                                                <input type="number" name="per" class="form-control"
-                                                    placeholder="% Discount">
-                                            </div>
-                                            <div class="form-group col-lg-6">
-                                                <label>Discount Days * </label>
-                                                <input type="number" name="day" class="form-control"
-                                                    placeholder="Discount Days">
-                                            </div>
-                                        </div> -->
-
                                         <div class="submit text-right mt-5">
-                                            <Button class="btn btn-primary" name="addProductpricing"
-                                                value="post product">
-                                                Submit</button>
+                                            <button type="button" class="btn btn-warning"
+                                                onclick="showProductPricing(0, <?php echo $_id;?>)">Cancel</button>
+                                            <button type="submit" class="btn btn-primary" name="addProductpricing"
+                                                id="addProductpricing" value="post product">
+                                                Add</button>
+                                            <button type="button" class="btn btn-primary" name="updateProductpricing"
+                                                id="updateProductpricing" onclick="update()" value="Update product">
+                                                Update</button>
                                         </div>
                                         <br>
                                     </form>
@@ -420,8 +449,70 @@ if((!isset($_GET['id'])) || (($_GET['id']) == NULL)){
                                             
                                         
                                     }
-                                    
+                                    //submit form, fetch data from form, call function addProduct
+                                    //go to another page to view posted product
+
+                                    if (isset($_POST['updateProductpricing'])) {
+                                        
+                                        //Fetch data from the fields
+                                        $z_id = $_POST['prodid'];
+                                        $z_unit = $_POST['unit'];
+                                        $z_amount = $_POST['amount'];
+                                        $z_price = $_POST['price'];
+                                        $z_qoh = $_POST['qoh'];
+                                        $z_lastmodif = date("Y/m/d G:i:s");
+                                        
+                                        $result = updateProductLine($z_id, $z_unit, $z_amount, $z_qoh, $z_price, $z_lastmodif);
+                                        if ($result) {
+                                            //**********get add product success message, go to page to view posted product
+                                            //Add product price => add to table productLine
+                                            header('Location: addProductpricing.php?id='.$productID);
+                                        } else {
+                                            //**********get add product failed message
+                                            header('Location: fail.php');
+                                            //echo "<script>window.location.href='register.php';</script>";
+                                        }
+                                            
+                                        
+                                    }
                                     ?>
+                                </div>
+
+
+                                <div class="leave-comment-form mt-lg-5 mt-4" id="discount">
+                                    <!-- <h3 class="hny-title mb-0">Product <span>Pricing</span></h3> -->
+                                    <input type="number" name="disprodid" id="disprodid" value="" disabled hidden>
+                                    <p class="mb-4">Required fields are marked
+                                        *
+                                    </p>
+
+                                    <form action="" method="post" enctype="multipart/form-data">
+
+                                        <p class="mb-4 text-white text-center bg-dark">
+                                            Discount Pricing Details
+                                        </p>
+                                        <div class="input-grids row" id="discountDetails">
+
+                                            <div class="form-group col-lg-6">
+                                                <label>% Discount * </label>
+                                                <input type="number" name="per" class="form-control"
+                                                    placeholder="% Discount">
+                                            </div>
+                                            <div class="form-group col-lg-6">
+                                                <label>Discount Days * </label>
+                                                <input type="number" name="day" class="form-control"
+                                                    placeholder="Discount Days">
+                                            </div>
+                                        </div>
+                                        <div class="submit text-right mt-5">
+                                            <button type="button" class="btn btn-warning"
+                                                onclick="showDiscount(0,1)">Cancel</button>
+                                            <button type="button" class="btn btn-primary" name="addDiscount"
+                                                value="post product">
+                                                Submit</button>
+                                        </div>
+                                    </form>
+
                                 </div>
                                 <!--//leave-->
                                 <!--//mag-hny-content-4-->
@@ -453,6 +544,7 @@ if((!isset($_GET['id'])) || (($_GET['id']) == NULL)){
 
 </html>
 <script>
+/*
 var disc = document.getElementById('disc');
 var discDetails = document.getElementById('discountDetails');
 
@@ -475,7 +567,7 @@ function switchDisc() {
         per.required = true;
         day.required = true;
     }
-}
+}*/
 </script>
 
 <script src="assets/js/jquery-3.3.1.min.js"></script>
@@ -571,3 +663,110 @@ $(function() {
 </script>
 <!-- disable body scroll which navbar is in active -->
 <script src="assets/js/bootstrap.min.js"></script>
+
+
+<?php
+if(!isset($_GET['m'])){
+ echo '
+ <script>
+//default hide
+document.getElementById(\'comment\').style.display = "none";
+document.getElementById(\'addProductpricing\').style.display = "inline";
+document.getElementById(\'updateProductpricing\').style.display = "none";
+document.getElementById(\'newProductLine\').style.display = "block";
+
+</script>
+ ';
+}else{
+    echo '
+ <script>
+//default hide
+document.getElementById(\'comment\').style.display = "block";
+document.getElementById(\'addProductpricing\').style.display = "none";
+document.getElementById(\'updateProductpricing\').style.display = "inline";
+document.getElementById(\'newProductLine\').style.display = "none";
+//get row, add bg color
+document.getElementById("rowNum'.$_GET['m'].'").style.backgroundColor = "grey";
+</script>
+';
+}
+?>
+
+<script>
+function showProductPricing(num, id) {
+    if (num == 1) {
+        document.getElementById('comment').style.display = "block";
+        document.getElementById('newProductLine').style.display = "none";
+        document.getElementById('updateProductpricing').style.display = "none";
+        document.getElementById('addProductpricing').style.display = "inline";
+
+        //set values blank
+        document.getElementById('unit').value = "";
+        document.getElementById('am').value = "";
+        document.getElementById('price').value = "";
+        document.getElementById('qoh').value = "";
+
+    }
+    if (num == 0) {
+        document.getElementById('comment').style.display = "none";
+        document.getElementById('newProductLine').style.display = "block";
+        //get row, add bg color
+        document.getElementById("rowNum" + id).style.backgroundColor = "white";
+    }
+}
+
+//default hide discount
+document.getElementById('discount').style.display = "none";
+
+function showDiscount(num, id) {
+    if (num == 1) {
+        document.getElementById('discount').style.display = "block";
+        //get row, add bg color
+        document.getElementById("rowNum" + id).style.backgroundColor = "grey";
+
+        //set input
+        document.getElementById('disprodid').value = id;
+    }
+    if (num == 0) {
+        document.getElementById('discount').style.display = "none";
+        //get row, add bg color
+        thisid = document.getElementById('disprodid').value;
+        document.getElementById("rowNum" + thisid).style.backgroundColor = "white";
+    }
+}
+//test
+function reload2() {
+    id = document.getElementById('productID').value;
+    window.location.href = "addproductpricing.php?id=" + id + "#prodDetails";
+}
+
+
+function update(id) {
+
+    _id = document.getElementById('prodid').value;
+    _price = document.getElementById('price').value;
+    _unit = document.getElementById('unit').value;
+    _number = document.getElementById('qoh').value;
+    _amount = document.getElementById('am').value;
+
+    $.ajax({
+        url: 'ajax/productAction.php',
+        data: {
+            productlineID: _id,
+            price: _price,
+            unit: _unit,
+            amount: _amount,
+            qoh: _number,
+            action: "updateProductline"
+        },
+        type: 'post',
+        success: function(data) {
+            if (data == 1) {
+
+            }
+            toastr.success('Updated');
+            reload2();
+        }
+    });
+}
+</script>

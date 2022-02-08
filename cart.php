@@ -235,7 +235,7 @@ if(isset($_SESSION["userid"])){
                                         <input id="totalValue" value="'.$_SESSION['total_price'].'" hidden disabled>
                                         ';*/
                                         echo '
-                                        <a href="checkout.php" class="col-12 btn btn-success border rounded-pill"><b>Checkout</b></a>
+                                        <a href="checkout.php#checkout" class="col-12 btn btn-success border rounded-pill"><b>Checkout</b></a>
                                         ';
                                                 } else {
                                                     //user not logged in

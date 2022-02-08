@@ -10,6 +10,7 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2)) {
     header('Location: login.php');
 } else {
     $userid = $_SESSION["userid"];
+    $psid = getPetshopID($userid);
 }
 ?>
 <!doctype html>
@@ -17,19 +18,9 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2)) {
 
 
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title><?php echo $title?></title>
-    <!-- CSS -->
-    <link rel="stylesheet" href="assets/css/style-liberty.css">
-    <!-- CSS -->
-    <link href="//fonts.googleapis.com/css?family=Oswald:300,400,500,600&display=swap" rel="stylesheet">
-    <link href="//fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,900&display=swap" rel="stylesheet">
-    <link rel="icon" href="assets/image/icon/icon.jpg">
-
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.1/css/jquery.dataTables.css">
-    <!-- CSS -->
+    <?php
+    include 'include/header.php';
+    ?>
 
     <style>
     .centered {
@@ -49,8 +40,8 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2)) {
         background-color: black;
     }
 
-    .bgrow{
-        background-color:#BEBEBE;
+    .bgrow {
+        background-color: #BEBEBE;
     }
     </style>
 </head>
@@ -73,7 +64,8 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2)) {
                             <div class="popup">
                                 <h3>Please Click to confirm the delivery &nbsp
                                     <button type="button" class="btn btn-success"
-                                        onclick="itemDelivered()">Confirm Delivery</button>
+                                        onclick="itemDelivered(<?php echo $psid?>);">Confirm
+                                        Delivery</button>
                                 </h3>
                             </div>
                             <a class="close" href="petshopHome.php#corders">×</a>
@@ -155,9 +147,9 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2)) {
                         $countProduct = getCountMyProducts($userid);
                         $countCustomer = getCountMyPetshopCustomers($userid);
                         $countSpecialities = getCountMyPetshopSpecialities($userid);
-                        $countOrders = getCountMyPetshopOrders($userid);
+                        $countOrders = getCountMyPetshopDeliveries($userid);
 
-                        $staName = array("PRODUCTS", "CUSTOMERS", "SPECIALITIES", "ORDERS");
+                        $staName = array("PRODUCTS", "CUSTOMERS", "SPECIALITIES", "DELIVERIES");
                         $staCount = array($countProduct, $countCustomer, $countSpecialities, $countOrders);
                         $imgName = array("s1", "s2", "s3", "s4");
 
@@ -189,7 +181,15 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2)) {
                     <!-- Customer Order Collapsible-->
                     <div class="rounded bg-light" id="corders">
                         <h2>
-                            Customer Orders
+                        <?php
+                         $NoOfOrders = getCountMyPetshopOrders($userid);
+                         if($NoOfOrders > 1){
+                            echo $NoOfOrders . " " . "Customer Orders";
+                         }else{
+                            echo $NoOfOrders . " " . "Customer Order";
+                         }
+                         
+                         ?> 
                             <button class="btn btn-primary rounded float-right" id="orderplus" data-toggle="collapse"
                                 href="#collapseExample2" aria-expanded="true" onclick="changeSign('order');"
                                 aria-controls="collapseExample2">
@@ -201,7 +201,7 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2)) {
                             <div class="card card-body col-12">
                                 <!--place content here-->
                                 <!-- Datatable -->
-                                <table id="" class="display" width="100%">
+                                <table id="table_id" class="display" width="100%">
                                     <thead>
                                         <tr class="bg-warning">
                                             <th width="12%">&nbspCustomer</th>
@@ -219,7 +219,6 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2)) {
                                         
                                 
                                 //fetch product from database, using session userid
-                                $psid = getPetshopID($userid);
                                 $sql = "CALL sp_getMyCustomerOrders($psid);";
                             $result = $conn->query($sql);
                             $output = "";
@@ -349,23 +348,23 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2)) {
                                 </h2>
 
                                 <div class="collapse show " id="collapseLowStock">
-                                <div class="card card-body col-12">
-                                <!--place content here-->
-                                <!-- Datatable -->
-                                <table id="" class="display" width="100%">
-                                    <thead>
-                                        <tr class="bg-warning">
-                                            <th width="20%">&nbsp Product</th>
-                                            <th width="14%">Unit</th>
-                                            <th width="14%">Price</th>
-                                            <th width="12%">Quantity Available</th>
-                                            <th width="20%">Last Restock Date</th>
-                                            <th width="20%">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <!-- repeat within body-->
-                                        <?php
+                                    <div class="card card-body col-12">
+                                        <!--place content here-->
+                                        <!-- Datatable -->
+                                        <table id="" class="display" width="100%">
+                                            <thead>
+                                                <tr class="bg-warning">
+                                                    <th width="20%">&nbsp Product</th>
+                                                    <th width="14%">Unit</th>
+                                                    <th width="14%">Price</th>
+                                                    <th width="12%">Quantity Available</th>
+                                                    <th width="20%">Last Restock Date</th>
+                                                    <th width="20%">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <!-- repeat within body-->
+                                                <?php
                                         $sql = "CALL sp_countMyProducts($psid);";
                                         $result = $conn->query($sql);
                                         $bg = 0;
@@ -412,13 +411,13 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2)) {
                                         $result->close();
                                         $conn->next_result();
                                         ?>
-                                        <!-- //repeat body-->
-                                    </tbody>
+                                                <!-- //repeat body-->
+                                            </tbody>
 
-                                </table>
-                                <!-- //Datatable -->
-                                <!--//place content here-->
-                            </div>
+                                        </table>
+                                        <!-- //Datatable -->
+                                        <!--//place content here-->
+                                    </div>
                                 </div>
                             </div>
                             <!-- //Low stock collapsible -->
@@ -478,42 +477,100 @@ $(document).ready(function() {
 
 <script>
 //Customer Orders
-function setOrderid(id){
-//set id input
-document.getElementById('setorderID').value = id;
+function setOrderid(id) {
+    //set id input
+    document.getElementById('setorderID').value = id;
 }
 
-function itemDelivered(){
+function itemDelivered(petshopID) {
     //get id from input, should not be null
     orderID = document.getElementById('setorderID').value;
-    alert(orderID);
-    //ajax call to change status of delivery schedule
+
+    //ajax call to change status of orderDetails to order delivered
+    if (orderID > 0 && petshopID > 0) {
+        $.ajax({
+            url: 'ajax/productAction.php',
+            data: {
+                pid: petshopID,
+                oid: orderID,
+                status: "Delivered",
+                action: "updateOrderDetailsStatus"
+            },
+            type: 'post',
+            success: function(data) {
+                if (data == 1) {
+                    toastr.success('Product Delivered');
+                }
+                reloadpage();
+            }
+            //toastr
+        });
+        //toastr.success('Product Delivered');
+    } else {
+        //error msg toastr
+        toastr.warning('Product Not Delivered');
+    }
+
+}
+
+function reloadpage() {
+    window.location.href = "petshopHome.php?reload=1#corders";
 }
 
 
 //Low Stock Product
-function showButtons(id){
-    document.getElementById('inputQOH'+id).style.display = "inline";
-    document.getElementById('YesQOH'+id).style.display = "inline";
-    document.getElementById('NoQOH'+id).style.display = "inline";
-    document.getElementById('ReStockQOH'+id).style.display = "none";
-    document.getElementById('Details'+id).style.display = "none";
+function showButtons(id) {
+    document.getElementById('inputQOH' + id).style.display = "inline";
+    document.getElementById('YesQOH' + id).style.display = "inline";
+    document.getElementById('NoQOH' + id).style.display = "inline";
+    document.getElementById('ReStockQOH' + id).style.display = "none";
+    document.getElementById('Details' + id).style.display = "none";
 }
-function hideButtons(id){
-    document.getElementById('inputQOH'+id).style.display = "none";
-    document.getElementById('YesQOH'+id).style.display = "none";
-    document.getElementById('NoQOH'+id).style.display = "none";
-    document.getElementById('ReStockQOH'+id).style.display = "inline";
-    document.getElementById('Details'+id).style.display = "inline";
-}
-function updateProductStock(id){
-    document.getElementById('inputQOH'+id).style.display = "none";
-    document.getElementById('YesQOH'+id).style.display = "none";
-    document.getElementById('NoQOH'+id).style.display = "none";
-    document.getElementById('ReStockQOH'+id).style.display = "inline";
-    document.getElementById('Details'+id).style.display = "inline";
 
+function hideButtons(id) {
+    document.getElementById('inputQOH' + id).style.display = "none";
+    document.getElementById('YesQOH' + id).style.display = "none";
+    document.getElementById('NoQOH' + id).style.display = "none";
+    document.getElementById('ReStockQOH' + id).style.display = "inline";
+    document.getElementById('Details' + id).style.display = "inline";
+}
+
+function updateProductStock(id) {
+    document.getElementById('inputQOH' + id).style.display = "none";
+    document.getElementById('YesQOH' + id).style.display = "none";
+    document.getElementById('NoQOH' + id).style.display = "none";
+    document.getElementById('ReStockQOH' + id).style.display = "inline";
+    document.getElementById('Details' + id).style.display = "inline";
+
+    //get value of input
+    quantity = document.getElementById('inputQOH' + id).value;
     //ajax call
-    //give toastr msg
+    if (quantity > 0) {
+        $.ajax({
+            url: 'ajax/productAction.php',
+            data: {
+                productlineID: id,
+                qoh: quantity,
+                action: "updateProductlineQuantity"
+            },
+            type: 'post',
+            success: function(data) {
+                if (data == 1) {
+                    
+                }
+                toastr.success('Re Stock Completed');
+                reloadpage1();
+            }
+        });
+
+    } else {
+        //error
+        toastr.error('Quantity cannot be < 0');
+    }
+
+}
+
+function reloadpage1() {
+    window.location.href = "petshopHome.php?reload=1";
 }
 </script>

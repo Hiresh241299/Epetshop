@@ -1,5 +1,5 @@
 <?php
-if(!isset($_SESSION)){
+if (!isset($_SESSION)) {
     session_start();
 }
 include 'include/common.php';
@@ -8,7 +8,7 @@ include 'include/functions.php';
 //Check if session roleid exists
 if (isset($_SESSION["roleid"])) {
     $session_roleID = $_SESSION["roleid"];
-}else{
+} else {
     $session_roleID = 0;
 }
 //if login as owner, send to petshopHome.php
@@ -16,9 +16,9 @@ if ($session_roleID == 2) {
     header('Location: petshopHome.php');
 }
 $userID = 0;
-if(isset($_SESSION["userid"])){
+if (isset($_SESSION["userid"])) {
     $userID = $_SESSION["userid"];
-}else{
+} else {
     header('Location: cart.php');
 }
 ?>
@@ -31,8 +31,8 @@ if(isset($_SESSION["userid"])){
     ?>
     <style type="text/css">
     #map {
-        width: 300px;
-        height: 300px;
+        width: 400px;
+        height: 400px;
     }
     </style>
     <script type="text/javascript"
@@ -69,7 +69,7 @@ if(isset($_SESSION["userid"])){
                     <?php
             if ($session_roleID == 3) {
                 include 'include/navbarCustomer.php';
-            }else{
+            } else {
                 include 'include/navbar.php';
             }
             ?>
@@ -123,7 +123,7 @@ if(isset($_SESSION["userid"])){
 	 </div>-->
     <!--//Cart-->
 
-    <section class="blog-post-main">
+    <section class="blog-post-main" id="checkout">
         <!--/mag-content-->
         <div class="mag-content-inf py-5">
             <div class="container py-lg-5 px-lg-5">
@@ -137,41 +137,100 @@ if(isset($_SESSION["userid"])){
                             <hr>
                             </h5>
                             <div class="mag-small-post">
-                                <form id="register" action="" method="post">
+                                <?php
+                                //get user details and populate fields below
+                                $sql = "CALL sp_getUserDetails($userID);";
+                                        $result = $conn->query($sql);
+            
+                                        if ($result -> num_rows > 0) {
+                                            //output data for each row
+                                            while ($row = $result->fetch_assoc()) {
+                                                $mobile = $row['mobile'];
+                                                $street = $row['street'];
+                                                $town = $row['town'];
+                                                $district = $row['district'];
+                                                $long = $row['longitude'];
+                                                $lat = $row['latitude'];
+                                            }
+                                        }
+                                        $result->close();
+                                        $conn->next_result();
+                                        $orderID = getActiveUserOrder($userID);
+                                ?>
+                                <form id="DeliverySchedule" action="" method="post">
+                                <input type="text" class="form-control col-3" id="orderid" placeholder=""
+                                            name="orderid" value="<?php echo $orderID?>" disabled >
                                     <div class="form-group">
                                         <p class="login-texthny mb-2 text-dark">Mobile</p>
-                                        <input type="text" class="form-control col-3" id="fname" placeholder=""
-                                            name="mobile" disabled>
+                                        <input type="text" class="form-control col-3" id="mobile" placeholder=""
+                                            name="mobile" value="<?php echo $mobile?>" disabled required>
                                     </div>
                                     <div class="form-group">
-                                        <p class="login-texthny mb-2 text-dark">Full Address</p>
-                                        <input type="text" class="form-control col-6" id="address" placeholder=""
-                                            name="mobile" disabled>
+                                        <p class="login-texthny mb-2 text-dark">Street</p>
+                                        <input type="text" class="form-control col-6" id="street" placeholder=""
+                                            name="street" value="<?php echo $street?>" required>
                                     </div>
                                     <div class="form-group">
-                                    <p class="login-texthny mb-2 text-dark">Select Map Location</p>
+                                        <p class="login-texthny mb-2 text-dark">Locality</p>
+                                        <input type="text" class="form-control col-6" id="locality" placeholder=""
+                                            name="locality" value="" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <p class="login-texthny mb-2 text-dark">Town</p>
+                                        <input type="text" class="form-control col-6" id="town" placeholder=""
+                                            name="town" value="<?php echo $town?>" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <p class="login-texthny mb-2 text-dark">District</p>
+                                        <input type="text" class="form-control col-6" id="district" placeholder=""
+                                            name="district" value="<?php echo $district?>" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <p class="login-texthny mb-2 text-dark">Postcode</p>
+                                        <input type="text" class="form-control col-6" id="postcode" placeholder=""
+                                            name="postcode" value="" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <p class="login-texthny mb-2 text-dark">Select Map Location</p>
                                         <!--map div-->
                                         <div id="map"></div>
+                                        <input type="text" id="lat" disabled hidden>
+                                        <input type="text" id="lng" disabled hidden>
 
-                                        <!--our form-->
-                                        <h2>Chosen Location</h2>
-                                        <form method="post">
-                                            <input type="text" id="lat" readonly="yes"><br>
-                                            <input type="text" id="lng" readonly="yes">
-                                        </form>
+                                        
 
-                                        <div class="mapouter">
+                                        <!--<div class="mapouter">
                                             <div class="gmap_canvas">
-                                                <iframe width="600" height="500" id="gmap_canvas" src="https://maps.google.com/maps?q=dy%20fish&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
-                                                    <a href="https://123movies-to.org"></a>
-                                                    <br>
-                                                    <style>.mapouter{position:relative;text-align:right;height:500px;width:600px;}</style>
-                                                    <a href="https://www.embedgooglemap.net">embed google maps in web page</a>
-                                                    <style>.gmap_canvas {overflow:hidden;background:none!important;height:500px;width:600px;}</style></div></div>
+                                                <iframe width="600" height="500" id="gmap_canvas"
+                                                    src="https://maps.google.com/maps?q=dy%20fish&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                                                    frameborder="0" scrolling="no" marginheight="0"
+                                                    marginwidth="0"></iframe>
+                                                <a href="https://123movies-to.org"></a>
+                                                <br>
+                                                <style>
+                                                .mapouter {
+                                                    position: relative;
+                                                    text-align: right;
+                                                    height: 500px;
+                                                    width: 600px;
+                                                }
+                                                </style>
+                                                <a href="https://www.embedgooglemap.net">embed google maps in web
+                                                    page</a>
+                                                <style>
+                                                .gmap_canvas {
+                                                    overflow: hidden;
+                                                    background: none !important;
+                                                    height: 500px;
+                                                    width: 600px;
+                                                }
+                                                </style>
+                                            </div>
+                                        </div>-->
 
                                     </div>
                                 </form>
-
+                                
                             </div>
                         </div>
 
@@ -185,8 +244,8 @@ if(isset($_SESSION["userid"])){
                                 <div class="side-bar-hny-recent mb-5">
                                     <?php
                                     if ((isset($_SESSION['total_price'])) &&($_SESSION['total_price'] != 0)) {
-                                            echo '<h4 class="side-title">Order <span>Summary</span></h4>';
-                                    }else{
+                                        echo '<h4 class="side-title">Order <span>Summary</span></h4>';
+                                    } else {
                                         echo '<p>No product in cart</p>';
                                     }
                                     ?>
@@ -251,7 +310,7 @@ if(isset($_SESSION["userid"])){
 
 </html>
 
-
+<?php include "bottomScripts.php"; ?>
 <!--pop-up-box-->
 <script src="assets/js/jquery.magnific-popup.js"></script>
 <!--//pop-up-box-->
@@ -275,6 +334,9 @@ $(document).ready(function() {
 <script
     src="https://www.paypal.com/sdk/js?client-id=AbWcm8GgWdLQvjia0I1vJWaa2F6GsxpX_KOWGWOOlY4uSPzOUyPTJDSs0PRk9urbdVaodQnv9WGjLIdm&disable-funding=credit,card">
 </script>
+
 <script src="paypal/index.js"></script>
+
 <script type="text/javascript" src="map.js"></script>
-<?php include "bottomScripts.php"; ?>
+
+<script>

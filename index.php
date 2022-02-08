@@ -182,7 +182,32 @@ if ($result -> num_rows < 1) {
         $number = $row['number'];
         $qoh = $row['qoh'];
         $price = $row['price'];
+        $priceDisplay = 'Rs'  . $price ;
         $postedProductID = $row['productID'];
+
+        //get discount
+        $percentage = "";
+        $start = "";
+        $end = "";
+        $date = "";
+        $percentageDisplay="";
+        $arrayResult = getDiscount($pid, "active");
+        if ($arrayResult != null) {
+            if ($arrayResult -> num_rows > 0) {
+                //output data for each row
+                while ($row1 = $arrayResult->fetch_assoc()) {
+                    $percentage = $row1['percentage'];
+                    $percentageDisplay = $percentage . '%';
+                    $start = date('d-m-Y', strtotime($row1['startDate']));
+                    $end = date('d-m-Y', strtotime($row1['endDate']));
+                    $date = $start . " to " . $end;
+                    $price = (($price * $percentage)*0.01);
+                    $priceDisplay = '<del>'.$priceDisplay.'</del>' ." " .'<b class="text-danger">Rs'  . $price .'<br>'.daysleft($end).'day'.((daysleft($end)>1)?"s":"").' left</b>';
+                }
+            }
+            $arrayResult->close();
+            $conn->next_result();
+        }
 
         //check if not exists in array then post
         if (!in_array($postedProductID, $arrayPosted)) {
@@ -217,7 +242,7 @@ if ($result -> num_rows < 1) {
                             <div class="product-content">
                                 <h3 class="title"><a href="viewProductDetails.php?prodid='.$pid.'">'.$pname . " ".$number. " " .$unit.'</a> | <a href="#">'.$brand.'</a></h3>
                                 <!-- <span class="price"><del>$975.00</del>Rs2200</span>-->
-                                <span class="price">Rs '.$price.'</span></br>
+                                <span class="price">'.$priceDisplay.'</span></br>
                                 <small><a href="viewPetshops.php#petshop'.$petshopID.'"><u>'.$petshopName.'</u></a></small>
                             </div>
                         </div>

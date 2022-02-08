@@ -14,7 +14,15 @@ if (isset($_SESSION["roleid"])) {
 } else {
     $session_roleID = 0;
 }
-//testt
+
+//if remember me is check, create cookie
+if(isset($_COOKIE['email'])){
+    //save email in cookie
+    $userEmail = $_COOKIE['email'];
+}else{
+    //delete cookie if exists
+    $userEmail = "";
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -50,7 +58,7 @@ if (isset($_SESSION["roleid"])) {
                                     <div class="form-group">
                                         <p class="login-texthny mb-2 text-white">Email address</p>
                                         <input type="email" class="form-control" id="exampleInputEmail1" name="email"
-                                            aria-describedby="emailHelp" placeholder="" required="">
+                                            aria-describedby="emailHelp" placeholder="" value="<?php echo $userEmail;?>" required="">
                                         <!--<small id="emailHelp" class="form-text text-white">We'll never share your email
                                             with anyone else.</small>-->
                                     </div>
@@ -61,7 +69,7 @@ if (isset($_SESSION["roleid"])) {
                                     </div>
                                     <div class="form-group">
                                         <div class="userhny-check">
-                                            <input type="checkbox" id="remember" name="remember">
+                                            <input type="checkbox" id="remember" value="1" name="remember">
                                             <label class="privacy-policy text-white">Remember me</label>
                                         </div>
                                     </div>
@@ -89,12 +97,6 @@ if (isset($_SESSION["roleid"])) {
                 $lastLogin = date("Y/m/d G:i:s");
                 updateUserLogin($lastLogin, $userID);
 
-                //if remember me is check, create cookie
-                if(isset($_POST['remember'])){
-                    //save emall and password in cookie
-                }else{
-                    //delete cookie if exists
-                }
                 
                 saveCartInDb($userID);
                 //clear cookies
@@ -108,6 +110,17 @@ if (isset($_SESSION["roleid"])) {
                     $orderID = getActiveUserOrder($userID);
                     loadcart($orderID);
                 }
+
+                //if remember me is check, create cookie
+                /*if(isset($_POST['remember'])&& ($_POST['remember'] == 1)){
+                    //save email in cookie
+                    //$_COOKIE['email'] = $userEmail;
+                    setcookie("email", $userEmail, time() + (86400 * 30), "/");
+                }else{
+                    //delete cookie if exists
+                    //$_COOKIE['email'] = "";
+                    setcookie("email", null, -1, '/');
+                }*/
 
                 //cart is not empty => login => save in database, delete session, cookies
                 //check cookies cart
@@ -162,6 +175,7 @@ if (isset($_SESSION["roleid"])) {
                     unset($_SESSION['mycart']);
                     $_SESSION['total_price'] = 0;
                     setcookie("cart", null, -1, '/');
+                    
                 }
 
                 //load cart
