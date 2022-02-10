@@ -37,6 +37,25 @@ if(isset($_GET['p'])){
         $status = "Payment Completed";
         addPayment($dateTime, $remark, $status, $orderID);
 
+        //reduce quantity
+        //get orderID
+        //getall orderDetails
+        //get all productLine
+        //update
+        //fetch product from database, using session userid
+        $sql = "CALL sp_getProductLineDetailsByOrderID($orderID, 'Order paid');";
+        $result = $conn->query($sql);
+        if ($result -> num_rows > 0) {
+            //output data for each row
+            while ($row = $result->fetch_assoc()) {
+                $productLineID = $row['productLineID'];
+                $quantity = $row['quantity'];
+                $quantity =  ($quantity * -1);
+                updateProductLineQOH($productLineID, $quantity);
+            }
+        }
+        $result->close();
+        $conn->next_result();
     }
 }
 

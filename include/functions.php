@@ -8,6 +8,9 @@ if ($conn -> connect_error) {
     die("connection failed:" . $conn->connect_error);
 }
 
+//auto update discount status
+updateDiscountStatusAuto();
+
 //verify user credentials
 function verifyUserCredentials($email, $passw)
 {
@@ -342,6 +345,15 @@ function addDeliverySchedule($street, $locality, $town, $district, $postcode, $l
     return $result;
 }
 
+//add discount
+function addDiscount($per, $start, $end, $status, $productLineID){
+    include "dbConnection.php";
+    $sql = "CALL sp_addDiscount('$per', '$start', '$end', '$status', '$productLineID');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
+
 
 //get admin id
 //works for only 1 admin
@@ -470,6 +482,14 @@ function updateUserLogin($lastLogin, $userID){
     return $result;
 }
 
+//update discount status Expired
+function updateDiscountStatus($productLineID){
+    include "dbConnection.php";
+    $sql = "CALL sp_updateDiscountStatus('$productLineID');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
 
 //get petshopID
 function getPetshopID($uid)
@@ -909,4 +929,13 @@ function daysleft($endDate){
     $datediff = $now - $your_date;
     
     return round(-$datediff / (60 * 60 * 24));
+}
+
+//auto update discount status
+function updateDiscountStatusAuto(){
+    include "dbConnection.php";
+    $sql = "CALL sp_updateDiscountStatusbyendDate();";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
 }

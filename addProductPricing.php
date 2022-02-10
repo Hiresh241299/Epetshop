@@ -29,7 +29,9 @@ if((!isset($_GET['id'])) || (($_GET['id']) == NULL)){
     ?>
 
 </head>
-
+<style>
+    .not-allowed {cursor: not-allowed;}
+</style>
 <body>
 
     <section class="w3l-banner-slider-main inner-pagehny">
@@ -288,10 +290,10 @@ if((!isset($_GET['id'])) || (($_GET['id']) == NULL)){
                                                                     while ($row1 = $arrayResult->fetch_assoc()) {
                                                                         $percentage = $row1['percentage'];
                                                                         $percentageDisplay = $percentage . '%';
-                                                                        $start = date('d-m-Y', strtotime($row1['startDate']));
-                                                                        $end = date('d-m-Y', strtotime($row1['endDate']));
+                                                                        $start = date('d M Y', strtotime($row1['startDate']));
+                                                                        $end = date('d M Y', strtotime($row1['endDate']));
                                                                         $date = $start . " to " . $end;
-                                                                        $newprice = (($price * $percentage)*0.01);
+                                                                        $newprice = (($price * (100 - $percentage))*0.01);
                                                                         $priceDisplay = '<del>'.$priceDisplay.'</del>' ." " .'<b class="text-danger">Rs'  . $newprice .'</b>';
                                                                     }
                                                                 }
@@ -300,7 +302,11 @@ if((!isset($_GET['id'])) || (($_GET['id']) == NULL)){
                                                             }
                                                             
 
-                                                            echo '<tr id="rowNum'.$row['productLineID'].'">
+                                                            echo '
+                                                            <input type="number" id="per'.$productLineID.'" value="'.$percentage.'" disabled hidden>
+                                                            <input type="text" id="start'.$productLineID.'" value="'.$start.'" disabled hidden>
+                                                            <input type="text" id="end'.$productLineID.'" value="'.$end.'" disabled hidden>
+                                                            <tr id="rowNum'.$row['productLineID'].'">
                                                             <td>' . $number . " ". $unit . ' </td>
                                                             <td>'  . $priceDisplay . ' </td>
                                                             <td> '.$qoh.' </td>
@@ -308,7 +314,7 @@ if((!isset($_GET['id'])) || (($_GET['id']) == NULL)){
                                                             <td> '.$date.'</td>
                                                             <td class="text-center" width="25%">
                                                             <a href="addproductpricing.php?id='.$productID.'&m='.$productLineID.'#tableprice"  class="btn btn-info" title="Edit Product-line" style="margin:3px"><i class="fa fa-edit" aria-hidden="true"></i></a>
-                                                            <button type="button" class="btn btn-info" onclick="showDiscount(1, '.$productLineID.')" title="Add Discount" style="margin:3px"><i class="fa fa-tag" aria-hidden="true"></i></button>
+                                                            <button type="button" class="btn btn-info" onclick="showDiscount(1, '.$productLineID.')" title="Add/Update Discount" style="margin:3px"><i class="fa fa-tag" aria-hidden="true"></i></button>
                                                             </td>
                                                             </tr>';
                         
@@ -495,22 +501,31 @@ if((!isset($_GET['id'])) || (($_GET['id']) == NULL)){
 
                                             <div class="form-group col-lg-6">
                                                 <label>% Discount * </label>
-                                                <input type="number" name="per" class="form-control"
+                                                <input type="number" name="per" id="per" class="form-control"
                                                     placeholder="% Discount">
                                             </div>
+                                        </div>
+                                        <div class="input-grids row">
+
                                             <div class="form-group col-lg-6">
-                                                <label>Discount Days * </label>
-                                                <input type="number" name="day" class="form-control"
-                                                    placeholder="Discount Days">
+                                                <label>Start Date </label>
+                                                <input type="date" name="start" id="start" onchange="setDate()"
+                                                    class="form-control" placeholder="Start Date">
+                                            </div>
+                                            <div class="form-group col-lg-6">
+                                                <label>End Date </label>
+                                                <input type="date" name="end" id="end" onchange="setDate()" class="form-control"
+                                                    placeholder="End Date">
                                             </div>
                                         </div>
+                                        <label id="discountErrormsg" class="text-danger"></label>
                                         <div class="submit text-right mt-5">
                                             <button type="button" class="btn btn-warning"
                                                 onclick="showDiscount(0,1)">Cancel</button>
-                                            <button type="button" class="btn btn-primary" name="addDiscount"
-                                                value="post product">
-                                                Submit</button>
+                                            <button type="button" class="btn btn-primary" name="addDiscount" id="addDiscount" onclick="addDiscountfunc()">
+                                                Add Discount</button>
                                         </div>
+                                        </br>
                                     </form>
 
                                 </div>
@@ -723,21 +738,31 @@ function showDiscount(num, id) {
         document.getElementById('discount').style.display = "block";
         //get row, add bg color
         document.getElementById("rowNum" + id).style.backgroundColor = "grey";
-
         //set input
         document.getElementById('disprodid').value = id;
+
+        //get value
+        var date = new Date();
+        document.getElementById("per").value = document.getElementById("per"+id).value;
+        document.getElementById("end").value = formatDate(document.getElementById("end"+id).value);
+        document.getElementById("start").value = formatDate(document.getElementById("start"+id).value);
     }
     if (num == 0) {
         document.getElementById('discount').style.display = "none";
         //get row, add bg color
         thisid = document.getElementById('disprodid').value;
         document.getElementById("rowNum" + thisid).style.backgroundColor = "white";
+        //clear value
+        document.getElementById("start").value = "";
+        document.getElementById("end").value = "";
+        document.getElementById("per").value = "";
+
     }
 }
 //test
 function reload2() {
     id = document.getElementById('productID').value;
-    window.location.href = "addproductpricing.php?id=" + id + "#prodDetails";
+    window.location.href = "addproductpricing.php?id=" + id;
 }
 
 
@@ -768,5 +793,99 @@ function update(id) {
             reload2();
         }
     });
+}
+</script>
+
+<script>
+var today = new Date();
+var dd = today.getDate();
+var mm = today.getMonth() + 1; //January is 0!
+var yyyy = today.getFullYear();
+
+if (dd < 10) {
+    dd = '0' + dd;
+}
+
+if (mm < 10) {
+    mm = '0' + mm;
+}
+
+today = yyyy + '-' + mm + '-' + dd;
+document.getElementById("start").setAttribute("min", today);
+
+//document.getElementById("end").disabled = true;
+//document.getElementById("addDiscount").disabled = true;
+
+function setDate() {
+    document.getElementById("end").disabled = false;
+    Endmin = document.getElementById("start").value;
+    document.getElementById("end").setAttribute("min", Endmin);
+
+    //get values
+    start = document.getElementById("start").value;
+    end = document.getElementById("end").value;
+
+    if(start > end){
+        //give error msg
+        //block add discount btn
+        document.getElementById("addDiscount").disabled = true;
+        document.getElementById("addDiscount").classList.add("not-allowed");
+        document.getElementById("discountErrormsg").innerHTML = "Start Date must be less than End Date";
+    }else{
+        document.getElementById("addDiscount").disabled = false;
+        document.getElementById("discountErrormsg").innerHTML = "";
+    }
+
+}
+
+function addDiscountfunc(){
+    //get values of per, start, end
+        start = document.getElementById("start").value ;
+        end = document.getElementById("end").value ;
+        per = document.getElementById("per").value ;
+        productLineID = document.getElementById("disprodid").value ;
+        id = document.getElementById('prodid').value;
+    // if not empty, ajax call else error msg
+
+    if(per < 0 || per == "" || start == "" || end == "" || productLineID <= 0){
+        document.getElementById("discountErrormsg").innerHTML = "Invalid Values";
+        document.getElementById("addDiscount").classList.add("not-allowed");
+    }else{
+        document.getElementById("discountErrormsg").innerHTML = "";
+
+        //ajax call to add discount
+        $.ajax({
+            url: 'ajax/productAction.php',
+            data: {
+                start : start,
+                end: end,
+                per: per,
+                productLineID: productLineID,
+                action: "addDiscount"
+            },
+            type: 'post',
+            success: function(data) {
+                if (data == 1) {
+                    
+                }
+                toastr.success('Discount Added');
+                reload2();
+            }
+        });
+    }
+}
+
+function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
 }
 </script>

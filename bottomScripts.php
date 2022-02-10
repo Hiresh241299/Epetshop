@@ -55,6 +55,8 @@ $(document).ready(function() {
                 $("#cart").text(data.da);
                 $("#total").text(data.total);
                 $("#totalValue").val(data.totalValue);
+                $("#valid").val(data.valid);
+                checkValidity();
             }
         });
     }
@@ -73,6 +75,8 @@ function show_mycart() {
             $("#cart").text(data.da);
             $("#total").text(data.total);
             $("#totalValue").val(data.totalValue);
+            $("#valid").val(data.valid);
+            checkValidity();
         }
     });
 }
@@ -114,7 +118,9 @@ $(document).on("click", ".clearall", function() {
     });
     setInterval(show_mycart, 1000);
     toastr.warning('Cart cleared');
-    setTimeout(function() { setInterval(show_mycart, 0); }, 5000);
+    setTimeout(function() {
+        setInterval(show_mycart, 0);
+    }, 5000);
 });
 </script>
 <!--cart.php-->

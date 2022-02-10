@@ -134,6 +134,30 @@ if (isset($_POST['action'])) {
             }            
         }
     }
+
+    //Add discount
+    if ((isset($_POST['action'])) == "addDiscount") {
+        if ((isset($_POST['start'])) && (isset($_POST['end']))&& (isset($_POST['per']))&& (isset($_POST['productLineID']))) {
+
+            //get value of session
+            $start = $_POST['start'];
+            $end = $_POST['end'];
+            $per = $_POST['per'];
+            $productLineID = $_POST['productLineID'];
+            $status = "active";
+
+            //get quantity
+            //add to existing quantity
+            //set status expired for other with same productlineID
+            updateDiscountStatus($productLineID);
+            //add/update
+            if(addDiscount($per, $start, $end, $status, $productLineID)){
+                $output = 1;
+            }            
+        }
+    }
+
+
 }
 
 echo $output;

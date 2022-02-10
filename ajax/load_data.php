@@ -119,6 +119,7 @@ if ($result -> num_rows < 1) {
         $end = "";
         $date = "";
         $percentageDisplay="";
+        $newprice = $price;
         $arrayResult = getDiscount($pid, "active");
         if ($arrayResult != null) {
             if ($arrayResult -> num_rows > 0) {
@@ -129,8 +130,8 @@ if ($result -> num_rows < 1) {
                     $start = date('d-m-Y', strtotime($row1['startDate']));
                     $end = date('d-m-Y', strtotime($row1['endDate']));
                     $date = $start . " to " . $end;
-                    $price = (($price * $percentage)*0.01);
-                    $priceDisplay = '<del>'.$priceDisplay.'</del>' ." " .'<b class="text-danger">Rs'  . $price .'<br>'.daysleft($end).'day'.((daysleft($end)>1)?"s":"").' left</b>';
+                    $newprice = (($price * (100 - $percentage))*0.01);
+                    $priceDisplay = '<del>'.$priceDisplay.'</del>' ." " .'<b class="text-danger">Rs'  . $newprice .'<br>'.daysleft($end).'day'.((daysleft($end)>1)?"s":"").' left</b>';
                 }
             }
             $arrayResult->close();
@@ -160,7 +161,7 @@ if ($result -> num_rows < 1) {
                                             <input type="hidden" name="id" value="'.$pid.'" id="'.$pid.'">
                                             <input type="hidden" name="quantity" value="1" id="quantity'.$pid.'">
                                             <input type="hidden" name="name" value="'.$pname. " ".$number. " " .$unit.'" id="name'.$pid.'">
-                                            <input type="hidden" name="price" value="'.$price.'" id="price'.$pid.'">
+                                            <input type="hidden" name="price" value="'.$newprice.'" id="price'.$pid.'">
                                             <button type="submit" class="transmitv-cart ptransmitv-cart add-to-cart add_cart" name="add" id="'.$pid.'">
                                                 Add to Cart
                                             </button>

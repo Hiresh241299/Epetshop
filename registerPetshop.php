@@ -209,8 +209,8 @@ if (isset($_SESSION['tmpUserID'])){
                                                 while ($row = $result->fetch_assoc()) {
                                                     $id = $row['petcatID'];
                                                     $name = $row['name'];
-                                                    echo '&nbsp <input type="checkbox" id="'.$id.'" name="'.$id.'" value="'.$id.'">
-                                                          <label for="horns">'.$name.'</label>
+                                                    echo '&nbsp <input type="checkbox" id="'.$id.'" onchange=append("'.$name.'", this.checked) name="'.$id.'" value="'.$id.'">
+                                                          <label for="specialities">'.$name.'</label>
                                                         <br>';
                                                 }
                                             }
@@ -218,6 +218,7 @@ if (isset($_SESSION['tmpUserID'])){
                                              $conn->next_result();
                                             ?>
                                     </div>
+                                    <p class="text-white" id="displaySpecialities"><p>
                                 </div>
                             </div>
 
@@ -388,6 +389,17 @@ function verifyUniqueness(field, value) {
                 }
             }
         });
+    }
+}
+
+function append(appendVal, isCheck){
+    alert(isCheck);
+    list = document.getElementById('displaySpecialities').innerHTML;
+
+    if(list == ""){
+        document.getElementById('displaySpecialities').innerHTML = appendVal ;
+    }else{
+    document.getElementById('displaySpecialities').innerHTML = list + ", " + appendVal ;
     }
 }
 </script>

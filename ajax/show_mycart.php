@@ -7,12 +7,14 @@ if(!isset($_SESSION)){
 $total = 0;
 $to = 0;
 $output = "";
+$errorMSG ="";
+$valid = 1;
 
 /*$output .= '
 <!--Display carts-->
 <div class="mag-post-left-hny col-lg-8">
 ';*/
-
+ 
 if (!empty($_SESSION['mycart'])) {
 	foreach ($_SESSION['mycart'] as $key => $value) {
 
@@ -44,6 +46,12 @@ if (!empty($_SESSION['mycart'])) {
           $number = $row['number'];
           $qoh = $row['qoh'];
           $price = $row['price'];
+
+          //check quantity availe
+          if($value['quantity'] > $qoh){
+            $errorMSG = "Quantity not available!";
+            $valid = 0;
+          }
         }
     }
     $result->close();
@@ -68,22 +76,23 @@ if (!empty($_SESSION['mycart'])) {
                                         <small><a href="viewPetshops.php#petshop'.$petshopID.'"><u>'.$petshopName.'</u></a></small>
                                         <p><b>Pet: </b> '.$petCat."  ".'<b>Type: </b>'.$prodcat.'</p>
                                         <p>'.$desc.'</p>
-                                        <h5>Rs '.$value['price'].'</h5>
+                                        <h5>Rs '.$value['price'].' <p>('.$qoh.' Left)</p></h5>
+                                        <p class="text-danger" id="quantityErrorMsg">'.$errorMSG.'</p>
                                       </div>
                                       <div class="col-md-2">
                                       </br>
                                         <p class="text-center" ><b>Quantity</b></p>
                                         <div class="quantity buttons_added">
 
-                                        <input type="button" id="btnminus" name="'.$value['id'].'" value="-" class="minus col-4 reduceQTY">
+                                        <input type="button" id="btnminus'.$value['id'].'" name="'.$value['id'].'" onclick=checkQuantity('.$value['id'].','.$qoh.') value="-" class="minus col-4 reduceQTY">
                                         
                                         <input
                                         type="text" step="1" min="1" max="100" name="quantity"
-                                        id="quantity" value="'.$value['quantity'].'" title="Qty"
+                                        id="quantity'.$value['id'].'" value="'.$value['quantity'].'" title="Qty"
                                         class="input-text qty text bg-white col-4" size="4" pattern=""
-                                        inputmode="">
+                                        inputmode="" disabled>
 
-                                        <input type="button" id="btnplus" name="'.$value['id'].'" value="+" class="plus col-4 addQTY">
+                                        <input type="button" id="btnplus'.$value['id'].'" name="'.$value['id'].'" onclick=checkQuantity('.$value['id'].','.$qoh.') value="+" class="plus col-4 addQTY">
                                                                                 
                                         </div>
                                       </div>
@@ -182,6 +191,7 @@ $data['da'] = $to;
 $data['out'] = $output;
 $data['total'] = $total;
 $data['totalValue'] = $totalValue;
+$data['valid'] = $valid;
 
 echo json_encode($data);
  ?>

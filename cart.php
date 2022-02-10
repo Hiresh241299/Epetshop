@@ -124,7 +124,9 @@ if(isset($_SESSION["userid"])){
     background-color: #ff7315;
 }
 
-.not-allowed {cursor: not-allowed;}
+.not-allowed {
+    cursor: not-allowed;
+}
 </style>
 
 <body>
@@ -235,7 +237,8 @@ if(isset($_SESSION["userid"])){
                                         <input id="totalValue" value="'.$_SESSION['total_price'].'" hidden disabled>
                                         ';*/
                                         echo '
-                                        <a href="checkout.php#checkout" class="col-12 btn btn-success border rounded-pill"><b>Checkout</b></a>
+                                        <button type="button" onclick=payment() id="checkoutBTN" class="col-12 btn btn-success border rounded-pill"><b>Checkout</b></button>
+                                        <input type="text" id="valid" hidden disabled>
                                         ';
                                                 } else {
                                                     //user not logged in
@@ -316,6 +319,8 @@ function show_mycart() {
             $("#cart").text(data.da);
             $("#total").text(data.total);
             $("#totalValue").val(data.totalValue);
+            $("#valid").val(data.valid);
+            checkValidity();
         }
     });
 }
@@ -377,3 +382,45 @@ $(document).on("click", ".reduceQTY", function(event) {
 <script src="paypal/index.js"></script>
 
 <?php include "bottomScripts.php"; ?>
+
+<script>
+function checkQuantity(id, qoh) {
+    quantity = document.getElementById('quantity' + id).value;
+    if (quantity == 1) {
+        document.getElementById('btnminus' + id).disabled = true;
+    }
+    else{
+        document.getElementById('btnminus' + id).disabled = false;
+    }
+    if(quantity == qoh) {
+        document.getElementById('btnplus' + id).disabled = true;
+    }
+    else{
+        document.getElementById('btnplus' + id).disabled = false;
+    }
+    
+}
+
+function checkValidity(){
+    isvalid = document.getElementById('valid').value;
+    if(isvalid == 1){
+        document.getElementById('checkoutBTN').disabled = false;
+    }
+    if(isvalid == 0){
+        document.getElementById('checkoutBTN').disabled = true;
+    }
+}
+function payment(){
+    window.location.href='checkout.php#checkout';
+}
+//disable buttons - and +
+//get values
+/*document.getElementById('btnminus10').disabled = true;
+function checkQuantity(id){
+//quantity = document.querySelector('input[name=quantity'+id+']').value
+quantity = document.getElementById('quantity'+id).value;
+alert(quantity);
+if(quantity == 1){
+document.getElementById('btnminus'+id).disabled = true;
+}*/
+</script>

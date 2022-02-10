@@ -148,7 +148,7 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                                                                     //output data for each row
                                                                     while ($row1 = $arrayResult->fetch_assoc()) {
                                                                         $percentage = $row1['percentage'];
-                                                                        $newprice = (($price * $percentage)*0.01);
+                                                                        $newprice = (($price * (100 - $percentage))*0.01);
                                                                         $priceDisplay = '<del>'.$priceDisplay.'</del>' ." " .'<b class="text-danger">Rs'  . $newprice .'</b>';
                                                                     }
                                                                 }
