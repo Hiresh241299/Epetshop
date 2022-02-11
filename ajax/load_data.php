@@ -178,6 +178,23 @@ if ($result -> num_rows < 1) {
                         </div>
 
 		 ';
+
+         //get productline discount
+         /*$arrayResult = DiscountedProductLine();
+         if ($arrayResult != null) {
+             if ($arrayResult -> num_rows > 0) {
+                 //output data for each row
+                 while ($row1 = $arrayResult->fetch_assoc()) {
+                     if($row1['productLineID'] == $pid){
+                         
+                     }
+                     
+                 }
+             }
+             $arrayResult->close();
+             $conn->next_result();
+         }*/
+
         if ($_petshopID > 0) {
             if ($_petshopID == $petshopID) {
                 $output .= $outputRow;

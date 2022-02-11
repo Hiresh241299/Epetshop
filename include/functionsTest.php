@@ -148,6 +148,15 @@ if($result == 1){
     echo "Product Line not Updated!!" . "<br>";
 }
 
+//update user
+//updateUser($userID, $fname, $lname, $email, $nic, $mobile, $street, $locality, $town, $district, $lastmodif)
+$result = updateUser(199, "REALTEST2", "REALTEST2", "REALTEST2", "REALTEST2", "REALTEST2", "REALTEST2", "REALTEST2", "REALTEST2", 1, "2021-09-14 09:22:26");
+if($result == 1){
+    echo "User  Updated!!" . "<br>";
+}else if ($result == 0){
+    echo "user not Updated!!" . "<br>";
+}
+
 //update order details quantity
 //updateOrderDetailsQuantity($orderID, $productLineID, $quantity);
 $result = updateOrderDetailsQuantity(1, 5, 10);

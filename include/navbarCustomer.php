@@ -72,15 +72,24 @@
                         Products
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="ecommerce-single.html">My Favorite Products</a>
+                    <!--<a class="dropdown-item" href="ecommerce-single.html">My Favorite Products</a>-->
                     <a class="dropdown-item" href="displayAllProducts.php">All Products</a>
                                             </div>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="viewPetshops.php">PETSHOPS</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="customerOrder.php">My Orders</a>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                       My Orders
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item btn-open2" href="customerOrder.php?s=p">Pending</a>
+                    <a class="dropdown-item btn-open2" href="customerOrder.php?s=d">Delivered</a>
+                            <a class="dropdown-item btn-open" href="customerOrder.php">View All</a>
+                    </div>
                 </li>
 
                 <li class="nav-item dropdown">
@@ -89,7 +98,7 @@
                         My Account
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item btn-open" href="#">My Profile</a>
+                            <a class="dropdown-item btn-open" href="userProfile.php">My Profile</a>
                             <a class="dropdown-item btn-open2" href="Logout.php">Logout</a>
                     </div>
                 </li>

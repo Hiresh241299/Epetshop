@@ -112,7 +112,7 @@ if(isset($_COOKIE['email'])){
                 }
 
                 //if remember me is check, create cookie
-                /*if(isset($_POST['remember'])&& ($_POST['remember'] == 1)){
+                if(isset($_POST['remember'])&& ($_POST['remember'] == 1)){
                     //save email in cookie
                     //$_COOKIE['email'] = $userEmail;
                     setcookie("email", $userEmail, time() + (86400 * 30), "/");
@@ -120,7 +120,7 @@ if(isset($_COOKIE['email'])){
                     //delete cookie if exists
                     //$_COOKIE['email'] = "";
                     setcookie("email", null, -1, '/');
-                }*/
+                }
 
                 //cart is not empty => login => save in database, delete session, cookies
                 //check cookies cart

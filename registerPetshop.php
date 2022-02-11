@@ -27,6 +27,7 @@ if (isset($_SESSION['tmpUserID'])){
     <title>Register</title>
     <!-- CSS -->
     <link rel="stylesheet" href="assets/css/style-liberty.css">
+    <link rel="stylesheet" href="assets/css/mystyle.css">
     <!-- CSS -->
     <link href="//fonts.googleapis.com/css?family=Oswald:300,400,500,600&display=swap" rel="stylesheet">
     <link href="//fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,900&display=swap" rel="stylesheet">
@@ -195,6 +196,7 @@ if (isset($_SESSION['tmpUserID'])){
 
                             <div class="form-group">
                                 <p class="login-texthny mb-2 text-white">Speciality</p>
+                                <p class="text-white" id="displaySpecialities"><p>
                                 <div class="dropdown">
                                     <input type="button" class="dropbtn form-control" value="Select Speciality"
                                         formnovalidate disabled>
@@ -209,7 +211,8 @@ if (isset($_SESSION['tmpUserID'])){
                                                 while ($row = $result->fetch_assoc()) {
                                                     $id = $row['petcatID'];
                                                     $name = $row['name'];
-                                                    echo '&nbsp <input type="checkbox" id="'.$id.'" onchange=append("'.$name.'", this.checked) name="'.$id.'" value="'.$id.'">
+                                                    $trimName = preg_replace('/\s+/', '', $name);
+                                                    echo '&nbsp <input type="checkbox" id="'.$id.'" onchange=append("'.$trimName.'",this.checked) name="'.$id.'" value="'.$id.'">
                                                           <label for="specialities">'.$name.'</label>
                                                         <br>';
                                                 }
@@ -218,7 +221,7 @@ if (isset($_SESSION['tmpUserID'])){
                                              $conn->next_result();
                                             ?>
                                     </div>
-                                    <p class="text-white" id="displaySpecialities"><p>
+                                    
                                 </div>
                             </div>
 
@@ -393,13 +396,19 @@ function verifyUniqueness(field, value) {
 }
 
 function append(appendVal, isCheck){
-    alert(isCheck);
-    list = document.getElementById('displaySpecialities').innerHTML;
-
-    if(list == ""){
-        document.getElementById('displaySpecialities').innerHTML = appendVal ;
-    }else{
-    document.getElementById('displaySpecialities').innerHTML = list + ", " + appendVal ;
+    if(isCheck){
+        const node = document.createElement("span");
+        node.classList.add("badge");
+        node.classList.add("badge-info");
+        node.classList.add("badge-margin");
+        node.id = "badge" + appendVal;
+        const textnode = document.createTextNode(appendVal);
+        node.appendChild(textnode);
+        document.getElementById('displaySpecialities').appendChild(node) ;
+    }
+    else{
+        var toRemoveNode = document.getElementById("badge" + appendVal);
+        document.getElementById('displaySpecialities').removeChild(toRemoveNode);
     }
 }
 </script>

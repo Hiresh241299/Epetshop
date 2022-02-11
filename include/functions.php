@@ -241,6 +241,25 @@ function getUserID($email)
     return $output;
 }
 
+//get location name given location ID
+function getLocationName($locationID)
+{
+    include "dbConnection.php";
+    $output= 0;
+    $sql = "CALL sp_verifyLocation('$locationID');";
+
+    $result = $conn->query($sql);
+
+    if ($result -> num_rows > 0) {
+        //output data for each row
+        while ($row = $result->fetch_assoc()) {
+            $output = $row['name'];
+        }
+    }
+    
+    return $output;
+}
+
 
 
 
@@ -427,6 +446,24 @@ function updateProductLine($prodLineID, $unit, $num, $qoh, $price, $date){
     return $result;
 }
 
+//update userDetails
+function updateUser($userID, $fname, $lname, $email, $nic, $mobile, $street, $locality, $town, $district, $lastmodif){
+    include "dbConnection.php";
+    $sql = "CALL sp_updateUser('$userID','$fname', '$lname', '$email', '$nic', '$mobile', '$street', '$locality', '$town', '$district', '$lastmodif');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
+
+//update petshop
+function updatePetshop($userID, $pname, $brn, $desc, $img, $street, $locality, $town, $district, $lastmodif){
+    include "dbConnection.php";
+    $sql = "CALL sp_updatePetshop('$userID', '$pname', '$brn', '$desc', '$img', '$street', '$locality', '$town', '$district', '$lastmodif');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
+
 //update orderDetails Quantity
 function updateOrderDetailsQuantity($orderID, $productLineID, $quantity){
     include "dbConnection.php";
@@ -505,6 +542,20 @@ function getPetshopID($uid)
         }
     }
     return $petshopid;
+}
+
+//get discounted productline
+function DiscountedProductLine()
+{
+    include "dbConnection.php";
+    $petshopid = "";
+    //fetch petshop id from db
+    $sql = "CALL sp_getDiscountedProductLine();";
+    $result = $conn->query($sql);
+    if ($result -> num_rows > 0) {
+        return $result;
+    }
+    return 0;
 }
 
 //get recently added product id by petshop 

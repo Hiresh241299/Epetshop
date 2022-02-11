@@ -149,11 +149,10 @@ if(isset($_GET['p'])){
                     <table id="table_id" class="display" width="100%" border=2>
                         <thead>
                             <tr class="bg-warning">
-                                <th>Order No</th>
-                                <th>Date Paid</th>
+                                <th>Order Ref</th>
                                 <th>Product(Qty)</th>
                                 <th>Total price</th>
-                                <th>Remark</th>
+                                <th>Payment Date</th>
                                 <th>Delivery</th>
                                 <th>Action</th>
                             </tr>
@@ -165,32 +164,62 @@ if(isset($_GET['p'])){
                             //fetch product from database, using session userid
                             $sql = "CALL sp_getPaidOrderByUserID($userid);";
                             $result = $conn->query($sql);
+                            $output = "";
 
                             if ($result -> num_rows > 0) {
                                 //output data for each row
                                 while ($row = $result->fetch_assoc()) {
                                     $orderNo = $row['orderID'];
-                                    $date = date('d-m-Y h:m:s', strtotime($row['createdDateTime']));
+                                    $date = date('d M Y h:m', strtotime($row['createdDateTime']));
                                     $remark = $row['status'];
                                     $qty = getPaidOrderDetailsNoOFProducts($orderNo);
                                     $total = getPaidOrderDetailsTotals($orderNo);
 
                                     $delivery = getDeliveryScheduleStatus($orderNo);
 
-                                                                                       
+                                         
+                                $query ="";
+                                //get queryString
+                                if(isset($_GET['s'])){
+                                    if($_GET['s'] == "d"){
+                                        if($delivery == "Delivered"){
+                                            $query = "s=d&";
+                                        }
+                                    }
+                                    if($_GET['s'] == "p"){
+                                        if($delivery == "Pending"){
+                                            $query = "s=p&";
+                                        }
+                                    }
+                                }
                                    
-                                    echo '<tr>
+                                    $output= '<tr>
                                 <td>'.$orderNo.'</td>
-                                <td>'.$date.'</td>
                                 <td>'.$qty.'</td>
                                 <td>Rs '.$total.'</td>
-                                <td>'.$remark.'</td>
+                                <td>'.$date.'</td>
                                 <td>'.$delivery.'</td>
                                 <td class="text-center">
-                                    <a  href="CustomerOrder.php?viewOrderDetails='.$orderNo.'#orderdetails"  class="btn btn-primary" title="View Order"><i class="fa fa-eye iblack"
+                                    <a  href="CustomerOrder.php?'.$query.'viewOrderDetails='.$orderNo.'#orderdetails"  class="btn btn-primary" title="View Order"><i class="fa fa-eye iblack"
                                             aria-hidden="true"></i></a>
                                 </td>
                                 </tr>';
+
+                                //get queryString
+                                if(isset($_GET['s'])){
+                                    if($_GET['s'] == "d"){
+                                        if($delivery == "Delivered"){
+                                            echo $output;
+                                        }
+                                    }
+                                    if($_GET['s'] == "p"){
+                                        if($delivery == "Pending"){
+                                            echo $output;
+                                        }
+                                    }
+                                }else{
+                                    echo $output;
+                                }
                                 }
                             }
                              $result->close();
@@ -356,7 +385,11 @@ if(isset($_GET['p'])){
 <script>
 //initialising datatable
 $(document).ready(function() {
-    $('#table_id').DataTable();
+    $('#table_id').DataTable(
+        {
+        "order": [[ 0, "desc" ]]
+    }
+    );
 });
-$('#table_id').DataTable().columns.adjust();
+//$('#table_id').DataTable().columns.adjust();
 </script>

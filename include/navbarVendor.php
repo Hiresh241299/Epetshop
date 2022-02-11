@@ -81,7 +81,7 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="viewMyPetshop.php">My Petshop</a>
+                    <a class="nav-link" href="viewMyPetshop.php">Store</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="viewMyOrderDelivery.php">Orders & Delivery</a>
@@ -93,7 +93,8 @@
                         My Account
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item btn-open" href="#">My Profile</a>
+                            <a class="dropdown-item btn-open" href="userProfile.php">My Profile</a>
+                            <a class="dropdown-item btn-open" href="petshopProfile.php">My Petshop</a>
                             <a class="dropdown-item btn-open2" href="Logout.php">Logout</a>
                     </div>
                 </li>
