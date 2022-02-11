@@ -33,6 +33,53 @@ if (isset($_POST['action'])) {
             }
         }
     }
+    //delete petshop speciality
+    if ((isset($_POST['action'])) == "deleteSpeciality") {
+        if (isset($_POST['sid'])) {
+            //change review status = 0
+            $id = $_POST['sid'];
+            $status = 0;
+            if(updateSpecialityStatus($id, $status)){
+                $output = "1";
+            }
+        }
+    }
+
+    //delete customer favorite
+    if ((isset($_POST['action'])) == "deleteFavorite") {
+        if (isset($_POST['fid'])) {
+            //change review status = 0
+            $id = $_POST['fid'];
+            $status = 0;
+            if(updateFavoriteStatus($id, $status)){
+                $output = "1";
+            }
+        }
+    }
+
+    //delete product
+    if ((isset($_POST['action'])) == "deleteProduct") {
+        if (isset($_POST['productID'])) {
+            //change review status = 0
+            $id = $_POST['productID'];
+            $status = 0;
+            if(updateProductStatus($id, $status)){
+                $output = "1";
+            }
+        }
+    }
+
+    //delete product line
+    if ((isset($_POST['action'])) == "deleteProductLine") {
+        if (isset($_POST['productLineID'])) {
+            //change review status = 0
+            $id = $_POST['productLineID'];
+            $status = 0;
+            if(updateProductLineStatus($id, $status)){
+                $output = "1";
+            }
+        }
+    }
 
     //PetshopHome
     if ((isset($_POST['action'])) == "updateOrderDetailsStatus") {

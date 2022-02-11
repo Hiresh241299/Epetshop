@@ -61,6 +61,7 @@ if($result -> num_rows >0){
         $discrictName = getLocationName($district);
         $email = $row['email'];
         $mobile = $row['mobile'];
+        $postcode = $row['postcode'];
         $longitude = $row['longitude'];
         $latitude = $row['latitude'];
         $registrationDate = date('d M Y h:m', strtotime($row['registrationDate']));
@@ -171,6 +172,12 @@ $conn->next_result();
                                                     placeholder="Mobile" value="<?php echo $mobile;?>" required=""
                                                     disabled>
                                             </div>
+                                            <div class="form-group col-lg-6">
+                                                <label>Postcode</label>
+                                                <input type="text" name="postcode" id="postcode" class="form-control"
+                                                    placeholder="Postcode" value="<?php echo $postcode;?>" required=""
+                                                    disabled>
+                                            </div>
                                         </div>
 
                                         <div class="input-grids row">
@@ -256,6 +263,7 @@ $conn->next_result();
                                         $email = $_POST['email'];
                                         $nic = $_POST['nic'];
                                         $mobile = $_POST['mobile'];
+                                        $postcode = $_POST['postcode'];
                                         $street = $_POST['street'];
                                         $locality = $_POST['locality'];
                                         $town = $_POST['town'];
@@ -263,7 +271,7 @@ $conn->next_result();
                                         $lastmodified= date("Y/m/d G:i:s");
 
                                      
-                                                $result = updateUser($userid, $fistname, $lastname, $email, $nic, $mobile, $street, $locality, $town, $district, $lastmodified);
+                                                $result = updateUser($userid, $fistname, $lastname, $email, $nic, $mobile,$postcode, $street, $locality, $town, $district, $lastmodified);
                                                 if ($result) {
                                                     //**********get add product success message, go to page to view posted product
                                                     //Add product price => add to table productLine
@@ -325,6 +333,7 @@ function updateProfile(btn) {
         document.getElementById("email").disabled = false;
         document.getElementById("nic").disabled = false;
         document.getElementById("mobile").disabled = false;
+        document.getElementById("postcode").disabled = false;
         document.getElementById("street").disabled = false;
         document.getElementById("locality").disabled = false;
         document.getElementById("town").disabled = false;
@@ -340,6 +349,7 @@ function updateProfile(btn) {
         document.getElementById("email").disabled = true;
         document.getElementById("nic").disabled = true;
         document.getElementById("mobile").disabled = true;
+        document.getElementById("postcode").disabled = true;
         document.getElementById("street").disabled = true;
         document.getElementById("locality").disabled = true;
         document.getElementById("town").disabled = true;

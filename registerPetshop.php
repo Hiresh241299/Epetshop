@@ -101,7 +101,7 @@ if (isset($_SESSION['tmpUserID'])){
                                     <div class="form-group">
                                         <p class="login-texthny mb-2 text-white">Petshop Name <span
                                                 class="text-warning">*</span></p>
-                                        <input type="text" class="form-control" id="pname" placeholder="" name="pname"
+                                        <input type="text" class="form-control" id="pname" placeholder="" name="pname" maxlength="30"
                                             onkeyup="validatePetshop(this.id); verifyUniqueness(this.id, this.value)"
                                             required>
                                         <p class="login-texthny mb-2 text-danger" id="pnameErrorMsg"></p>
@@ -110,7 +110,7 @@ if (isset($_SESSION['tmpUserID'])){
                                     <div class="form-group">
                                         <p class="login-texthny mb-2 text-white">Business Registration Number <span
                                                 class="text-warning">*</span></p>
-                                        <input type="text" class="form-control" id="brn" placeholder="" name="brn"
+                                        <input type="text" class="form-control" id="brn" placeholder="" name="brn" maxlength="10"
                                             onkeyup="validatePetshop(this.id); verifyUniqueness(this.id, this.value)"
                                             required>
                                         <p class="login-texthny mb-2 text-danger" id="brnErrorMsg"></p>
@@ -119,20 +119,32 @@ if (isset($_SESSION['tmpUserID'])){
 
                                     <div class="form-group">
                                         <p class="login-texthny mb-2 text-white">Description</p>
-                                        <input type="text" class="form-control" id="desc" placeholder="" name="desc"
-                                            required>
+                                        <textarea type="text" class="form-control" id="desc" placeholder="" name="desc"
+                                            required></textarea>
                                     </div>
-
+                                    <div class="form-group">
+                                        <p class="login-texthny mb-2 text-white">Post/Zip Code<span
+                                                class="text-warning">*</span></p>
+                                        <input type="text" class="form-control" id="postcode" placeholder="" onkeyup="validatePetshop(this.id);" maxlength="5" name="postcode"
+                                            required>
+                                            <p class="login-texthny mb-2 text-danger" id="postcodeErrorMsg"></p>
+                                    </div>
                                     <div class="form-group">
                                         <p class="login-texthny mb-2 text-white">Street <span
                                                 class="text-warning">*</span></p>
-                                        <input type="text" class="form-control" id="street" placeholder="" name="street"
+                                        <input type="text" class="form-control" id="street" placeholder="" maxlength="30" name="street"
                                             required>
                                     </div>
                                     <div class="form-group">
-                                        <p class="login-texthny mb-2 text-white">Town <span
+                                        <p class="login-texthny mb-2 text-white">Locality <span
                                                 class="text-warning">*</span></p>
-                                        <input type="text" class="form-control" id="town" placeholder="" name="town"
+                                        <input type="text" class="form-control" id="locality" placeholder="" maxlength="30" name="locality"
+                                            required>
+                                    </div>
+                                    <div class="form-group">
+                                        <p class="login-texthny mb-2 text-white">Town/Village <span
+                                                class="text-warning">*</span></p>
+                                        <input type="text" class="form-control" id="town" placeholder="" maxlength="30" name="town"
                                             required>
                                     </div>
 
@@ -247,6 +259,8 @@ if (isset($_SESSION['tmpUserID'])){
             $brn = $_POST['brn'];
             $desc = $_POST['desc'];
             $street = $_POST['street'];
+            $postcode = $_POST['postcode'];
+            $locality = $_POST['locality'];
             $town = $_POST['town'];
             $district = $_POST['district'];
             $long = "1";
@@ -256,7 +270,7 @@ if (isset($_SESSION['tmpUserID'])){
             //$userID = $_GET['id'];
 
             //$addpetsh = addPetshop("Dy", "breeding", "tt", "tt", "tt", 12 , 12 , 1 , 31 , 1, "1999-08-08");
-            $result = addPetshop($pname,$brn, $desc, $street, $town, $district, $long, $lat, $status, $userID, $reg);
+            $result = addPetshop($pname,$brn, $desc, $postcode, $street, $locality, $town, $district, $long, $lat, $status, $userID, $reg);
 
             if ($result) {
                 //**********get registration success message

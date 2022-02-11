@@ -30,8 +30,11 @@ if((!isset($_GET['id'])) || (($_GET['id']) == NULL)){
 
 </head>
 <style>
-    .not-allowed {cursor: not-allowed;}
+.not-allowed {
+    cursor: not-allowed;
+}
 </style>
+
 <body>
 
     <section class="w3l-banner-slider-main inner-pagehny">
@@ -44,6 +47,31 @@ if((!isset($_GET['id'])) || (($_GET['id']) == NULL)){
             include 'include/navbarVendor.php';
             ?>
                 </header>
+                <!--/search-right-->
+                <div class="search-right">
+                    <!-- search popup -->
+                    <div id="deleteprodline" class="pop-overlay">
+                        <div class="popup">
+                            <h3>Are you sure you want to delete this product? &nbsp
+                                <button type="button" class="btn btn-danger" onclick="deleteProductline('',2,<?php echo $productID;?>);">Confirm
+                                    Delete</button>
+                                <input type="text" class="text-white" id="prodlineToDelete" name="prodlineToDelete" disabled hidden />
+                            </h3>
+                        </div>
+                        <a class="close" href="addproductpricing.php?id=<?php echo $_GET['id'];?>">×</a>
+
+                    </div>
+
+                    <!--<div id="paymentCompleted" class="pop-overlay">
+                            <div class="popup">
+                                <h3 class="text-center">Payment Completed</h3>
+                            </div>
+                            <a class="close" href="#">×</a>
+                            
+                        </div>-->
+                    <!-- /search popup -->
+                </div>
+                <!--//search-right-->
                 <div class="breadcrumb-contentnhy">
                     <div class="container">
                         <nav aria-label="breadcrumb">
@@ -235,11 +263,11 @@ if((!isset($_GET['id'])) || (($_GET['id']) == NULL)){
                                                 <table border="2" width="100%">
                                                     <thead class="bg-primary">
                                                         <th width="8%"> Unit </th>
-                                                        <th width="18%"> Price </th>
+                                                        <th width="17%"> Price </th>
                                                         <th width="20%"> Quantity Available </th>
-                                                        <th width="15%"> Discount %</th>
-                                                        <th width="25%"> Discount Date</th>
-                                                        <th width="1%">Action</th>
+                                                        <th width="13%"> Discount %</th>
+                                                        <th width="18%"> Discount Date</th>
+                                                        <th width="15%">Action</th>
                                                     </thead>
 
                                                     <?php
@@ -313,8 +341,9 @@ if((!isset($_GET['id'])) || (($_GET['id']) == NULL)){
                                                             <td> '.$percentageDisplay.'</td>
                                                             <td> '.$date.'</td>
                                                             <td class="text-center" width="25%">
-                                                            <a href="addproductpricing.php?id='.$productID.'&m='.$productLineID.'#tableprice"  class="btn btn-info" title="Edit Product-line" style="margin:3px"><i class="fa fa-edit" aria-hidden="true"></i></a>
-                                                            <button type="button" class="btn btn-info" onclick="showDiscount(1, '.$productLineID.')" title="Add/Update Discount" style="margin:3px"><i class="fa fa-tag" aria-hidden="true"></i></button>
+                                                            <a href="addproductpricing.php?id='.$productID.'&m='.$productLineID.'#tableprice"  class="btn btn-warning" title="Edit Product-line" style="margin:1px"><i class="fa fa-edit" aria-hidden="true"></i></a>
+                                                            <button type="button" class="btn btn-info" onclick="showDiscount(1, '.$productLineID.')" title="Add/Update Discount" style="margin:1px"><i class="fa fa-tag" aria-hidden="true"></i></button>
+                                                            <button type="button" class="btn btn-danger" onclick=deleteProductline('.$productLineID.',1,'.$productID.') title="Delete"><i class="fa fa-trash iblack" aria-hidden="true"></i></a>
                                                             </td>
                                                             </tr>';
                         
@@ -514,15 +543,16 @@ if((!isset($_GET['id'])) || (($_GET['id']) == NULL)){
                                             </div>
                                             <div class="form-group col-lg-6">
                                                 <label>End Date </label>
-                                                <input type="date" name="end" id="end" onchange="setDate()" class="form-control"
-                                                    placeholder="End Date">
+                                                <input type="date" name="end" id="end" onchange="setDate()"
+                                                    class="form-control" placeholder="End Date">
                                             </div>
                                         </div>
                                         <label id="discountErrormsg" class="text-danger"></label>
                                         <div class="submit text-right mt-5">
                                             <button type="button" class="btn btn-warning"
                                                 onclick="showDiscount(0,1)">Cancel</button>
-                                            <button type="button" class="btn btn-primary" name="addDiscount" id="addDiscount" onclick="addDiscountfunc()">
+                                            <button type="button" class="btn btn-primary" name="addDiscount"
+                                                id="addDiscount" onclick="addDiscountfunc()">
                                                 Add Discount</button>
                                         </div>
                                         </br>
@@ -743,9 +773,9 @@ function showDiscount(num, id) {
 
         //get value
         var date = new Date();
-        document.getElementById("per").value = document.getElementById("per"+id).value;
-        document.getElementById("end").value = formatDate(document.getElementById("end"+id).value);
-        document.getElementById("start").value = formatDate(document.getElementById("start"+id).value);
+        document.getElementById("per").value = document.getElementById("per" + id).value;
+        document.getElementById("end").value = formatDate(document.getElementById("end" + id).value);
+        document.getElementById("start").value = formatDate(document.getElementById("start" + id).value);
     }
     if (num == 0) {
         document.getElementById('discount').style.display = "none";
@@ -825,39 +855,39 @@ function setDate() {
     start = document.getElementById("start").value;
     end = document.getElementById("end").value;
 
-    if(start > end){
+    if (start > end) {
         //give error msg
         //block add discount btn
         document.getElementById("addDiscount").disabled = true;
         document.getElementById("addDiscount").classList.add("not-allowed");
         document.getElementById("discountErrormsg").innerHTML = "Start Date must be less than End Date";
-    }else{
+    } else {
         document.getElementById("addDiscount").disabled = false;
         document.getElementById("discountErrormsg").innerHTML = "";
     }
 
 }
 
-function addDiscountfunc(){
+function addDiscountfunc() {
     //get values of per, start, end
-        start = document.getElementById("start").value ;
-        end = document.getElementById("end").value ;
-        per = document.getElementById("per").value ;
-        productLineID = document.getElementById("disprodid").value ;
-        id = document.getElementById('prodid').value;
+    start = document.getElementById("start").value;
+    end = document.getElementById("end").value;
+    per = document.getElementById("per").value;
+    productLineID = document.getElementById("disprodid").value;
+    id = document.getElementById('prodid').value;
     // if not empty, ajax call else error msg
 
-    if(per < 0 || per == "" || start == "" || end == "" || productLineID <= 0){
+    if (per < 0 || per == "" || start == "" || end == "" || productLineID <= 0) {
         document.getElementById("discountErrormsg").innerHTML = "Invalid Values";
         document.getElementById("addDiscount").classList.add("not-allowed");
-    }else{
+    } else {
         document.getElementById("discountErrormsg").innerHTML = "";
 
         //ajax call to add discount
         $.ajax({
             url: 'ajax/productAction.php',
             data: {
-                start : start,
+                start: start,
                 end: end,
                 per: per,
                 productLineID: productLineID,
@@ -866,7 +896,7 @@ function addDiscountfunc(){
             type: 'post',
             success: function(data) {
                 if (data == 1) {
-                    
+
                 }
                 toastr.success('Discount Added');
                 reload2();
@@ -881,11 +911,42 @@ function formatDate(date) {
         day = '' + d.getDate(),
         year = d.getFullYear();
 
-    if (month.length < 2) 
+    if (month.length < 2)
         month = '0' + month;
-    if (day.length < 2) 
+    if (day.length < 2)
         day = '0' + day;
 
     return [year, month, day].join('-');
+}
+</script>
+
+<script>
+function deleteProductline(id, action, prodID) {
+    //set value in input prodToDelete
+    //pop up
+    if (action == 1) {
+        document.getElementById('prodlineToDelete').value = id;
+        window.location.href = 'addproductpricing.php?id=' + prodID + "#deleteprodline";
+    }
+
+    //get value in input prodToDelete
+    //ajax call
+    if (action == 2) {
+        IDtoDelete = document.getElementById('prodlineToDelete').value;
+        //ajax call
+        $.ajax({
+            url: 'ajax/productAction.php',
+            data: {
+                productLineID: IDtoDelete,
+                action: "deleteProductLine"
+            },
+            type: 'post',
+            success: function(data) {
+                toastr.success("Product Deleted");
+                window.location.href = 'addproductpricing.php?id=' + prodID;
+            }
+        });
+    }
+
 }
 </script>

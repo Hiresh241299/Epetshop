@@ -73,7 +73,7 @@ if((!isset($_GET['id'])) || (($_GET['id']) == NULL)){
                              $conn->next_result();
                             ?>
                             <ol class="breadcrumb mb-0">
-                                <li><a href="index.html">Home</a>
+                                <li><a href="index.php">Home</a>
                                     <span class="fa fa-angle-double-right"></span>
                                 </li>
                                 <li class="active">Add Product</li>

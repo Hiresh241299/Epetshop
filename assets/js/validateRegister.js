@@ -235,4 +235,25 @@ function validatePetshop(fieldName) {
       isformvalid = false;
     }
   }
+
+  //postcode
+  if (fieldName == "postcode") {
+    //1 Uppercase letter, 9 numbers
+    regex = /^([0-9]{5})$/;
+
+    if (input != "" && input != null) {
+      if (regex.test(input)) {
+        document.getElementById("postcodeErrorMsg").innerHTML = "";
+        isformvalid = true;
+      } else {
+        document.getElementById("postcodeErrorMsg").innerHTML =
+          "Postcode must be 5 numbers!";
+        isformvalid = false;
+      }
+    } else {
+      document.getElementById("postcodeErrorMsg").innerHTML =
+        "Postcode Cannot be empty!";
+      isformvalid = false;
+    }
+  }
 }

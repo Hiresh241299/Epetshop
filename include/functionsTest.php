@@ -46,12 +46,12 @@ echo getUserID("hiresh@gmail.com"). "<br>";
 
 //add petshop
 //addPetshop($pname,$brn, $desc, $street, $town, $district, $long, $lat, $status, $userID, $dateReg)
-/*$result = addPetshop("Dy","12345", "breeding", "tt", "tt", 1, 12 , 12 , 1 , 31, "1999-08-08");
+$result = addPetshop("Dy","12345", "breeding",12345, "tt","locality", "tt", 1, 12 , 12 , 1 , 31, "1999-08-08");
 if($result == 1){
     echo "Petshop added !!" . "<br>";
 }else if ($result == 0){
     echo "Petshop NOT added!!!!" . "<br>";
-}*/
+}
 
 //add petshop speciality
 //addPetshopSpeciality($petshopid, $petcatID, $date, $status);

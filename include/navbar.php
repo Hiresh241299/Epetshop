@@ -72,6 +72,7 @@
                         Products
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="displayAllProducts.php?dis=1">Discount Products</a>
                         <a class="dropdown-item" href="displayAllProducts.php">All Products</a>
                         <!-- different pets categpry dropdown with scroll bar -->
                     </div>

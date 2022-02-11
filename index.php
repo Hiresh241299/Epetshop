@@ -8,8 +8,10 @@ include 'include/functions.php';
 //Check if session roleid exists
 if (isset($_SESSION["roleid"])) {
     $session_roleID = $_SESSION["roleid"];
+    $userid = $_SESSION["userid"];
 }else{
     $session_roleID = 0;
+    $userid=0;
 }
 //if login as owner, send to petshopHome.php
 if ($session_roleID == 2) {
@@ -72,9 +74,9 @@ if ($session_roleID == 2) {
                                 <div class="container">
                                     <div class="carousel-caption">
                                         <h3>Fish and Pond accessories
-                                            <br>50% Off
+                                            <br>
                                         </h3>
-                                        <a href="#" class="shop-button btn">
+                                        <a href="displayAllProducts.php" class="shop-button btn">
                                             Shop Now
                                         </a>
 
@@ -84,10 +86,9 @@ if ($session_roleID == 2) {
                             <div class="carousel-item item2">
                                 <div class="container">
                                     <div class="carousel-caption">
-                                        <h3>Bird and Cage
-                                            <br>60% Off
+                                        <h3>Bird and Cage accessories
                                         </h3>
-                                        <a href="#" class="shop-button btn">
+                                        <a href="displayAllProducts.php" class="shop-button btn">
                                             Shop Now
                                         </a>
 
@@ -144,8 +145,20 @@ if ($session_roleID == 2) {
         <!-- /products-->
         <div class="ecom-contenthny py-5">
             <div class="container py-lg-5">
-                <h3 class="hny-title mb-0 text-center">Latest <span>Products</span></h3>
+                <?php
+                if($userid > 0){
+                    echo '
+                    <h3 class="hny-title mb-0 text-center">Latest <span>Favorites</span></h3>
+                <p class="text-center">Get your latest Favorite product available on E-Petshop</p>
+                    ';
+                }else{
+                    echo '
+                    <h3 class="hny-title mb-0 text-center">Latest <span>Products</span></h3>
                 <p class="text-center">Varieties of product available for all pets</p>
+                    ';
+                }
+                ?>
+                
                 <!-- /row-->
                 <div class="ecom-products-grids row mt-lg-5 mt-3">
 
@@ -212,6 +225,151 @@ if ($result -> num_rows < 1) {
 
         //check if not exists in array then post
         if (!in_array($postedProductID, $arrayPosted)) {
+            $output =  '<div class="col-lg-2 col-6 product-incfhny mb-4 cardbg border border-white border-rounded">
+                            </br>
+                            <div class="product-grid2 transmitv">
+                                <div class="product-image2">
+                                    <a href="viewProductDetails.php?prodid='.$pid.'">
+                                        <img class="pic-1 img-fluid" src="product/'.$img.'">
+                                        <img class="pic-2 img-fluid" src="product/'.$img.'">
+                                    </a>
+                                    <ul class="social">
+                                        <li><a href="viewProductDetails.php?prodid='.$pid.'" data-tip="Quick View"><span class="fa fa-eye"></span></a>
+                                        </li>
+
+                                        <!--<li><a href="ecommerce.html" data-tip="Add to Cart"><span
+                                                    class="fa fa-shopping-bag"></span></a>
+                                        </li>-->
+                                    </ul>
+                                    <div class="transmitv single-item">
+                                    <form action="#" method="post">
+                                        <input type="hidden" name="id" value="'.$pid.'" id="'.$pid.'">
+                                        <input type="hidden" name="quantity" value="1" id="quantity'.$pid.'">
+                                        <input type="hidden" name="name" value="'.$pname. " ".$number. " " .$unit.'" id="name'.$pid.'">
+                                        <input type="hidden" name="price" value="'.$newprice.'" id="price'.$pid.'">
+                                        <button type="submit" class="transmitv-cart ptransmitv-cart add-to-cart add_cart" name="add" id="'.$pid.'">
+                                            Add to Cart
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="product-content">
+                                <h3 class="title"><a href="viewProductDetails.php?prodid='.$pid.'">'.$pname . " ".$number. " " .$unit.'</a> | <a href="#">'.$brand.'</a></h3>
+                                <!-- <span class="price"><del>$975.00</del>Rs2200</span>-->
+                                <span class="price">'.$priceDisplay.'</span></br>
+                                <small><a href="viewPetshops.php#petshop'.$petshopID.'"><u>'.$petshopName.'</u></a></small>
+                            </div>
+                        </div>
+                    </div>';
+
+                    //get favorites and then display products
+                    //get array
+                    if ($userid > 0) {
+                        $favorite = array();
+                        $favorite = getCustomerFavorite($userid);
+                        if (isset($favorite)) {
+                            if (in_array($row['petcatID'], $favorite)) {
+                                echo $output;
+                            }
+                        } else {
+                            echo $output;
+                        }
+                    }else {
+                        echo $output;
+                    }
+
+                    
+        }
+        //add $postedProductID in array
+        array_push($arrayPosted, $postedProductID);
+    }
+                    }
+                    $result->close();
+                    $conn->next_result();
+                    ?>
+                    <!-- Post Ends-->
+
+
+                </div>
+                <a href="displayAllProducts.php" class="btn btn-info float-right">View all Products</a>
+                <!-- //row-->
+            </div>
+        </div>
+    </section>
+    <!-- //Posters-->
+
+    <!--Posters-->
+    <section class="w3l-ecommerce-main">
+        <!-- /products-->
+        <div class="ecom-contenthny py-5">
+            <div class="container py-lg-5">
+                <h3 class="hny-title mb-0 text-center">Discounted <span>Products</span></h3>
+                <p class="text-center">Benefit from these discount only on E-Petshop</p>
+                <!-- /row-->
+                <div class="ecom-products-grids row mt-lg-5 mt-3">
+
+
+                    <!-- Post Starts-->
+                    <?php
+
+                    //Load product details from database
+                    //gets error details
+                    //mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
+$sql = "CALL sp_getAllProductLineDetailsWithLimitsWithDiscount(0,12);";
+$result = $conn->query($sql);
+$arrayPosted = array();
+
+$output = "";
+if ($result -> num_rows < 1) {
+    $output .="<h3>No products available</h3>";
+}else{
+	//output data for each row
+    while ($row = $result->fetch_assoc()) {
+        $pid = $row['plID'];
+        $pname = $row['pname'];
+        $brand = $row['bname'];
+        $desc= $row['description'];
+        $img = $row['imgPath'];
+        $prodcat = $row['pcname'];
+        $petCat = $row['sname'];
+        $postedDT = $row['postedDateTime'];
+        $lastMDT = $row['lastModifiedDateTime'];
+        $petshopID = $row['petshopID'];
+        $petshopName = $row['petshop'];
+        $unit = $row['unit'];
+        $number = $row['number'];
+        $qoh = $row['qoh'];
+        $price = $row['price'];
+        $priceDisplay = 'Rs'  . $price ;
+        $postedProductID = $row['productID'];
+
+        //get discount
+        $percentage = "";
+        $start = "";
+        $end = "";
+        $date = "";
+        $percentageDisplay="";
+        $newprice = $price;
+        $arrayResult = getDiscount($pid, "active");
+        if ($arrayResult != null) {
+            if ($arrayResult -> num_rows > 0) {
+                //output data for each row
+                while ($row1 = $arrayResult->fetch_assoc()) {
+                    $percentage = $row1['percentage'];
+                    $percentageDisplay = $percentage . '%';
+                    $start = date('d-m-Y', strtotime($row1['startDate']));
+                    $end = date('d-m-Y', strtotime($row1['endDate']));
+                    $date = $start . " to " . $end;
+                    $newprice = (($price * (100 - $percentage))*0.01);
+                    $priceDisplay = '<del>'.$priceDisplay.'</del>' ." " .'<b class="text-danger">Rs'  . $newprice .'<br>'.daysleft($end).'day'.((daysleft($end)>1)?"s":"").' left</b>';
+                }
+            }
+            $arrayResult->close();
+            $conn->next_result();
+        }
+
+        //check if not exists in array then post
             echo '<div class="col-lg-2 col-6 product-incfhny mb-4 cardbg border border-white border-rounded">
                             </br>
                             <div class="product-grid2 transmitv">
@@ -248,7 +406,7 @@ if ($result -> num_rows < 1) {
                             </div>
                         </div>
                     </div>';
-        }
+        
         //add $postedProductID in array
         array_push($arrayPosted, $postedProductID);
     }
@@ -260,6 +418,7 @@ if ($result -> num_rows < 1) {
 
 
                 </div>
+                <a href="displayAllProducts.php?dis=1" class="btn btn-info float-right">View all Products</a>
                 <!-- //row-->
             </div>
         </div>

@@ -78,14 +78,26 @@ if (isset($_SESSION["roleid"])) {
                                 <div class="single-gd mb-5">
 
                                     <h4>Search <span>here</span></h4>
-                                        <form action="#" method="post" class="search-trans-form">
-                                            <input class="form-control" name="searchcriterie" id="searchcriterie"
-                                                placeholder="Search by product, brand, category, petshop .." title="Search by product name, brand, category, petshop .." value="" onkeyup="reloadData();">
-                                            <button type="button" class="btn read-2" onclick="reloadData();">
-                                                <span class="fa fa-search"></span>
-                                            </button>
+                                    <form action="#" method="post" class="search-trans-form">
+                                        <input class="form-control" name="searchcriterie" id="searchcriterie"
+                                            placeholder="Search by product, brand, category, petshop .."
+                                            title="Search by product name, brand, category, petshop .." value=""
+                                            onkeyup="reloadData();">
+                                        <button type="button" class="btn read-2" onclick="reloadData();">
+                                            <span class="fa fa-search"></span>
+                                        </button>
+                                    </form>
+                                </div>
+                                <div class="single-gd mb-5">
+                                    <h4>Discount </h4>
+                                    <div classes="box-hny">
+                                        <label class="containerhny-checkbox">Discount
+                                            <input type="checkbox" id="discount" <?php ((isset($_GET['dis']) == true)? $x='checked':$x=""); echo $x;?> name="discount"
+                                                onclick="reloadData();">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
 
-                                        </form>
                                 </div>
                                 <!-- /Gallery-imgs 
 
@@ -135,28 +147,6 @@ if (isset($_SESSION["roleid"])) {
                                             <input type="checkbox" checked="checked">
                                             <span class="checkmark"></span>
                                         </label>
-                                        <label class="containerhny-checkbox">20% or More
-                                            <input type="checkbox">
-                                            <span class="checkmark"></span>
-                                        </label>
-                                        <label class="containerhny-checkbox">35% or More
-                                            <input type="checkbox">
-                                            <span class="checkmark"></span>
-                                        </label>
-                                        <label class="containerhny-checkbox">55% or More
-                                            <input type="checkbox">
-                                            <span class="checkmark"></span>
-                                        </label>
-
-                                        <label class="containerhny-checkbox">65% or More
-                                            <input type="checkbox">
-                                            <span class="checkmark"></span>
-                                        </label>
-                                        <label class="containerhny-checkbox">75% or More
-                                            <input type="checkbox">
-                                            <span class="checkmark"></span>
-                                        </label>
-
                                     </div>
 
                                 </div>
@@ -416,6 +406,11 @@ $(document).ready(function() {
 
         perpage_ = document.getElementById("perpage").value;
         search_ = document.getElementById("searchcriterie").value;
+        if (document.getElementById('discount').checked) {
+            discount_ = 1;
+        } else {
+            discount_ = 0;
+        }
         //toastr.success(search_);
 
         $.ajax({
@@ -423,8 +418,9 @@ $(document).ready(function() {
             method: "POST",
             data: {
                 page: page,
-                searchv : search_,
-                perpage: perpage_
+                searchv: search_,
+                perpage: perpage_,
+                discount: discount_
             },
             dataType: "JSON",
             success: function(data) {
@@ -505,13 +501,19 @@ function load_data(page) {
 
     perpage_ = document.getElementById("perpage").value;
     search_ = document.getElementById("searchcriterie").value;
+    if (document.getElementById('discount').checked) {
+        discount_ = 1;
+    } else {
+        discount_ = 0;
+    }
     $.ajax({
         url: "ajax/load_data.php",
         method: "POST",
         data: {
             page: page,
-            searchv : search_,
-            perpage: perpage_
+            searchv: search_,
+            perpage: perpage_,
+            discount: discount_
         },
         dataType: "JSON",
         success: function(data) {

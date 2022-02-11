@@ -137,7 +137,7 @@ if (isset($_SESSION["userid"])) {
                                                 $status = $row['status'];
                                                 $userID = $row['userID'];
                                                 //$img
-                                                $img="";
+                                                $img=$row['imgPath'];
 
                                                 if($img == ""){
                                                     $outputImg = '<div class="text-center"></br></br><h1 class="text-center">'.$name.'</h1><span class="text-center"><i class="fa fa-home" style="font-size:75px"></i></span></div>';
@@ -205,7 +205,7 @@ if (isset($_SESSION["userid"])) {
                                     </div>
                                     <div class="author-right col-sm-5 pr-lg-0 ">
                                         </br>
-                                        <h4><a href="viewPetshopDetails.php?psid='.$psid.'" class="title-team-28"><b>'.strtoupper($name).'</b></a>
+                                        <h4><a href="viewPetshopProducts.php?psid='.$psid.'" class="title-team-28"><b>'.strtoupper($name).'</b></a>
                                             &nbsp<a href="https://api.whatsapp.com/send?phone=230'.$mobile.'&text=&source=&data=" target="_blank" class="whatsapp text-success"><span class="fa fa-whatsapp"></span></a>
                                             <!--&nbsp<a href="https://mail.google.com/mail/#inbox?compose=new" target="_blank" class="email text-danger"><span class="fa fa-envelope"></span></a>-->
                                         </h4>

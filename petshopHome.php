@@ -39,6 +39,9 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2)) {
     .cardbg {
         background-color: black;
     }
+    #orangebg {
+        background-color: '#ff7315';
+    }
 
     .bgrow {
         background-color: #BEBEBE;
@@ -243,6 +246,7 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2)) {
                                     $_quantity = $row['quantity'];
                                     $_img = $row['imgPath'];
                                     $_CustomerName = $row['firstName'] . " " . $row['lastName'];
+                                    $_mobile = $row['mobile'];
 
                                 //get delivery schedule for address and maps location
                                         $street = "";
@@ -292,7 +296,8 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2)) {
                                             <td rowspan="'.$rowSpan.'">Rs'.$total.'</td>
                                             <td rowspan="'.$rowSpan.'">
                                             <a href="https://www.google.com/maps/search/?api=1&query='.$longitude.','.$latitude.'" target="_blank" class="btn btn-info text-center col-6" style="padding:2px; margin:1px;" title="Get map direction"><i class="fa fa-map-marker text-center" aria-hidden="true"></i></a>
-                                            <a href="petshopHome.php#delivery" class="btn btn-success text-center col-6" onclick="setOrderid('.$_id.')" title="Delivery completed" style="padding:2px; margin:1px;"><i class="fa fa-check text-center"  aria-hidden="true"></i></a>
+                                            <a href="https://api.whatsapp.com/send?phone=230'.$_mobile.'&text=&source=&data=" target="_blank" class="btn btn-success text-center col-6" style="padding:2px; margin:1px;" title="Whatsapp"><i class="fa fa-whatsapp text-center" aria-hidden="true"></i></a>
+                                            <a href="petshopHome.php#delivery" class="btn text-center text-white col-6" onclick="setOrderid('.$_id.')" title="Delivery completed" style="padding:2px; margin:1px; background-color: #ff7315;"><i class="fa fa-check text-center"  aria-hidden="true"></i></a>
                                             </td>
                                         </tr>
                                 ';
@@ -380,6 +385,7 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2)) {
                                                 $qoh_ = $row['qoh'];
                                                 $price_ = $row['price'];
                                                 $date_ = date('d-m-Y h:m:s', strtotime($row['lastModifiedDateTime']));
+                                                $productID_  = $row['id'];
 
 
                                                 if ($qoh_ < 5) {
@@ -401,7 +407,7 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2)) {
                                                 <Button type="button" id="YesQOH'.$pid_.'" onclick="updateProductStock('.$pid_.')" class="btn btn-success col-3" style="padding:2px; margin:1px; display:none;" ><i class="fa fa-check text-center"  aria-hidden="true"></i></Button>
                                                 <Button type="cancel" id="NoQOH'.$pid_.'" onclick="hideButtons('.$pid_.')" class="btn btn-danger col-3" style="padding:2px; margin:1px; display:none;" ><i class="fa fa-times text-center" aria-hidden="true"></i></Button>
                                                 <Button type="button" id="ReStockQOH'.$pid_.'" onclick="showButtons('.$pid_.')" class="btn btn-success">Re Stock</Button>
-                                                <Button type="button" id="Details'.$pid_.'" class="btn btn-info">View Details</Button>
+                                                <Button type="button" id="Details'.$pid_.'" onclick=addpricing('.$productID_.') class="btn btn-info">View Details</Button>
                                                 </td>
                                                 </tr>
                                                 ';
@@ -572,5 +578,9 @@ function updateProductStock(id) {
 
 function reloadpage1() {
     window.location.href = "petshopHome.php?reload=1";
+}
+
+function addpricing(id){
+    window.location.href = "addproductpricing.php?id="+ id;
 }
 </script>

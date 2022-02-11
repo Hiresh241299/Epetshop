@@ -9,12 +9,12 @@
         <!--//left-->
         <!--/right-->
         <ul class="top-hnt-right-content col-lg-6">
-            <!-- Open Login form-->
+            <!-- Open Login form
             <li class="button-log usernhy">
                <a class="btn-open" href="#">
                     <span class="fa fa-bell" aria-hidden="true"></span> 
                 </a>
-            </li> 
+            </li> -->
             <!-- Cart -->
             <li class="transmitvcart galssescart2 cart cart box_1">
                 <!-- <form action="#" method="post" class="last">
@@ -83,8 +83,15 @@
                 <li class="nav-item">
                     <a class="nav-link" href="viewMyPetshop.php">Store</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="viewMyOrderDelivery.php">Orders & Delivery</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Orders & Delivery
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item btn-open" href="viewMyOrderDelivery.php">Pending</a>
+                            <a class="dropdown-item btn-open" href="viewMyOrderDeliveryCompleted.php">Delivered</a>
+                    </div>
                 </li>
 
                 <li class="nav-item dropdown">
@@ -93,9 +100,10 @@
                         My Account
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item btn-open" href="userProfile.php">My Profile</a>
-                            <a class="dropdown-item btn-open" href="petshopProfile.php">My Petshop</a>
-                            <a class="dropdown-item btn-open2" href="Logout.php">Logout</a>
+                            <a class="dropdown-item btn-open" href="userProfile.php">Profile</a>
+                            <a class="dropdown-item btn-open" href="petshopProfile.php">Petshop</a>
+                            <a class="dropdown-item btn-open" href="petshopSpecialities.php">Specialities</a>
+                            <a class="dropdown-item btn-open2 bg-secondary text-white" href="Logout.php"><b>Logout</b></a>
                     </div>
                 </li>
 

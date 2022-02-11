@@ -17,18 +17,9 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
 <html lang="en">
 
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title><?php echo $title?></title>
-    <!-- Template CSS -->
-    <link rel="stylesheet" href="assets/css/style-liberty.css">
-    <!-- Template CSS -->
-    <link href="//fonts.googleapis.com/css?family=Oswald:300,400,500,600&display=swap" rel="stylesheet">
-    <link href="//fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,900&display=swap" rel="stylesheet">
-    <link rel="icon" href="assets/image/icon/icon.jpg">
-
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.1/css/jquery.dataTables.css">
+<?php
+    include 'include/header.php';
+    ?>
     <!-- Template CSS -->
 
     <style>
@@ -51,6 +42,31 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
             include 'include/navbarVendor.php';
             ?>
                 </header>
+                <!--/search-right-->
+                <div class="search-right">
+                    <!-- search popup -->
+                    <div id="deleteprod" class="pop-overlay">
+                        <div class="popup">
+                            <h3>Are you sure you want to delete this product? &nbsp
+                                <button type="button" class="btn btn-danger" onclick="deleteProduct('',2);">Confirm
+                                    Delete</button>
+                                <input type="text" id="prodToDelete" name="prodToDelete" disabled hidden/>
+                            </h3>
+                        </div>
+                        <a class="close" href="viewAllMyProducts.php">×</a>
+
+                    </div>
+
+                    <!--<div id="paymentCompleted" class="pop-overlay">
+                            <div class="popup">
+                                <h3 class="text-center">Payment Completed</h3>
+                            </div>
+                            <a class="close" href="#">×</a>
+                            
+                        </div>-->
+                    <!-- /search popup -->
+                </div>
+                <!--//search-right-->
                 <div class="breadcrumb-contentnhy">
                     <div class="container">
                         <nav aria-label="breadcrumb">
@@ -145,8 +161,8 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                                             aria-hidden="true"></i></a>
                                     <a href="addproduct.php?id='.$productID.'" class="btn btn-warning" title="Edit"><i class="fa fa-edit iblack"
                                             aria-hidden="true"></i></a>
-                                    <button class="btn btn-danger" title="Delete"><i class="fa fa-trash iblack"
-                                            aria-hidden="true"></i></button>
+                                    <button type="button" class="btn btn-danger" onclick=deleteProduct('.$productID.',1) title="Delete"><i class="fa fa-trash iblack"
+                                            aria-hidden="true"></i></a>
 
                                 </td>
                                 </tr>';
@@ -280,3 +296,34 @@ $(function() {
 </script>
 <!-- disable body scroll which navbar is in active -->
 <script src="assets/js/bootstrap.min.js"></script>
+
+<script>
+function deleteProduct(id, action) {
+    //set value in input prodToDelete
+    //pop up
+    if (action == 1) {
+        document.getElementById('prodToDelete').value = id;
+        window.location.href = 'viewAllMyProducts.php#deleteprod';
+    }
+
+    //get value in input prodToDelete
+    //ajax call
+    if (action == 2) {
+        IDtoDelete = document.getElementById('prodToDelete').value;
+        //ajax call
+        $.ajax({
+            url: 'ajax/productAction.php',
+            data: {
+                productID: IDtoDelete,
+                action: "deleteProduct"
+            },
+            type: 'post',
+            success: function(data) {
+                toastr.success("Product Deleted");
+                    window.location.href = 'viewAllMyProducts.php';
+            }
+        });
+    }
+
+}
+</script>

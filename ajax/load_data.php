@@ -28,7 +28,7 @@ if (isset($_POST['searchv']) && ($_POST['searchv']!= "")) {
 if (isset($_POST['petshopID'])) {
     $_petshopID = $_POST['petshopID'];
     if ($searchValue == null) {
-        $searchValue = "m";
+        $searchValue = "";
     }
     //add 2 because of error
     //$perpage+= 2;
@@ -77,11 +77,27 @@ $pagination .= '</ul>
 </div>';
 //$pagination="";
 
+//get is discount is checked
+if(isset($_POST['discount'])){
+    $isDiscountChecked = $_POST['discount'];
+}else{
+    $isDiscountChecked = 0;
+}
+
 //sp_getAllProductLineDetailsWithLimitsSearch("search". $start, $limit);
 if ($searchValue != null) {
-    $sql = "CALL sp_getAllProductLineDetailsWithLimitsSearch('%$searchValue%', $start, $limit);";
+    if($isDiscountChecked == 1){
+        $sql = "CALL sp_getAllProductLineDetailsWithLimitsSearchDiscount('%$searchValue%', $start, $limit);";
+    }else{
+        $sql = "CALL sp_getAllProductLineDetailsWithLimitsSearch('%$searchValue%', $start, $limit);";
+    }
+    
 } else {
-    $sql = "CALL sp_getAllProductLineDetailsWithLimits($start, $limit);";
+    if($isDiscountChecked == 1){
+        $sql = "CALL sp_getAllProductLineDetailsWithLimitsWithDiscount($start, $limit);";
+    }else{
+        $sql = "CALL sp_getAllProductLineDetailsWithLimits($start, $limit);";
+    }
 }
 $result = $conn->query($sql);
 
@@ -207,7 +223,7 @@ if ($result -> num_rows < 1) {
 $result->close();
 $conn->next_result();
 
-$data['showresult'] = $showresult;
+$data['showresult'] = $total;
 $data['output'] = $output;
 $data['pagination'] = $pagination;
 

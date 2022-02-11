@@ -41,29 +41,6 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                     <?php
             include 'include/navbarVendor.php';
             ?>
-            <div class="search-right">
-                        <!-- search popup -->
-                        <div id="delivery" class="pop-overlay">
-                            <div class="popup">
-                                <h3>Please Click to confirm the delivery &nbsp
-                                    <button type="button" class="btn btn-success"
-                                        onclick="itemDelivered(<?php echo $psid?>);">Confirm
-                                        Delivery</button>
-                                </h3>
-                            </div>
-                            <a class="close" href="viewMyOrderDelivery.php#corders">×</a>
-
-                        </div>
-
-                        <!--<div id="paymentCompleted" class="pop-overlay">
-                            <div class="popup">
-                                <h3 class="text-center">Payment Completed</h3>
-                            </div>
-                            <a class="close" href="#">×</a>
-                            
-                        </div>-->
-                        <!-- /search popup -->
-                    </div>
                 </header>
                 <div class="breadcrumb-contentnhy">
                     <div class="container">
@@ -89,8 +66,10 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                                 <li><a href="index.php">Home</a>
                                     <span class="fa fa-angle-double-right"></span>
                                 </li>
-
-                                <li class="active">Orders & Delivery</li>
+                                <li><a href="viewMyOrderDeliveryCompleted.php">Orders & Delivery</a>
+                                    <span class="fa fa-angle-double-right"></span>
+                                </li>
+                                <li class="active">Delivered</li>
                             </ol>
                         </nav>
                     </div>
@@ -111,7 +90,7 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                     <!---728x90--->
 
                 </div>
-                <h3 class="hny-title mb-0 border text-center">Orders &<span> Delivery</span></h3>
+                <h3 class="hny-title mb-0 border text-center">Orders <span> Completed</span></h3>
                 <div class="blog-inner-grids">
                     <div class="mag-post-left-hny">
                         <div class="">
@@ -120,7 +99,7 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                                 <!--Table-->
                                 <div class="rounded bg-light" id="corders">
                                     <h2>
-                                        <?php
+                                        <!--<?php
                          $NoOfOrders = getCountMyPetshopOrders($userid);
                          if($NoOfOrders > 1){
                             echo $NoOfOrders . " " . "Customer Orders";
@@ -128,7 +107,7 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                             echo $NoOfOrders . " " . "Customer Order";
                          }
                          
-                         ?>
+                         ?>-->
                                     </h2>
 
                                     <div class="">
@@ -153,7 +132,7 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                                         
                                 
                                 //fetch product from database, using session userid
-                                $sql = "CALL sp_getMyCustomerOrdersDelivery($psid);";
+                                $sql = "CALL sp_getAllMyCustomerOrdersDelivery($psid);";
                             $result = $conn->query($sql);
                             $output = "";
                             $rowSpan = 1 ;
@@ -164,6 +143,7 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                             if ($result -> num_rows > 0) {
                                 //output data for each row
                                 while ($row = $result->fetch_assoc()) {
+                                    if($row['status'] == 'Delivered'){
                                     //$img = $row['imgPath'];
                                     $_id = $row['id'];
                                     $_pname = $row['name'];
@@ -179,43 +159,43 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                                     $_CustomerName = $row['firstName'] . " " . $row['lastName'];
                                     $_mobile = $row['mobile'];
 
-                                    //get delivery schedule for address and maps location
-                                    $street = "";
-                                    $town = "";
-                                    $district = "";
-                                    $postcode = "";
-                                    $longitude = "";
-                                    $latitude = "";
-                                    $fulladdress = "";
-                                    $arrayResult = getDeliverySchedule($_id);
-                                    if ($arrayResult != null) {
-                                        if ($arrayResult -> num_rows > 0) {
-                                            //output data for each row
-                                            while ($row1 = $arrayResult->fetch_assoc()) {
-                                                $street = $row1['street'];
-                                                $town = $row1['town'];
-                                                $district = $row1['name'];
-                                                $postcode = $row1['postcode'];
-                                                $longitude = $row1['longitude'];
-                                                $latitude = $row1['latitude'];
-                                                $fulladdress = $street. " ".$town.", ". $district;
-                                            }
+                                //get delivery schedule for address and maps location
+                                        $street = "";
+                                        $town = "";
+                                        $district = "";
+                                        $postcode = "";
+                                        $longitude = "";
+                                        $latitude = "";
+                                        $fulladdress = "";
+                                /*$arrayResult = getDeliverySchedule($_id);
+                                if ($arrayResult != null) {
+                                    if ($arrayResult -> num_rows > 0) {
+                                        //output data for each row
+                                        while ($row1 = $arrayResult->fetch_assoc()) {
+                                            $street = $row1['street'];
+                                            $town = $row1['town'];
+                                            $district = $row1['name'];
+                                            $postcode = $row1['postcode'];
+                                            $longitude = $row1['longitude'];
+                                            $latitude = $row1['latitude'];
+                                            $fulladdress = $street. " ".$town.", ". $district;
                                         }
-                                        $arrayResult->close();
-                                        $conn->next_result();
                                     }
+                                    $arrayResult->close();
+                                    $conn->next_result();
+                                }*/
                                 
 
-                                    if ($previousID != $_id) {
-                                        if ($bg == 0) {
-                                            $bg = 1;
-                                        } else {
-                                            $bg = 0;
-                                        }
+                                if ($previousID != $_id) {
+                                    if ($bg == 0) {
+                                        $bg = 1;
+                                    } else {
+                                        $bg = 0;
                                     }
-                                    $rowSpan =  countProductLineInOrder($_id, $userid);
-                                    $total = getPaidOrderDetailsTotalsByPetshopID($_id, $userid);
-                                    $firstRow = '
+                                }
+                                $rowSpan =  countProductLineInOrderDelivered($_id,$userid);
+                                $total = getPaidOrderDetailsTotalsByPetshopIDDelivered($_id,$userid);
+                                $firstRow = '
                                         <tr class="'.(($bg == 1)?"bgrow":"bg-light").'">
                                             <td rowspan="'.$rowSpan.'">&nbsp'.$_CustomerName.'</td>
                                             <td rowspan="'.$rowSpan.'">'.$fulladdress.'</td>
@@ -226,14 +206,12 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                                             <td>Rs'.$_price.'</td>
                                             <td rowspan="'.$rowSpan.'">Rs'.$total.'</td>
                                             <td rowspan="'.$rowSpan.'">
-                                            <a href="https://www.google.com/maps/search/?api=1&query='.$longitude.','.$latitude.'" target="_blank" class="btn btn-info text-center col-6" style="padding:2px; margin:1px;" title="Get map direction"><i class="fa fa-map-marker text-center" aria-hidden="true"></i></a>
-                                            <a href="https://api.whatsapp.com/send?phone=230'.$_mobile.'&text=&source=&data=" target="_blank" class="btn btn-success text-center col-6" style="padding:2px; margin:1px;" title="Whatsapp"><i class="fa fa-whatsapp text-center" aria-hidden="true"></i></a>
-                                            <a href="viewMyOrderDelivery.php#delivery" class="btn btn-primary text-center col-6" onclick="setOrderid('.$_id.')" title="Delivery completed" style="padding:2px; margin:1px;"><i class="fa fa-check text-center"  aria-hidden="true"></i></a>
+                                            <a href="https://api.whatsapp.com/send?phone=230'.$_mobile.'&text=&source=&data=" target="_blank" class="whatsapp btn btn-success"><span class="fa fa-whatsapp"></span></a>
                                             </td>
                                         </tr>
                                 ';
 
-                                    $addons = '
+                                $addons = '
                                         <tr class="'.(($bg == 1)?"bgrow":"bg-light").'">
                                             <td><img src="product/'.$_img.'" style="width:18%; height:18%;">'.$_pname. " ".$_number . $_unit.'</td>
                                             <td>'.$_quantity.'</td>
@@ -242,14 +220,14 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                                         </tr>
                                 ';
 
-                                    if ($previousID == $_id) {
-                                        $output .= $addons;
-                                    } else {
-                                        $output .= $firstRow;
-                                    }
-                                    $previousID = $_id;
+                                if($previousID == $_id){
+                                    $output .= $addons;
+                                }else{
+                                    $output .= $firstRow;
                                 }
-                                
+                                $previousID = $_id;
+                            }
+                                }
                             }
                             echo $output;
                              $result->close();

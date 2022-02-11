@@ -57,152 +57,27 @@ if(isset($_COOKIE['email'])){
                                 <form action="#" method="post">
                                     <div class="form-group">
                                         <p class="login-texthny mb-2 text-white">Email address</p>
-                                        <input type="email" class="form-control" id="exampleInputEmail1" name="email"
+                                        <input type="email" class="form-control" id="email" name="email"
                                             aria-describedby="emailHelp" placeholder="" value="<?php echo $userEmail;?>" required="">
                                         <!--<small id="emailHelp" class="form-text text-white">We'll never share your email
                                             with anyone else.</small>-->
                                     </div>
                                     <div class="form-group">
                                         <p class="login-texthny mb-2 text-white">Password</p>
-                                        <input type="password" class="form-control" id="exampleInputPassword1"
+                                        <input type="password" class="form-control" id="password"
                                             name="password" placeholder="" required="">
                                     </div>
                                     <div class="form-group">
                                         <div class="userhny-check">
-                                            <input type="checkbox" id="remember" value="1" name="remember">
+                                            <input type="checkbox" id="remember" value="1" id="remember" name="remember">
                                             <label class="privacy-policy text-white">Remember me</label>
                                         </div>
                                     </div>
-                                    <input type="submit" class="btn btn-success submit-login btn mb-4" name="login"
-                                        value="Login">
+                                    <label class="privacy-policy text-danger" id="loginErrMsg"></label></br>
+                                    <button type="button" class="btn btn-success submit-login btn mb-4" name="login"
+                                         onclick='userLogin()'>Login</button>
                                     <small class="form-text text-white">Don't have an account? <a href="register.php" class="text-warning">Register Now</a></small></br>
                                 </form>
-                                <!--//login-form-->
-                                <?php
-        
-        if (isset($_POST['login'])) {
-            //Fetch data from Login form
-            $userEmail = $_POST['email'];
-            $userPassword = $_POST['password'];
-
-            //verify user credentials
-            if ((verifyUserCredentials($userEmail, $userPassword)) == true) {
-                //create session for this user
-                $_SESSION['userid'] = getUserID($userEmail);
-                $_SESSION['roleid'] = getUserRole($userEmail);
-
-                $userID = $_SESSION['userid'];
-
-                //update user last login datetime
-                $lastLogin = date("Y/m/d G:i:s");
-                updateUserLogin($lastLogin, $userID);
-
-                
-                saveCartInDb($userID);
-                //clear cookies
-                //clear session if exists
-                unset($_SESSION['mycart']);
-                $_SESSION['total_price'] = 0;
-                setcookie("cart", null, -1, '/');
-                //load cart
-                //check if user have active order
-                if (getActiveUserOrder($userID) > 0) {
-                    $orderID = getActiveUserOrder($userID);
-                    loadcart($orderID);
-                }
-
-                //if remember me is check, create cookie
-                if(isset($_POST['remember'])&& ($_POST['remember'] == 1)){
-                    //save email in cookie
-                    //$_COOKIE['email'] = $userEmail;
-                    setcookie("email", $userEmail, time() + (86400 * 30), "/");
-                }else{
-                    //delete cookie if exists
-                    //$_COOKIE['email'] = "";
-                    setcookie("email", null, -1, '/');
-                }
-
-                //cart is not empty => login => save in database, delete session, cookies
-                //check cookies cart
-                /*if(isset($_COOKIE['cart'])){
-
-                    $cart = $_COOKIE["cart"];
-                    $cart = json_decode($cart);
-
-                    //check if order exists
-                    if (getActiveUserOrder($userID) > 0) {
-                        $orderID = getActiveUserOrder($userID);
-                    } else {
-                        //create a new order for this user
-                        $createdDT= date("Y/m/d G:i:s");
-                        $status="active";
-                        $result = addOrder($createdDT, $status, $userID);
-                    }
-				    while($orderID <= 0){
-				    	$orderID = getActiveUserOrder($userID);
-				    }
-                    //get data from cookies
-                    foreach($cart as $key => $value){
-                            //key1 = field nname
-                            //value1 = data
-                            //check if productLineID exists in order
-                            //update product quantity
-                            //add product
-                            //check if there is an active order else create an order
-                            //check if productDetailID avail => add quantity
-                            //else add productdetailsID
-                            if ($orderID > 0) {
-                                //get productLineDetails
-                                $productLineID = $value->id;
-                                $quantity = $value->quantity;
-                                $price = $value->price;
-                                $remark =$value->name;
-                                $status= "active" ;
-                                //if productLineID already exists, add quantity then update quantity only
-                                $existingQuantity = verifyOrderDetails($orderID, $productLineID);
-                                if ($existingQuantity > 0) {
-                                    //already exists
-                                    $quantity += $existingQuantity;
-                                    updateOrderDetailsQuantity($orderID, $productLineID, $quantity);
-                                } else {
-                                    //add productline
-                                    addOrderDetails($quantity, $price, $remark, $status, $orderID, $productLineID);
-                                }
-                            }
-                    }
-                    //clear cookies
-                    //clear session if exists
-                    unset($_SESSION['mycart']);
-                    $_SESSION['total_price'] = 0;
-                    setcookie("cart", null, -1, '/');
-                    
-                }
-
-                //load cart
-                //check if user have active order
-                if (getActiveUserOrder($userID) > 0) {
-                    $orderID = getActiveUserOrder($userID);
-
-                    loadcart($orderID);
-                }*/
-
-                //check role id to redirect to appropriate page                             
-                $roleid = getUserRole($userEmail);
-                if ($roleid == 1) {
-                    header('location: adminDashboard.php');
-                }
-                else if ($roleid == 2) {
-                    header('Location: petshopHome.php');
-                }else if ($roleid == 3) {
-                    header('Location: index.php');
-                }
-            }
-            //credentials does not match ********** DISPLAY ERROR MESSAGE HERE
-            else {
-                $_SESSION['roleid'] = 0;
-            }
-        }
-        ?>
                             </div>
                         </div>
                     </div>
@@ -248,3 +123,35 @@ if(isset($_COOKIE['email'])){
 
 </html>
 <?php include "bottomScripts.php"; ?>
+
+<script>
+function userLogin(){
+    //ajax call to login
+    //get email
+email = document.getElementById('email').value;
+password = document.getElementById('password').value;
+ischeck = document.getElementById('remember').checked;
+    
+    $.ajax({
+            url: 'ajax/LoginAction.php',
+            data: {
+                email:email,
+                password:password,
+                check:ischeck,
+                action: "login"
+            },
+            type: 'post',
+            success: function(data) {
+                if(data == 1){
+                    window.location.href='adminDashboard.php';
+                }else if(data == 2){
+                    window.location.href='petshopHome.php';
+                }else if(data == 3){
+                    window.location.href='index.php';
+                }else{
+                $('#loginErrMsg').text(data);
+                }
+            }
+        });
+}
+</script>

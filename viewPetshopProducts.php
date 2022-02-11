@@ -124,168 +124,18 @@ echo '<input type="text" value="'.$petshopID.'" name="petshop" id="petshop" disa
 
                                     </form>
                                 </div>
-                                <!-- /Gallery-imgs 
-
-                                <div class="single-gd mb-5">
-                                    <h4>Product <span>Categories</span></h4>
-                                    <ul class="list-group single">
-                                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                                            Accessories
-                                            <span class="badge badge-primary badge-pill">14</span>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                                            Suits
-                                            <span class="badge badge-primary badge-pill">18</span>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                                            Footwear
-                                            <span class="badge badge-primary badge-pill">12</span>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                                            Blazers
-                                            <span class="badge badge-primary badge-pill">10</span>
-                                        </li>
-                                    </ul>
-                                </div>-->
-                                <!--
-                                <div class="single-gd mb-5">
-                                    <h4>Filter by <span>Price</span></h4>
-
-                                    <ul class="dropdown-vjm-transitu6">
-                                        <li>
-
-                                            <div id="slider-range"
-                                                class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all">
-                                                
-                                            </div>
-                                            <input type="text" id="amount"
-                                                style="border: 0; color: #ffffff; font-weight: normal;">
-                                        </li>
-                                    </ul>
-                                </div>
-
-                                
                                 <div class="single-gd mb-5">
                                     <h4>Discount </h4>
                                     <div classes="box-hny">
-                                        <label class="containerhny-checkbox">15% or More
-                                            <input type="checkbox" checked="checked">
+                                        <label class="containerhny-checkbox">Discount
+                                            <input type="checkbox" id="discount" name="discount"
+                                                onclick="reloadData();">
                                             <span class="checkmark"></span>
                                         </label>
-                                        <label class="containerhny-checkbox">20% or More
-                                            <input type="checkbox">
-                                            <span class="checkmark"></span>
-                                        </label>
-                                        <label class="containerhny-checkbox">35% or More
-                                            <input type="checkbox">
-                                            <span class="checkmark"></span>
-                                        </label>
-                                        <label class="containerhny-checkbox">55% or More
-                                            <input type="checkbox">
-                                            <span class="checkmark"></span>
-                                        </label>
-
-                                        <label class="containerhny-checkbox">65% or More
-                                            <input type="checkbox">
-                                            <span class="checkmark"></span>
-                                        </label>
-                                        <label class="containerhny-checkbox">75% or More
-                                            <input type="checkbox">
-                                            <span class="checkmark"></span>
-                                        </label>
-
                                     </div>
 
                                 </div>
-                                
-                                <div class="single-gd left-side mb-5">
-                                    <h4>Customer Ratings</h4>
-                                    <ul class="ratingshyny">
-                                        <li>
-                                            <a href="#">
-                                                <span class="fa fa-star" aria-hidden="true"></span>
-                                                <span class="fa fa-star" aria-hidden="true"></span>
-                                                <span class="fa fa-star" aria-hidden="true"></span>
-                                                <span class="fa fa-star" aria-hidden="true"></span>
-                                                <span class="fa fa-star" aria-hidden="true"></span>
-                                                <span>5.0</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <span class="fa fa-star" aria-hidden="true"></span>
-                                                <span class="fa fa-star" aria-hidden="true"></span>
-                                                <span class="fa fa-star" aria-hidden="true"></span>
-                                                <span class="fa fa-star" aria-hidden="true"></span>
-                                                <span class="fa fa-star-o" aria-hidden="true"></span>
-                                                <span>4.0</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <span class="fa fa-star" aria-hidden="true"></span>
-                                                <span class="fa fa-star" aria-hidden="true"></span>
-                                                <span class="fa fa-star" aria-hidden="true"></span>
-                                                <span class="fa fa-star-half-o" aria-hidden="true"></span>
-                                                <span class="fa fa-star-o" aria-hidden="true"></span>
-                                                <span>3.5</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <span class="fa fa-star" aria-hidden="true"></span>
-                                                <span class="fa fa-star" aria-hidden="true"></span>
-                                                <span class="fa fa-star" aria-hidden="true"></span>
-                                                <span class="fa fa-star-o" aria-hidden="true"></span>
-                                                <span class="fa fa-star-o" aria-hidden="true"></span>
-                                                <span>3.0</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <span class="fa fa-star" aria-hidden="true"></span>
-                                                <span class="fa fa-star" aria-hidden="true"></span>
-                                                <span class="fa fa-star-half-o" aria-hidden="true"></span>
-                                                <span class="fa fa-star-o" aria-hidden="true"></span>
-                                                <span class="fa fa-star-o" aria-hidden="true"></span>
-                                                <span>2.5</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div> 
 
-                                <div class="single-gd mb-5 border-0">
-                                    <h4>Recent <span>Products</span></h4>
-                                    <div class="row special-sec1 mt-4">
-                                        <div class="col-4 img-deals">
-                                            <a href="ecommerce-single.html"><img src="assets/images/shop-88.jpg"
-                                                    class="img-fluid" alt=""></a>
-                                        </div>
-                                        <div class="col-8 img-deal1">
-                                            <h5 class="post-title">
-                                                <a href="ecommerce-single.html">Blue Sweater</a>
-                                            </h5>
-
-                                            <a href="ecommerce-single.html" class="price-right">$499.00</a>
-                                        </div>
-
-                                    </div>
-                                    <div class="row special-sec1 mt-4">
-                                        <div class="col-4 img-deals">
-                                            <a href="ecommerce-single.html"><img src="assets/images/shop-77.jpg"
-                                                    class="img-fluid" alt=""></a>
-                                        </div>
-                                        <div class="col-8 img-deal1">
-                                            <h5 class="post-title">
-                                                <a href="ecommerce-single.html">White T-Shirt</a>
-                                            </h5>
-                                            <a href="ecommerce-single.html" class="price-right">$575.00</a>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-                                -->
                             </div>
                         </aside>
                         <!--Filters-->
@@ -305,8 +155,8 @@ echo '<input type="text" value="'.$petshopID.'" name="petshop" id="petshop" disa
                                     <span class="fa fa-angle-down" aria-hidden="true"></span>
                                     <select onchange="reloadData()" id="perpage">
                                         <option value="" disabled>No of products</option>
-                                        <option value="10" selected>10</option>
-                                        <option value="20">20</option>
+                                        <option value="10">10</option>
+                                        <option value="20" selected>20</option>
                                         <option value="50">50</option>
                                         <option value="all">All</option>
                                     </select>
@@ -368,6 +218,11 @@ $(document).ready(function() {
         perpage_ = document.getElementById("perpage").value;
         search_ = document.getElementById("searchcriterie").value;
         psid = document.getElementById('petshop').value;
+        if (document.getElementById('discount').checked) {
+            discount_ = 1;
+        } else {
+            discount_ = 0;
+        }
         //toastr.success(search_);
 
         $.ajax({
@@ -377,7 +232,8 @@ $(document).ready(function() {
                 page: page,
                 searchv: search_,
                 perpage: perpage_,
-                petshopID: psid
+                petshopID: psid,
+                discount: discount_
             },
             dataType: "JSON",
             success: function(data) {
@@ -458,7 +314,12 @@ function load_data(page) {
 
     perpage_ = document.getElementById("perpage").value;
     search_ = document.getElementById("searchcriterie").value;
-    psid = document.getElementById('petshop').value;
+    psid = document.getElementById("petshop").value;
+    if (document.getElementById('discount').checked) {
+        discount_ = 1;
+    } else {
+        discount_ = 0;
+    }
     $.ajax({
         url: "ajax/load_data.php",
         method: "POST",
@@ -466,7 +327,8 @@ function load_data(page) {
             page: page,
             searchv: search_,
             perpage: perpage_,
-            petshopID: psid
+            petshopID: psid,
+            discount: discount_
         },
         dataType: "JSON",
         success: function(data) {

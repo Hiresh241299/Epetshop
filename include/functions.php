@@ -271,10 +271,10 @@ function getLocationName($locationID)
 //add petshop
 //by default petshop status is 0
 //admin must accept petshop, then vendor can post product etc.
-function addPetshop($pname,$brn, $desc, $street, $town, $district, $long, $lat, $status, $userID, $dateReg)
+function addPetshop($pname,$brn, $desc, $postcode, $street, $locality, $town, $district, $long, $lat, $status, $userID, $dateReg)
 {
     include "dbConnection.php";
-    $sql = "CALL sp_addPetshop('$pname', '$brn', '$desc', '$street', '$town', '$district', '$long', '$lat', '$status', '$userID', '$dateReg');";
+    $sql = "CALL sp_addPetshop('$pname', '$brn', '$desc', '$postcode', '$street', '$locality', '$town', '$district', '$long', '$lat', '$status', '$userID', '$dateReg');";
     $result = mysqli_query($conn, $sql);
 
     return $result;
@@ -284,6 +284,15 @@ function addPetshop($pname,$brn, $desc, $street, $town, $district, $long, $lat, 
 function addPetshopSpeciality($petshopid, $petcatID, $date, $status){
     include "dbConnection.php";
     $sql = "CALL sp_addPetshopSpeciality('$petshopid', '$petcatID', '$date', '$status');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
+
+//add user favorite
+function addUserFavorite($userid, $petcatID, $date, $status){
+    include "dbConnection.php";
+    $sql = "CALL sp_addUserFavorite('$userid', '$petcatID', '$date', '$status');";
     $result = mysqli_query($conn, $sql);
 
     return $result;
@@ -373,6 +382,21 @@ function addDiscount($per, $start, $end, $status, $productLineID){
     return $result;
 }
 
+//get array customer favorites
+function getCustomerFavorite($userID){
+    include "dbConnection.php";
+    $sql = "CALL sp_getUserFavorite('$userID');";
+    $result = $conn->query($sql);
+    $favorite = array();
+    if ($result -> num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            array_push($favorite, $row['petCatID']);
+        }
+    }
+
+    return $favorite;
+}
+
 
 //get admin id
 //works for only 1 admin
@@ -405,6 +429,42 @@ function updateUserStatus($id, $status){
 function updateProductReviewStatus($id, $status){
     include "dbConnection.php";
     $sql = "CALL sp_updateProductReview('$id', '$status');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
+
+//update petshop speciality status
+function updateSpecialityStatus($id, $status){
+    include "dbConnection.php";
+    $sql = "CALL sp_updateSpecialityStatus('$id', '$status');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
+
+//update productline status
+function updateProductLineStatus($id, $status){
+    include "dbConnection.php";
+    $sql = "CALL sp_updateProductLineStatus('$id', '$status');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
+
+//update product status
+function updateProductStatus($id, $status){
+    include "dbConnection.php";
+    $sql = "CALL sp_updateProductStatus('$id', '$status');";
+    $result = mysqli_query($conn, $sql);
+
+    return $result;
+}
+
+//update customer favorite
+function updateFavoriteStatus($id, $status){
+    include "dbConnection.php";
+    $sql = "CALL sp_updateFavoriteStatus('$id', '$status');";
     $result = mysqli_query($conn, $sql);
 
     return $result;
@@ -447,9 +507,9 @@ function updateProductLine($prodLineID, $unit, $num, $qoh, $price, $date){
 }
 
 //update userDetails
-function updateUser($userID, $fname, $lname, $email, $nic, $mobile, $street, $locality, $town, $district, $lastmodif){
+function updateUser($userID, $fname, $lname, $email, $nic, $mobile, $postcode,  $street, $locality, $town, $district, $lastmodif){
     include "dbConnection.php";
-    $sql = "CALL sp_updateUser('$userID','$fname', '$lname', '$email', '$nic', '$mobile', '$street', '$locality', '$town', '$district', '$lastmodif');";
+    $sql = "CALL sp_updateUser('$userID','$fname', '$lname', '$email', '$nic', '$mobile', '$postcode', '$street', '$locality', '$town', '$district', '$lastmodif');";
     $result = mysqli_query($conn, $sql);
 
     return $result;
@@ -711,6 +771,23 @@ function countProductLineInOrder($orderID, $uid)
     return $count;
 }
 
+//count my petshop Orders Delivvered
+function countProductLineInOrderDelivered($orderID, $uid)
+{
+    include "dbConnection.php";
+    $pid = getPetshopID($uid);
+    $count = 0;
+    //fetch petshop id from db
+    $sql = "CALL sp_countProductLineInOrderDelivered($orderID,$pid);";
+    $result = $conn->query($sql);
+    if ($result -> num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $count = $row['countID'];
+        }
+    }
+    return $count;
+}
+
 //get totals
 function getPaidOrderDetailsTotalsByPetshopID($orderID, $uid)
 {
@@ -719,6 +796,23 @@ function getPaidOrderDetailsTotalsByPetshopID($orderID, $uid)
     $count = 0;
     //fetch petshop id from db
     $sql = "CALL sp_getPaidOrderDetailsTotalsByPetshopID($orderID,$pid);";
+    $result = $conn->query($sql);
+    if ($result -> num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            return  $row['total'];
+        }
+    }
+    return $count;
+}
+
+//get totals for delivered orders
+function getPaidOrderDetailsTotalsByPetshopIDDelivered($orderID, $uid)
+{
+    include "dbConnection.php";
+    $pid = getPetshopID($uid);
+    $count = 0;
+    //fetch petshop id from db
+    $sql = "CALL sp_getPaidOrderDetailsTotalsByPetshopIDDelivered($orderID,$pid);";
     $result = $conn->query($sql);
     if ($result -> num_rows > 0) {
         while ($row = $result->fetch_assoc()) {

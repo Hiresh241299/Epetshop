@@ -146,11 +146,14 @@ if (isset($_SESSION["userid"])) {
                                             //output data for each row
                                             while ($row = $result->fetch_assoc()) {
                                                 $mobile = $row['mobile'];
+                                                $postcode = $row['postcode'];
                                                 $street = $row['street'];
                                                 $town = $row['town'];
                                                 $district = $row['district'];
+                                                $districtName = $row['name'];
                                                 $long = $row['longitude'];
                                                 $lat = $row['latitude'];
+                                                $locality = $row['locality'];
                                             }
                                         }
                                         $result->close();
@@ -158,37 +161,59 @@ if (isset($_SESSION["userid"])) {
                                         $orderID = getActiveUserOrder($userID);
                                 ?>
                                 <form id="DeliverySchedule" action="" method="post">
-                                <input type="text" class="form-control col-3" id="orderid" placeholder=""
-                                            name="orderid" value="<?php echo $orderID?>" disabled >
+                                    <input type="text" class="form-control col-3" id="orderid" placeholder=""
+                                        name="orderid" value="<?php echo $orderID?>" disabled hidden>
                                     <div class="form-group">
-                                        <p class="login-texthny mb-2 text-dark">Mobile</p>
+                                        <p class="login-texthny mb-2 text-dark">Mobile *</p>
                                         <input type="text" class="form-control col-3" id="mobile" placeholder=""
                                             name="mobile" value="<?php echo $mobile?>" disabled required>
                                     </div>
                                     <div class="form-group">
-                                        <p class="login-texthny mb-2 text-dark">Street</p>
+                                        <p class="login-texthny mb-2 text-dark">Street *</p>
                                         <input type="text" class="form-control col-6" id="street" placeholder=""
                                             name="street" value="<?php echo $street?>" required>
                                     </div>
                                     <div class="form-group">
-                                        <p class="login-texthny mb-2 text-dark">Locality</p>
+                                        <p class="login-texthny mb-2 text-dark">Locality *</p>
                                         <input type="text" class="form-control col-6" id="locality" placeholder=""
-                                            name="locality" value="" required>
+                                            name="locality" value="<?php echo $locality?>" required>
                                     </div>
                                     <div class="form-group">
-                                        <p class="login-texthny mb-2 text-dark">Town</p>
+                                        <p class="login-texthny mb-2 text-dark">Town *</p>
                                         <input type="text" class="form-control col-6" id="town" placeholder=""
                                             name="town" value="<?php echo $town?>" required>
                                     </div>
                                     <div class="form-group">
-                                        <p class="login-texthny mb-2 text-dark">District</p>
-                                        <input type="text" class="form-control col-6" id="district" placeholder=""
-                                            name="district" value="<?php echo $district?>" required>
+                                        <p class="login-texthny mb-2 text-dark">District *</p>
+                                        <select class="form-control col-6" name="district" id="district" required="">
+                                            <option value="" selected="true" disabled="disabled">District
+                                            </option>
+                                            <?php
+                                                    $sql = "CALL sp_getAllLocation();";
+                                                    $result = $conn->query($sql);
+
+                                                    if($result -> num_rows >0){
+                                                        //output data for each row
+                                                        while($row = $result->fetch_assoc()){
+                                                            $id = $row['locationID'];
+                                                            $name = $row['name'];
+                                                            if($district == $id){
+                                                                echo '<option value="'.$id.'" selected="true">'.$name.'</option>';
+                                                            }else{
+                                                                echo '<option value="'.$id.'">'.$name.'</option>';
+                                                            }
+                                                        }
+                                                    }
+                                                    $result->close();
+                                                    $conn->next_result();
+                                                    ?>
+
+                                        </select>
                                     </div>
                                     <div class="form-group">
-                                        <p class="login-texthny mb-2 text-dark">Postcode</p>
+                                        <p class="login-texthny mb-2 text-dark">Postcode *</p>
                                         <input type="text" class="form-control col-6" id="postcode" placeholder=""
-                                            name="postcode" value="" required>
+                                            name="postcode" value="<?php echo $postcode?>" required>
                                     </div>
                                     <div class="form-group">
                                         <p class="login-texthny mb-2 text-dark">Select Map Location</p>
@@ -197,7 +222,7 @@ if (isset($_SESSION["userid"])) {
                                         <input type="text" id="lat" disabled hidden>
                                         <input type="text" id="lng" disabled hidden>
 
-                                        
+
 
                                         <!--<div class="mapouter">
                                             <div class="gmap_canvas">
@@ -230,7 +255,7 @@ if (isset($_SESSION["userid"])) {
 
                                     </div>
                                 </form>
-                                
+
                             </div>
                         </div>
 

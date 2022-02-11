@@ -9,20 +9,20 @@
         <!--//left-->
         <!--/right-->
         <ul class="top-hnt-right-content col-lg-6">
-            <!-- Notification bell-->
+            <!-- Notification bell
             <li class="button-log usernhy">
                 <a class="btn-open" href="#">
                     <span class="fa fa-bell" aria-hidden="true"></span> 
                 </a>
-            </li> 
+            </li> -->
             <!-- Cart -->
             <li class="transmitvcart galssescart2 cart cart box_1">
-                    <button class="top_transmitv_cart" onclick="cart()">
-                        My Cart
-                        <span class="fa fa-shopping-cart"></span>
-                        <span id="cart" class="badge badge-warning rounded-circle"></span>
-                    </button>
-            </li> 
+                <button class="top_transmitv_cart" onclick="cart()">
+                    My Cart
+                    <span class="fa fa-shopping-cart"></span>
+                    <span id="cart" class="badge badge-warning rounded-circle"></span>
+                </button>
+            </li>
         </ul>
         <!--//right-->
         <!-- Close Login Form -->
@@ -56,7 +56,7 @@
 							<a class="navbar-brand" href="#index.html">
 								<img src="image-path" alt="Your logo" title="Your logo" style="height:35px;" />
 							</a> -->
-        
+
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon fa fa-bars"> </span>
@@ -72,9 +72,10 @@
                         Products
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <!--<a class="dropdown-item" href="ecommerce-single.html">My Favorite Products</a>-->
-                    <a class="dropdown-item" href="displayAllProducts.php">All Products</a>
-                                            </div>
+                        <!--<a class="dropdown-item" href="ecommerce-single.html">My Favorite Products</a>-->
+                        <a class="dropdown-item" href="displayAllProducts.php?dis=1">Discount Products</a>
+                        <a class="dropdown-item" href="displayAllProducts.php">All Products</a>
+                    </div>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="viewPetshops.php">PETSHOPS</a>
@@ -83,12 +84,12 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                       My Orders
+                        My Orders
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item btn-open2" href="customerOrder.php?s=p">Pending</a>
-                    <a class="dropdown-item btn-open2" href="customerOrder.php?s=d">Delivered</a>
-                            <a class="dropdown-item btn-open" href="customerOrder.php">View All</a>
+                        <a class="dropdown-item btn-open2" href="customerOrder.php?s=p">Pending</a>
+                        <a class="dropdown-item btn-open2" href="customerOrder.php?s=d">Delivered</a>
+                        <a class="dropdown-item btn-open" href="customerOrder.php">View All</a>
                     </div>
                 </li>
 
@@ -98,8 +99,9 @@
                         My Account
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item btn-open" href="userProfile.php">My Profile</a>
-                            <a class="dropdown-item btn-open2" href="Logout.php">Logout</a>
+                        <a class="dropdown-item btn-open" href="userProfile.php">My Profile</a>
+                        <a class="dropdown-item btn-open" href="customerFavorites.php">Favorites</a>
+                        <a class="dropdown-item btn-open2 bg-secondary text-white" href="Logout.php"><b>Logout</b></a>
                     </div>
                 </li>
 
