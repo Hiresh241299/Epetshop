@@ -80,6 +80,24 @@ function verifyLocation($id){
     return $output;
 }
 
+//countActivePetshop
+function countActivePetshop(){
+    include "dbConnection.php";
+    $sql = "CALL sp_countActivePetshop();";
+    $output = 0;
+    //query Sql
+    $result = $conn->query($sql);
+    //result
+    if ($result -> num_rows > 0) {
+        //output password form db
+        while ($row = $result->fetch_assoc()) {
+                $output = $row['total'];
+        }
+    }
+
+    return $output;
+}
+
 
 //add pet category
 function addPetCat($name, $img, $date, $status)

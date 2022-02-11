@@ -55,7 +55,7 @@ if((!isset($_GET['id'])) || (($_GET['id']) == NULL)){
                             <h3>Are you sure you want to delete this product? &nbsp
                                 <button type="button" class="btn btn-danger" onclick="deleteProductline('',2,<?php echo $productID;?>);">Confirm
                                     Delete</button>
-                                <input type="text" class="text-white" id="prodlineToDelete" name="prodlineToDelete" disabled hidden />
+                                <input type="text" class="text-white" id="prodlineToDelete" name="prodlineToDelete" disabled hidden/>
                             </h3>
                         </div>
                         <a class="close" href="addproductpricing.php?id=<?php echo $_GET['id'];?>">×</a>
@@ -537,12 +537,12 @@ if((!isset($_GET['id'])) || (($_GET['id']) == NULL)){
                                         <div class="input-grids row">
 
                                             <div class="form-group col-lg-6">
-                                                <label>Start Date </label>
+                                                <label>Start Date *</label>
                                                 <input type="date" name="start" id="start" onchange="setDate()"
                                                     class="form-control" placeholder="Start Date">
                                             </div>
                                             <div class="form-group col-lg-6">
-                                                <label>End Date </label>
+                                                <label>End Date *</label>
                                                 <input type="date" name="end" id="end" onchange="setDate()"
                                                     class="form-control" placeholder="End Date">
                                             </div>
@@ -938,6 +938,7 @@ function deleteProductline(id, action, prodID) {
             url: 'ajax/productAction.php',
             data: {
                 productLineID: IDtoDelete,
+                delete:1,
                 action: "deleteProductLine"
             },
             type: 'post',

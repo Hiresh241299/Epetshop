@@ -1,5 +1,5 @@
-<?php 
-if(!isset($_SESSION)){
+<?php
+if (!isset($_SESSION)) {
     session_start();
 }
 include '../include/functions.php';
@@ -28,7 +28,7 @@ if (isset($_POST['action'])) {
             //change review status = 0
             $id = $_POST['reviewidval'];
             $status = 0;
-            if(updateProductReviewStatus($id, $status)){
+            if (updateProductReviewStatus($id, $status)) {
                 $output = "1";
             }
         }
@@ -39,7 +39,7 @@ if (isset($_POST['action'])) {
             //change review status = 0
             $id = $_POST['sid'];
             $status = 0;
-            if(updateSpecialityStatus($id, $status)){
+            if (updateSpecialityStatus($id, $status)) {
                 $output = "1";
             }
         }
@@ -51,7 +51,7 @@ if (isset($_POST['action'])) {
             //change review status = 0
             $id = $_POST['fid'];
             $status = 0;
-            if(updateFavoriteStatus($id, $status)){
+            if (updateFavoriteStatus($id, $status)) {
                 $output = "1";
             }
         }
@@ -63,7 +63,7 @@ if (isset($_POST['action'])) {
             //change review status = 0
             $id = $_POST['productID'];
             $status = 0;
-            if(updateProductStatus($id, $status)){
+            if (updateProductStatus($id, $status)) {
                 $output = "1";
             }
         }
@@ -71,12 +71,14 @@ if (isset($_POST['action'])) {
 
     //delete product line
     if ((isset($_POST['action'])) == "deleteProductLine") {
-        if (isset($_POST['productLineID'])) {
-            //change review status = 0
-            $id = $_POST['productLineID'];
-            $status = 0;
-            if(updateProductLineStatus($id, $status)){
-                $output = "1";
+        if (isset($_POST['delete'])) {
+            if (isset($_POST['productLineID'])) {
+                //change review status = 0
+                $id = $_POST['productLineID'];
+                $status = 0;
+                if (updateProductLineStatus($id, $status)) {
+                    $output = "1";
+                }
             }
         }
     }
@@ -107,41 +109,39 @@ if (isset($_POST['action'])) {
                 }
             }
             //call funncion to change status of delivery schedule
-            if(verifyAllProductDelivered($orderID)){
+            if (verifyAllProductDelivered($orderID)) {
 
                 //table orders
                 //table delivery schedule
                 updateDeliveryScheduleStatus($orderID, "Delivered");
                 $output = "1";
             }
-
-            
         }
     }
     
     if ((isset($_POST['action'])) == "addDeliverySchedule") {
         //if ((isset($_POST['oid'])) && (isset($_POST['mobile'])) && (isset($_POST['street']))&& (isset($_POST['locality']))&& (isset($_POST['town']))&& (isset($_POST['district'])) && (isset($_POST['postcode']))&& (isset($_POST['lng']))&& (isset($_POST['lat']))) {
 
-            //get value of session
-            $oid = $_POST['oid'];
-            $mobile = $_POST['mobile'];
-            $street = $_POST['street'];
-            $locality = $_POST['locality'];
-            $town = $_POST['town'];
-            $district = $_POST['district'];
-            $postcode = $_POST['postcode'];
-            $lng = $_POST['lng'];
-            $lat = $_POST['lat'];
+        //get value of session
+        $oid = $_POST['oid'];
+        $mobile = $_POST['mobile'];
+        $street = $_POST['street'];
+        $locality = $_POST['locality'];
+        $town = $_POST['town'];
+        $district = $_POST['district'];
+        $postcode = $_POST['postcode'];
+        $lng = $_POST['lng'];
+        $lat = $_POST['lat'];
 
-            $date=date("Y/m/d G:i:s");
-            $status = "Pending";
+        $date=date("Y/m/d G:i:s");
+        $status = "Pending";
 
-            //add delivery achedule
-            //addDeliverySchedule($street, $locality, $town, $district, $postcode, $long, $lat, $date, $status, $orderID);
+        //add delivery achedule
+        //addDeliverySchedule($street, $locality, $town, $district, $postcode, $long, $lat, $date, $status, $orderID);
 
-            if(addDeliverySchedule($street, $locality, $town, $district, $postcode, $lat, $lng, $date, $status, $oid)){
-                $output =1;
-            }            
+        if (addDeliverySchedule($street, $locality, $town, $district, $postcode, $lat, $lng, $date, $status, $oid)) {
+            $output =1;
+        }
         //}
     }
 
@@ -156,9 +156,9 @@ if (isset($_POST['action'])) {
             //get quantity
             //add to existing quantity
             //update
-            if(updateProductLineQOH($productLineID, $quantity)){
+            if (updateProductLineQOH($productLineID, $quantity)) {
                 $output = 1;
-            }            
+            }
         }
     }
 
@@ -170,15 +170,15 @@ if (isset($_POST['action'])) {
             $productLineID = $_POST['productlineID'];
             $price = $_POST['price'];
             $unit = $_POST['unit'];
-            $amount= $_POST['amount'];  
+            $amount= $_POST['amount'];
             $qoh = $_POST['qoh'];
             $lastmodif =date("Y/m/d G:i:s");
             //get quantity
             //add to existing quantity
             //update
-            if(updateProductLine($productLineID, $unit, $amount, $qoh, $price, $lastmodif)){
+            if (updateProductLine($productLineID, $unit, $amount, $qoh, $price, $lastmodif)) {
                 $output = 1;
-            }            
+            }
         }
     }
 
@@ -198,14 +198,11 @@ if (isset($_POST['action'])) {
             //set status expired for other with same productlineID
             updateDiscountStatus($productLineID);
             //add/update
-            if(addDiscount($per, $start, $end, $status, $productLineID)){
+            if (addDiscount($per, $start, $end, $status, $productLineID)) {
                 $output = 1;
-            }            
+            }
         }
     }
-
-
 }
 
 echo $output;
-?>

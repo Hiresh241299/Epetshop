@@ -51,14 +51,14 @@ $_SESSION['NavActive']="adminhome";
                 $result = $conn->query($sql);
                 $userCount = 0;
                 $customerCount = 0;
-                $vendorCount = 0;
+                $vendorCount = countActivePetshop();
                 if ($result -> num_rows > 0) {
                     //output data for each row
                     while ($row = $result->fetch_assoc()) {
                         $userCount++;
-                        if($row['roleID'] == 2){
+                        /*if($row['roleID'] == 2){
                             $vendorCount++;
-                        }
+                        }*/
                         if($row['roleID'] == 3){
                             $customerCount++;
                         }

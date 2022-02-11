@@ -237,18 +237,20 @@ if(isset($_SESSION["userid"])){
                                         <input id="totalValue" value="'.$_SESSION['total_price'].'" hidden disabled>
                                         ';*/
                                         echo '
+                                        <a href="displayAllProducts.php" class="col-12 btn btn-info border rounded-pill"><b>Continue Shopping</b></a>
                                         <button type="button" onclick=payment() id="checkoutBTN" class="col-12 btn btn-success border rounded-pill"><b>Checkout</b></button>
                                         <input type="text" id="valid" hidden disabled>
                                         ';
                                                 } else {
                                                     //user not logged in
                                                     echo '
+                                        <a href="displayAllProducts.php" class="col-12 btn btn-info border rounded-pill"><b>Continue Shopping</b></a>
                                         <button type="button" class="col-12 btn btn-success border rounded-pill not-allowed" disabled><b>Checkout</b></button>
                                         ';
-                                                    echo '<p>Please 
+                                                    echo '<p class="text-dark">Please 
                                                 <a class="text-warning" href="login.php"><b>Login</b></a>
                                                  or
-                                                <a class="text-warning" href="register.php"><b>Register</b></a> for payment</p>';
+                                                <a class="text-warning" href="register.php"><b>Register</b></a> for checkout</p>';
                                                 }
                                             }
                                         }

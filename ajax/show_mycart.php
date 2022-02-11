@@ -51,6 +51,8 @@ if (!empty($_SESSION['mycart'])) {
           if($value['quantity'] > $qoh){
             $errorMSG = "Quantity not available!";
             $valid = 0;
+          }else{
+            $errorMSG = "";
           }
         }
     }

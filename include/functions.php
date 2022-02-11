@@ -9,7 +9,7 @@ if ($conn -> connect_error) {
 }
 
 //auto update discount status
-updateDiscountStatusAuto();
+//updateDiscountStatusAuto();
 
 //verify user credentials
 function verifyUserCredentials($email, $passw)
@@ -960,6 +960,21 @@ function getProductLine($productID){
         return $result;
     }
     return null;
+}
+
+//get petshop status bypetshopID
+function getPetshopStatus($id){
+    include "dbConnection.php";
+    $sql = "CALL sp_getPetshopStatus('$id');";
+    $result = $conn->query($sql);
+    $output = 0;
+
+    if ($result -> num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $output = $row['status'];
+        }
+    }
+    return $output;
 }
 
 

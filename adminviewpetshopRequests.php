@@ -77,6 +77,7 @@ $_SESSION['NavActive']="adminPetshop";
                                                 $lat = $row['latitude'];
                                                 $status = $row['status'];
                                                 $userID = $row['userID'];
+                                                $prodIm =$row['imgPath'];
                                                 //$img
 
                                                 //add btn accept reject or block
@@ -109,8 +110,7 @@ $_SESSION['NavActive']="adminPetshop";
                                                     <div class="card-body py-3 p-0">
                                                         <div class="row">
                                                             <div class="col-lg-6 pr-lg-4">
-                                                                <img src="adminassets/images/template1.jpg" alt=""
-                                                                class="img-fluid rounded" />
+                                                            <div class="text-center"></br></br><h1 class="text-center">'.$name.'</h1><span class="text-center"><i class="fa fa-home" style="font-size:75px"></i></span></div>
                                                             </div>
                                                             <div class="col-lg-6 align-self pl-lg-4 mt-lg-0 mt-4">
                                                             <h3 class="block__title mb-lg-4">'.$name." (" .$brn.")".'</h3>

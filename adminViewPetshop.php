@@ -78,7 +78,7 @@ $_SESSION['NavActive']="adminPetshop";
                                                 echo '
                                                 <div class="card">
                                                 <a href="adminviewpetshopRequests.php?psid='.$psid.'&type=show">
-                                                <img src="adminassets/images/cart.jpg" class="card-img-top" alt="...">
+                                                <div class="text-center"></br></br><h1 class="text-center">'.$name.'</h1><span class="text-center"><i class="fa fa-home" style="font-size:75px"></i></span></div>
                                                 </a>
                                                     <div class="card-body">
                                                         <a href="adminviewpetshopRequests.php?psid='.$psid.'&type=show"><h5 class="card-title">'.$name.'</h5></a>

@@ -130,44 +130,46 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2) || (!isset($_SES
                                     $productID = $row['productID'];
 
                                                     $result1 = getProductLine($productID);
-                                                    if ($result1 -> num_rows > 0) {
-                                                        //output data for each row
-                                                        while ($row = $result1->fetch_assoc()) {
-                                                            $productLineID = $row['productLineID'];
-                                                            $unit = $row['unit'];
-                                                            $number = $row['number'];
-                                                            $qoh = $row['qoh'];
-                                                            $price = $row['price'];
-                                                            $priceDisplay = 'Rs'  . $price ;
-                                                            $lastMDT = $row['lastModifiedDateTime'];
+                                                    if ($result1 != null) {
+                                                        if ($result1 -> num_rows > 0) {
+                                                            //output data for each row
+                                                            while ($row = $result1->fetch_assoc()) {
+                                                                $productLineID = $row['productLineID'];
+                                                                $unit = $row['unit'];
+                                                                $number = $row['number'];
+                                                                $qoh = $row['qoh'];
+                                                                $price = $row['price'];
+                                                                $priceDisplay = 'Rs'  . $price ;
+                                                                $lastMDT = $row['lastModifiedDateTime'];
 
-                                                            //get discount
-                                                            $arrayResult = getDiscount($productLineID, "active");
-                                                            if ($arrayResult != null) {
-                                                                if ($arrayResult -> num_rows > 0) {
-                                                                    //output data for each row
-                                                                    while ($row1 = $arrayResult->fetch_assoc()) {
-                                                                        $percentage = $row1['percentage'];
-                                                                        $newprice = (($price * (100 - $percentage))*0.01);
-                                                                        $priceDisplay = '<del>'.$priceDisplay.'</del>' ." " .'<b class="text-danger">Rs'  . $newprice .'</b>';
+                                                                //get discount
+                                                                $arrayResult = getDiscount($productLineID, "active");
+                                                                if ($arrayResult != null) {
+                                                                    if ($arrayResult -> num_rows > 0) {
+                                                                        //output data for each row
+                                                                        while ($row1 = $arrayResult->fetch_assoc()) {
+                                                                            $percentage = $row1['percentage'];
+                                                                            $newprice = (($price * (100 - $percentage))*0.01);
+                                                                            $priceDisplay = '<del>'.$priceDisplay.'</del>' ." " .'<b class="text-danger">Rs'  . $newprice .'</b>';
+                                                                        }
                                                                     }
+                                                                    $arrayResult->close();
+                                                                    $conn->next_result();
                                                                 }
-                                                                $arrayResult->close();
-                                                                $conn->next_result();
-                                                            }
 
                                                             
 
-                                                            $output.= '<tr>
+                                                                $output.= '<tr>
                                                             <td> ' . $number . " ". $unit . ' </td>
                                                             <td>'  . $priceDisplay . ' </td>
                                                             <td> '.$qoh.' </td>
                                                             </tr>';
-                        
+                                                            }
                                                         }
+                                                        $result1->close();
+                                                        $conn->next_result();
                                                     }
-                                                     $result1->close();
-                                                     $conn->next_result();
+                                                    
 
                                                      if ($bg == 0) {
                                                         $bg = 1;

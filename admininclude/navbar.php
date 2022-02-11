@@ -26,7 +26,6 @@
                                                 $title = $row['title'];
                                                 //contains userid
                                                 $message = $row['message'];
-                                                $NID = $row['NID'];
                                                 $date = $row['createdDateTime'];
                                                 $status = $row['status'];
                                                 $timeLapsed = time_elapsed_string($date, false);

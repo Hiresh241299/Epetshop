@@ -202,6 +202,8 @@ if(isset($_GET['p'])){
                                 <td class="text-center">
                                     <a  href="CustomerOrder.php?'.$query.'viewOrderDetails='.$orderNo.'#orderdetails"  class="btn btn-primary" title="View Order"><i class="fa fa-eye iblack"
                                             aria-hidden="true"></i></a>
+                                    <a  href="receipt.php?order='.$orderNo.'"  class="btn btn-success" target="_blank" title="View Order"><i class="fa fa-download iblack"
+                                            aria-hidden="true"></i></a>
                                 </td>
                                 </tr>';
 

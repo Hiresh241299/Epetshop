@@ -11,6 +11,8 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2)) {
 } else {
     $userid = $_SESSION["userid"];
     $psid = getPetshopID($userid);
+    //get petshop status using userid
+    $petshopStatus = getPetshopStatus($psid);
 }
 ?>
 <!doctype html>
@@ -58,7 +60,11 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2)) {
                 <header class="tophny-header">
                     <!-- Include Navbar -->
                     <?php
+                    if ($petshopStatus == 1) {
                         include 'include/navbarVendor.php';
+                    }else{
+                        include 'include/navbarVendorINACTIVE.php';
+                    }
                     ?>
                     <!--/search-right-->
                     <div class="search-right">
@@ -88,6 +94,7 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2)) {
                 </header>
                 <div class="breadcrumb-contentnhy">
                     <div class="container">
+
                         <nav aria-label="breadcrumb">
                             <?php
                             //get petshop name from db using session userID
@@ -104,11 +111,26 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2)) {
                             }
                              $result->close();
                              $conn->next_result();
+                             
                             ?>
-
                             <ol class="breadcrumb mb-0">
-                                <li><a href="petshopHome.php">Home</a>
+                                <?php 
+                                if($petshopStatus == 1){
+                                    echo '
+                                    <li><a href="petshopHome.php">Home</a>
                                 </li>
+                                    ';
+                                }else{
+                                echo'
+                                <li>
+                                    <h2 class="text-center btn btn-danger">Your account has to be verified by the administrator</h2>
+                                </li>
+                                ';
+                                }
+                                
+                                ?>
+                                
+                                
                             </ol>
                         </nav>
                     </div>

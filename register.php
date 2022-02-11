@@ -137,7 +137,7 @@ ob_start();
             //$dob = $_POST['dob'];
             $street = "";
             $town = "";
-            $district = "";
+            $district = 1;
             $email = $_POST['email'];
             $mobile = $_POST['phone'];
             $reg = date("Y/m/d G:i:s");

@@ -240,7 +240,7 @@ if (isset($_SESSION['tmpUserID'])){
                             <div class="form-group">
                                 <input type="checkbox" id="terms" name="terms" onclick="toggleRegister('1')">
                                 <label class="login-texthny mb-2 text-white">I agree to the <a
-                                        href="TermsAndCondition.txt" class="text-warning" download>Terms and
+                                        href="TermsAndCondition.pdf" class="text-warning">Terms and
                                         conditions</a></label>
                             </div>
                             </br>
