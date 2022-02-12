@@ -3,7 +3,10 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 require 'phpmailer/vendor/autoload.php';
-
+//password for website
+//7feSLS8inEsPCx1wbAwy
+//password for db
+//D>]L-o4j67GXg!I!
 // Instantiation and passing `true` enables exceptions
 $mail = new PHPMailer(true);
 //$mail = new PHPMailer;

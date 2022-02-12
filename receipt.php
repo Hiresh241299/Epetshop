@@ -72,7 +72,7 @@ if ($result -> num_rows > 0) {
         $orderNo = $row['orderID'];
         $date = date('d M Y', strtotime($row['createdDateTime']));
         $remark = $row['status'];
-        $qty = getPaidOrderDetailsNoOFProducts($order_);
+        $qty_ = getPaidOrderDetailsNoOFProducts($order_);
         $total_ = getPaidOrderDetailsTotals($order_);
 
         $delivery = getDeliveryScheduleStatus($order_);
@@ -104,7 +104,7 @@ $conn->next_result();
 }
 ?>
 
-    <input type="text" id="orderid" value="<?php echo $orderNo;?>" disabled hidden>
+    <input type="text" id="orderid" value="<?php echo $order_;?>" disabled hidden>
     <div class="col-12 text-right"
         style="padding: 15px;solid #000;width: 80%;margin: 0 auto;position: relative;overflow: hidden;"><button
             class="btn btn-info" id="downloadPDF"><b>Download Receipt</b></button></div>
@@ -158,18 +158,8 @@ $conn->next_result();
                                     <span><?php echo $mobile;?></span>
                                 </div>
                                 </br></br>
-                                <div class="label" style="width: 30%;float: left;">
-                                    <strong>No of products</strong>
-                                </div>
-                                <div class="data" style="width: 70%;display: inline-block;">
-                                    <span><?php echo $qty;?></span>
-                                </div>
-                                <div class="label" style="width: 30%;float: left;">
-                                    <strong>Total</strong>
-                                </div>
-                                <div class="data" style="width: 70%;display: inline-block;">
-                                    <span>Rs<?php echo $total_;?></span>
-                                </div>
+                                
+                                
                                 <div class="label" style="width: 30%;float: left;">
                                     <strong>Status</strong>
                                 </div>
@@ -179,13 +169,13 @@ $conn->next_result();
                                 </br>
                                 <hr>
                                 <table border=1 class="col-12">
-                                    <thead class="bg-light">
+                                    <thead class="bg-secondary">
                                         <th>No</th>
                                         <th>Product</th>
                                         <th>Brand</th>
                                         <th>Cateogry</th>
-                                        <th>Quantity</th>
-                                        <th>Price</th>
+                                        <th class="text-center">Quantity</th>
+                                        <th class="text-center">Price</th>
                                     </thead>
                                     <tbody>
 
@@ -257,13 +247,22 @@ $conn->next_result();
                                 <td>'.$number." ".$unit." ".$pname.'</td>
                                 <td>'.$bname.'</td>
                                 <td>'.$pcname." " .$pdname.'</td>
-                                <td>'.$qty.'</td>
-                                <td>'.$price.'</td>
+                                <td class="text-center">'.$qty.'</td>
+                                <td class="text-center">'.$price.'</td>
                                 </tr>';
                                 }
                             }
                              $result->close();
                              $conn->next_result();
+
+                             echo '
+                                    <tr class="text-center '.(($bg == 1)?"cardbg":"").'">
+                                <!--<td width="16%"><img src="product/'.$img.'" alt="Img" width="100%" height="100%"></td>-->
+                                
+                                <td colspan="4" class="bg-secondary"><b>Total</b></td>
+                                <td class="bg-secondary"><b>'.$qty_.'</b></td>
+                                <td class="bg-secondary"><b>Rs '.$total_.'</b></td>
+                                </tr>';
 
                                     ?>
                                     </tbody>
