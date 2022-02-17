@@ -261,7 +261,7 @@ if ($session_roleID == 2) {
                         <!--Sort results-->
                         <div class="row ecomhny-topbar">
                             <div class="col-6 ecomhny-result">
-                                <h4 class="ecomhny-result-count"> Showing all 9 Results</h4>
+                                <h4 class="ecomhny-result-count" hidden> Showing all 9 Results</h4>
                             </div>
                             <div class="col-6 ecomhny-topbar-ordering">
 

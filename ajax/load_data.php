@@ -52,16 +52,16 @@ if ($_petshopID > 0) {
     while ($row = $result->fetch_assoc()) {
         $total++;
     }
-$result->close();
-$conn->next_result();
+    $result->close();
+    $conn->next_result();
 } else {
     $sql = "CALL sp_countProductLine();";
     $result = $conn->query($sql);
     while ($row = $result->fetch_assoc()) {
         $total = $row['id'];
     }
-$result->close();
-$conn->next_result();
+    $result->close();
+    $conn->next_result();
 }
 
 $count = ceil($total / $limit);
@@ -78,24 +78,23 @@ $pagination .= '</ul>
 //$pagination="";
 
 //get is discount is checked
-if(isset($_POST['discount'])){
+if (isset($_POST['discount'])) {
     $isDiscountChecked = $_POST['discount'];
-}else{
+} else {
     $isDiscountChecked = 0;
 }
 
 //sp_getAllProductLineDetailsWithLimitsSearch("search". $start, $limit);
 if ($searchValue != null) {
-    if($isDiscountChecked == 1){
+    if ($isDiscountChecked == 1) {
         $sql = "CALL sp_getAllProductLineDetailsWithLimitsSearchDiscount('%$searchValue%', $start, $limit);";
-    }else{
+    } else {
         $sql = "CALL sp_getAllProductLineDetailsWithLimitsSearch('%$searchValue%', $start, $limit);";
     }
-    
 } else {
-    if($isDiscountChecked == 1){
+    if ($isDiscountChecked == 1) {
         $sql = "CALL sp_getAllProductLineDetailsWithLimitsWithDiscount($start, $limit);";
-    }else{
+    } else {
         $sql = "CALL sp_getAllProductLineDetailsWithLimits($start, $limit);";
     }
 }
@@ -195,21 +194,21 @@ if ($result -> num_rows < 1) {
 
 		 ';
 
-         //get productline discount
-         /*$arrayResult = DiscountedProductLine();
-         if ($arrayResult != null) {
-             if ($arrayResult -> num_rows > 0) {
-                 //output data for each row
-                 while ($row1 = $arrayResult->fetch_assoc()) {
-                     if($row1['productLineID'] == $pid){
-                         
-                     }
-                     
-                 }
-             }
-             $arrayResult->close();
-             $conn->next_result();
-         }*/
+        //get productline discount
+        /*$arrayResult = DiscountedProductLine();
+        if ($arrayResult != null) {
+            if ($arrayResult -> num_rows > 0) {
+                //output data for each row
+                while ($row1 = $arrayResult->fetch_assoc()) {
+                    if($row1['productLineID'] == $pid){
+
+                    }
+
+                }
+            }
+            $arrayResult->close();
+            $conn->next_result();
+        }*/
 
         if ($_petshopID > 0) {
             if ($_petshopID == $petshopID) {

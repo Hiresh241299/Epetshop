@@ -203,6 +203,8 @@ function getUserDetails($userID,$field){
 
 
 
+
+
 function time_elapsed_string($datetime, $full) {
     $now = new DateTime;
     $ago = new DateTime($datetime);
@@ -230,6 +232,14 @@ function time_elapsed_string($datetime, $full) {
 
     if (!$full) $string = array_slice($string, 0, 1);
     return $string ? implode(' ', $string) . ' ago' : 'just now';
+}
+
+
+//send mails
+function sendEmail($email, $fname, $lname, $subject, $body)
+{
+    include '../include/sendMail.php';
+    return $mailstatus;
 }
 
 ?>

@@ -658,6 +658,8 @@ function show_mycart() {
         }
     });
 }
+
+//ajax add to cart
 $(document).on("click", ".add_cart", function(event) {
     event.preventDefault();
     //alert("test");
@@ -665,10 +667,6 @@ $(document).on("click", ".add_cart", function(event) {
     var name = $("#name" + id + "").val();
     var quantity = $("#quantity" + id + "").val();
     var price = $("#price" + id + "").val();
-    //var id = 1;
-    //var name = "";
-    //var quantity = 1;
-    //var price = 1;
     var action = "add";
     $.ajax({
         url: "ajax/cart_action.php",
@@ -688,4 +686,5 @@ $(document).on("click", ".add_cart", function(event) {
     show_mycart();
     toastr.success('Product added');
 });
+
 </script>

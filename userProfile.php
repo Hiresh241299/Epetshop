@@ -65,7 +65,11 @@ if($result -> num_rows >0){
         $longitude = $row['longitude'];
         $latitude = $row['latitude'];
         $registrationDate = date('d M Y h:m', strtotime($row['registrationDate']));
-        $lastmodified = date('d M Y h:m', strtotime($row['lastModifiedDateTime']));
+        if($row['lastModifiedDateTime'] == null || $row['lastModifiedDateTime'] == ""){
+            $lastmodified = "-";
+        }else{
+            $lastmodified = date('d M Y h:m', strtotime($row['lastModifiedDateTime']));
+        }
     }
 }
 $result->close();
@@ -134,7 +138,8 @@ $conn->next_result();
                                             Product Details
                                         </p> -->
                                         <div class="input-grids row">
-                                            <p class="text-danger">Account created on : <?php echo $registrationDate;?> &nbsp &nbspLast modified on: <?php echo $lastmodified;?> </p>
+                                            <p class="text-danger">Account created on : <?php echo $registrationDate;?>
+                                                &nbsp &nbspLast modified on: <?php echo $lastmodified;?> </p>
                                         </div>
 
                                         <div class="input-grids row">
@@ -175,7 +180,7 @@ $conn->next_result();
                                             <div class="form-group col-lg-6">
                                                 <label>Postcode</label>
                                                 <input type="text" name="postcode" id="postcode" class="form-control"
-                                                    placeholder="Postcode" value="<?php echo $postcode;?>" required=""
+                                                    placeholder="Postcode" value="<?php echo $postcode;?>"
                                                     disabled>
                                             </div>
                                         </div>
@@ -185,13 +190,13 @@ $conn->next_result();
                                                 <label>Street</label>
                                                 <input list="pname" type="text" name="street" id="street"
                                                     class="form-control" placeholder="Street"
-                                                    value="<?php echo $street;?>" required disabled>
+                                                    value="<?php echo $street;?>"  disabled>
                                             </div>
                                             <div class="form-group col-lg-6">
                                                 <label>Locality</label>
                                                 <input list="pname" type="text" name="locality" id="locality"
                                                     class="form-control" placeholder="Locality"
-                                                    value="<?php echo $locality;?>" required disabled>
+                                                    value="<?php echo $locality;?>"  disabled>
                                             </div>
                                         </div>
 
@@ -200,7 +205,7 @@ $conn->next_result();
                                                 <label>Town</label>
                                                 <input list="pname" type="text" name="town" id="town"
                                                     class="form-control" placeholder="Town" value="<?php echo $town;?>"
-                                                    disabled required>
+                                                    disabled >
                                             </div>
                                             <div class="form-group col-lg-6">
                                                 <label>District</label>

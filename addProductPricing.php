@@ -860,7 +860,7 @@ function setDate() {
         //block add discount btn
         document.getElementById("addDiscount").disabled = true;
         document.getElementById("addDiscount").classList.add("not-allowed");
-        document.getElementById("discountErrormsg").innerHTML = "Start Date must be less than End Date";
+        document.getElementById("discountErrormsg").innerHTML = "End Date must be greater than Start Date";
     } else {
         document.getElementById("addDiscount").disabled = false;
         document.getElementById("discountErrormsg").innerHTML = "";

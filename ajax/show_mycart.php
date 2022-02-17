@@ -1,6 +1,6 @@
 <?php
 include("../include/functions.php");
-if(!isset($_SESSION)){
+if (!isset($_SESSION)) {
     session_start();
 }
 
@@ -16,50 +16,50 @@ $valid = 1;
 ';*/
  
 if (!empty($_SESSION['mycart'])) {
-	foreach ($_SESSION['mycart'] as $key => $value) {
+    foreach ($_SESSION['mycart'] as $key => $value) {
 
     //Get product line details
-    $productLineID = $value['id'];
-    //sp_getProductLineDetailsByProductLineID($productLineID);
-    $sql = "CALL sp_getProductLineDetailsByProductLineID($productLineID);";
-    $result = $conn->query($sql);
+        $productLineID = $value['id'];
+        //sp_getProductLineDetailsByProductLineID($productLineID);
+        $sql = "CALL sp_getProductLineDetailsByProductLineID($productLineID);";
+        $result = $conn->query($sql);
 
-    if ($result -> num_rows > 0) {
-        //output data for each row
-        while ($row = $result->fetch_assoc()) {
-          $pid = $row['productID'];
-          $pname = $row['pname'];
-          $brand = $row['bname'];
-          $desc= $row['description'];
-          //shorten desc
-          if(strlen($desc) > 100){
-            $desc = substr($desc,0,100) . "...";
-          }
-          $img = $row['imgPath'];
-          $prodcat = $row['pcname'];
-          $petCat = $row['sname'];
-          $postedDT = $row['postedDateTime'];
-          $lastMDT = $row['lastModifiedDateTime'];
-          $petshopID = $row['petshopID'];
-          $petshopName = $row['petshop'];
-          $unit = $row['unit'];
-          $number = $row['number'];
-          $qoh = $row['qoh'];
-          $price = $row['price'];
+        if ($result -> num_rows > 0) {
+            //output data for each row
+            while ($row = $result->fetch_assoc()) {
+                $pid = $row['productID'];
+                $pname = $row['pname'];
+                $brand = $row['bname'];
+                $desc= $row['description'];
+                //shorten desc
+                if (strlen($desc) > 100) {
+                    $desc = substr($desc, 0, 100) . "...";
+                }
+                $img = $row['imgPath'];
+                $prodcat = $row['pcname'];
+                $petCat = $row['sname'];
+                $postedDT = $row['postedDateTime'];
+                $lastMDT = $row['lastModifiedDateTime'];
+                $petshopID = $row['petshopID'];
+                $petshopName = $row['petshop'];
+                $unit = $row['unit'];
+                $number = $row['number'];
+                $qoh = $row['qoh'];
+                $price = $row['price'];
 
-          //check quantity availe
-          if($value['quantity'] > $qoh){
-            $errorMSG = "Quantity not available!";
-            $valid = 0;
-          }else{
-            $errorMSG = "";
-          }
+                //check quantity availe
+                if ($value['quantity'] > $qoh) {
+                    $errorMSG = "Quantity not available!";
+                    $valid = 0;
+                } else {
+                    $errorMSG = "";
+                }
+            }
         }
-    }
-    $result->close();
-    $conn->next_result();
+        $result->close();
+        $conn->next_result();
 
-    $output .='
+        $output .='
     <!--Repeat-->
                         <div class="mag-hny-content">
                             <!--/set-1-->
@@ -112,10 +112,10 @@ if (!empty($_SESSION['mycart'])) {
                         <!--Repeat-->
     ';
 
-    $total = $total + $value['quantity'] * $value['price'];           
-    $_SESSION['total_price'] = $total;
+        $total = $total + $value['quantity'] * $value['price'];
+        $_SESSION['total_price'] = $total;
 
-		/*$output .= "
+        /*$output .= "
            <tr>
              <td hidden>".$value['id']."</td>
              <td>".$value['name']."</td>
@@ -125,12 +125,12 @@ if (!empty($_SESSION['mycart'])) {
              <td>
                <button class='btn btn-danger remove' id='".$value['id']."'>Remove</button>
              </td>
-		";
-		$total = $total + $value['quantity'] * $value['price'];
+        ";
+        $total = $total + $value['quantity'] * $value['price'];
     $_SESSION['total_price'] = $total;*/
-	}
+    }
 
-$output .='
+    $output .='
 <div class="row">
   <div class="col-md-4">
     <button class="btn btn-danger btn-block clearall" title="Delete All Products">Clear All</button>
@@ -139,7 +139,7 @@ $output .='
 ';
 
   
-	/*$output .= '
+    /*$output .= '
   <!--Display total-->
                     <div class="mag-post-right-hny col-lg-4">
                         <aside>
@@ -159,30 +159,27 @@ $output .='
                     <!--Display total-->
   ';*/
 
-  /*
-  $output .= "
-         <tr>
-         <td hidden><b>#subscribe</b></td>
-         <td><b>Total Price</b></td>
-         <td><b>Rs".number_format($total, 2)."</b></td>
-         <td>
-            <a href='stripe/'> <button class='btn btn-warning btn-block' >Checkout</button></a>
-            </td>
-            <td>
-              <a href='invoice.php'><button class='btn btn-info btn-block'>Invoice</button></a>
-            </td>
-            <td>
-              <button class='btn btn-warning btn-block clearall' id='".$value['id']."'>Clear All</button>
-            </td>
-            
-         </tr>
-	"; */
+    /*
+    $output .= "
+           <tr>
+           <td hidden><b>#subscribe</b></td>
+           <td><b>Total Price</b></td>
+           <td><b>Rs".number_format($total, 2)."</b></td>
+           <td>
+              <a href='stripe/'> <button class='btn btn-warning btn-block' >Checkout</button></a>
+              </td>
+              <td>
+                <a href='invoice.php'><button class='btn btn-info btn-block'>Invoice</button></a>
+              </td>
+              <td>
+                <button class='btn btn-warning btn-block clearall' id='".$value['id']."'>Clear All</button>
+              </td>
 
-	$to = count($_SESSION['mycart']);
-	
-}else{
+           </tr>
+      "; */
 
-
+    $to = count($_SESSION['mycart']);
+} else {
 }
 
 $totalValue = $total;
@@ -196,4 +193,3 @@ $data['totalValue'] = $totalValue;
 $data['valid'] = $valid;
 
 echo json_encode($data);
- ?>

@@ -3,10 +3,6 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 require 'phpmailer/vendor/autoload.php';
-//password for website
-//7feSLS8inEsPCx1wbAwy
-//password for db
-//D>]L-o4j67GXg!I!
 // Instantiation and passing `true` enables exceptions
 $mail = new PHPMailer(true);
 //$mail = new PHPMailer;
@@ -15,7 +11,7 @@ $mail = new PHPMailer(true);
     $mail->Host       = 'smtp.gmail.com';                    // Set the SMTP server to send through
     $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
     $mail->Username   = 'epetshopbse@gmail.com';                     // SMTP username
-    $mail->Password   = 'stE&U?eK?Xi-Ajo+9!SW_dlJETReSuk4na#Hlsek!SpAS!uno?RE-*ph2PHL=A6p';                               // SMTP password
+    $mail->Password   = 'stE&U?eK?Xi-Ajo+9!SW_dlJETReSuk4na#Hlsek!SpAS!uno?RE-*ph2PHL=A6p';      // SMTP password
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
     $mail->Port       = 587;       
     $mail->SMTPOptions = array(
@@ -28,17 +24,6 @@ $mail = new PHPMailer(true);
     //Recipients
         $mail->setFrom('epetshopbse@gmail.com', 'E-petshop');
         $mail->addAddress($email, $fname . " " . $lname);
-
-        // Attachments
-        //$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
-        //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
-        // Content
-        /*$body="Here is your key: $apikey <br>
-        Please append it to all of your API requests, <br>
-        Bookstore API: http://localhost/book_api_server/index.php?apikey=$apikey& <br>
-        Click <a href=\"http://localhost/book_api_server/activateApiKey.php?apikey=$apikey\" target=\"_blank\">here</a> to activate your key <br><br>
-        If you did not make this request, please disregard this email."; */
-
         $mail->isHTML(true);// Set email format to HTML
         $mail->Subject = $subject;
         $mail->Body    = $body;

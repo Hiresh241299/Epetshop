@@ -31,7 +31,7 @@ function verifyUserCredentials($email, $passw)
     $result = $conn->query($sql);
     //result
     
-    if ($result -> num_rows > 0) {
+    if ($result && $result -> num_rows > 0) {
         //output password form db
         while ($row = $result->fetch_assoc()) {
             if (password_verify($passw, $row['password'])) {
@@ -45,7 +45,8 @@ function verifyUserCredentials($email, $passw)
 
 //verify User email
 //sp_verifyUserCredentials
-function verifyEmail($email){
+function verifyEmail($email)
+{
     include "dbConnection.php";
     $sql = "CALL sp_verifyUserCredentials('$email');";
     $output = false;
@@ -53,10 +54,10 @@ function verifyEmail($email){
     $result = $conn->query($sql);
     //result
     
-    if ($result -> num_rows > 0) {
+    if ($result && $result -> num_rows > 0) {
         //output password form db
         while ($row = $result->fetch_assoc()) {
-                $output = true;
+            $output = true;
         }
     }
 
@@ -64,7 +65,8 @@ function verifyEmail($email){
 }
 
 //verify User Phone
-function verifyMobile($mobile){
+function verifyMobile($mobile)
+{
     include "dbConnection.php";
     $sql = "CALL sp_verifyUserMobile('$mobile');";
     $output = false;
@@ -72,10 +74,10 @@ function verifyMobile($mobile){
     $result = $conn->query($sql);
     //result
     
-    if ($result -> num_rows > 0) {
+    if ($result && $result -> num_rows > 0) {
         //output password form db
         while ($row = $result->fetch_assoc()) {
-                $output = true;
+            $output = true;
         }
     }
 
@@ -83,7 +85,8 @@ function verifyMobile($mobile){
 }
 
 //Verify User NIC
-function verifyNIC($nic){
+function verifyNIC($nic)
+{
     include "dbConnection.php";
     $sql = "CALL sp_verifyUserNIC('$nic');";
     $output = false;
@@ -91,10 +94,10 @@ function verifyNIC($nic){
     $result = $conn->query($sql);
     //result
     
-    if ($result -> num_rows > 0) {
+    if ($result && $result -> num_rows > 0) {
         //output password form db
         while ($row = $result->fetch_assoc()) {
-                $output = true;
+            $output = true;
         }
     }
 
@@ -102,7 +105,8 @@ function verifyNIC($nic){
 }
 
 //verify business name
-function verifyBusinessName($pname){
+function verifyBusinessName($pname)
+{
     include "dbConnection.php";
     $sql = "CALL sp_verifyPetshopName('$pname');";
     $output = false;
@@ -110,10 +114,10 @@ function verifyBusinessName($pname){
     $result = $conn->query($sql);
     //result
     
-    if ($result -> num_rows > 0) {
+    if ($result && $result -> num_rows > 0) {
         //output password form db
         while ($row = $result->fetch_assoc()) {
-                $output = true;
+            $output = true;
         }
     }
 
@@ -121,7 +125,8 @@ function verifyBusinessName($pname){
 }
 
 //verify brn
-function verifyBRN($brn){
+function verifyBRN($brn)
+{
     include "dbConnection.php";
     $sql = "CALL sp_verifyPetshopBRN('$brn');";
     $output = false;
@@ -129,10 +134,10 @@ function verifyBRN($brn){
     $result = $conn->query($sql);
     //result
     
-    if ($result -> num_rows > 0) {
+    if ($result && $result -> num_rows > 0) {
         //output password form db
         while ($row = $result->fetch_assoc()) {
-                $output = true;
+            $output = true;
         }
     }
 
@@ -141,13 +146,14 @@ function verifyBRN($brn){
 
 
 //verify order Details
-function verifyOrderDetails($orderID, $productLineID){
+function verifyOrderDetails($orderID, $productLineID)
+{
     include "dbConnection.php";
     $sql = "CALL sp_verifyOrderDetails('$orderID', '$productLineID');";
     $result = $conn->query($sql);
     $output = 0;
     //result
-    if ($result -> num_rows > 0) {
+    if ($result && $result -> num_rows > 0) {
         //output password form db
         while ($row = $result->fetch_assoc()) {
             $output = $row['quantity'];
@@ -158,18 +164,19 @@ function verifyOrderDetails($orderID, $productLineID){
 }
 
 //verify all product Delivered
-function verifyAllProductDelivered($orderID){
+function verifyAllProductDelivered($orderID)
+{
     include "dbConnection.php";
     $sql = "CALL sp_verifyAllProductDelivered('$orderID');";
     $result = $conn->query($sql);
     $output = 0;
     //result
-    if ($result -> num_rows > 0) {
+    if ($result && $result -> num_rows > 0) {
         //output password form db
         while ($row = $result->fetch_assoc()) {
-            if($row['status'] == "Delivered"){
+            if ($row['status'] == "Delivered") {
                 $output = 1;
-            }else{
+            } else {
                 $output = 0;
             }
         }
@@ -179,7 +186,7 @@ function verifyAllProductDelivered($orderID){
 }
 
 //add user
-function addUser($fname, $lname,$nic, $gender, $dob, $street, $town, $district, $email, $mobile, $reg, $pass, $status, $long, $lat, $lastLogin, $role)
+function addUser($fname, $lname, $nic, $gender, $dob, $street, $town, $district, $email, $mobile, $reg, $pass, $status, $long, $lat, $lastLogin, $role)
 {
     include "dbConnection.php";
 
@@ -212,7 +219,7 @@ function getUserRole($email)
 
     $result = $conn->query($sql);
 
-    if ($result -> num_rows > 0) {
+    if ($result && $result -> num_rows > 0) {
         //output data for each row
         while ($row = $result->fetch_assoc()) {
             $output = $row['roleID'];
@@ -231,7 +238,7 @@ function getUserID($email)
 
     $result = $conn->query($sql);
 
-    if ($result -> num_rows > 0) {
+    if ($result && $result -> num_rows > 0) {
         //output data for each row
         while ($row = $result->fetch_assoc()) {
             $output = $row['userID'];
@@ -250,7 +257,7 @@ function getLocationName($locationID)
 
     $result = $conn->query($sql);
 
-    if ($result -> num_rows > 0) {
+    if ($result && $result -> num_rows > 0) {
         //output data for each row
         while ($row = $result->fetch_assoc()) {
             $output = $row['name'];
@@ -271,7 +278,7 @@ function getLocationName($locationID)
 //add petshop
 //by default petshop status is 0
 //admin must accept petshop, then vendor can post product etc.
-function addPetshop($pname,$brn, $desc, $postcode, $street, $locality, $town, $district, $long, $lat, $status, $userID, $dateReg)
+function addPetshop($pname, $brn, $desc, $postcode, $street, $locality, $town, $district, $long, $lat, $status, $userID, $dateReg)
 {
     include "dbConnection.php";
     $sql = "CALL sp_addPetshop('$pname', '$brn', '$desc', '$postcode', '$street', '$locality', '$town', '$district', '$long', '$lat', '$status', '$userID', '$dateReg');";
@@ -281,7 +288,8 @@ function addPetshop($pname,$brn, $desc, $postcode, $street, $locality, $town, $d
 }
 
 //add petshop speciality
-function addPetshopSpeciality($petshopid, $petcatID, $date, $status){
+function addPetshopSpeciality($petshopid, $petcatID, $date, $status)
+{
     include "dbConnection.php";
     $sql = "CALL sp_addPetshopSpeciality('$petshopid', '$petcatID', '$date', '$status');";
     $result = mysqli_query($conn, $sql);
@@ -290,7 +298,8 @@ function addPetshopSpeciality($petshopid, $petcatID, $date, $status){
 }
 
 //add user favorite
-function addUserFavorite($userid, $petcatID, $date, $status){
+function addUserFavorite($userid, $petcatID, $date, $status)
+{
     include "dbConnection.php";
     $sql = "CALL sp_addUserFavorite('$userid', '$petcatID', '$date', '$status');";
     $result = mysqli_query($conn, $sql);
@@ -319,7 +328,8 @@ function addProductReview($review, $date, $status, $userID, $productID)
 }
 
 //add product line
-function addProductLine($unit, $amount, $qoh, $price, $lastmodif, $status, $productID){
+function addProductLine($unit, $amount, $qoh, $price, $lastmodif, $status, $productID)
+{
     include "dbConnection.php";
     $sql = "CALL sp_addProductLine('$unit', '$amount', '$qoh', '$price', '$lastmodif', '$status', '$productID');";
     $result = mysqli_query($conn, $sql);
@@ -328,7 +338,8 @@ function addProductLine($unit, $amount, $qoh, $price, $lastmodif, $status, $prod
 }
 
 //add order
-function addOrder($createdDT, $status, $userID){
+function addOrder($createdDT, $status, $userID)
+{
     include "dbConnection.php";
     $sql = "CALL sp_addOrder('$createdDT', '$status', '$userID');";
     $result = mysqli_query($conn, $sql);
@@ -337,7 +348,8 @@ function addOrder($createdDT, $status, $userID){
 }
 
 //add order details
-function addOrderDetails($quantity, $price, $remark, $status, $orderID, $productLineID){
+function addOrderDetails($quantity, $price, $remark, $status, $orderID, $productLineID)
+{
     include "dbConnection.php";
     $sql = "CALL sp_addOrderDetails('$quantity', '$price', '$remark', '$status', '$orderID', '$productLineID');";
     $result = mysqli_query($conn, $sql);
@@ -346,7 +358,8 @@ function addOrderDetails($quantity, $price, $remark, $status, $orderID, $product
 }
 
 //add payment
-function addPayment($dateTime, $remark, $status, $orderID){
+function addPayment($dateTime, $remark, $status, $orderID)
+{
     include "dbConnection.php";
     $sql = "CALL sp_addPayment('$dateTime', '$remark', '$status', '$orderID');";
     $result = mysqli_query($conn, $sql);
@@ -356,7 +369,8 @@ function addPayment($dateTime, $remark, $status, $orderID){
 
 //add notification
 //status 1 send, 2 read
-function addNotif($userID, $title, $message, $date, $status){
+function addNotif($userID, $title, $message, $date, $status)
+{
     include "dbConnection.php";
     $sql = "CALL sp_addNotification('$userID', '$title', '$message', '$date', '$status');";
     $result = mysqli_query($conn, $sql);
@@ -365,7 +379,8 @@ function addNotif($userID, $title, $message, $date, $status){
 }
 
 //add delivery schedule
-function addDeliverySchedule($street, $locality, $town, $district, $postcode, $long, $lat, $date, $status, $orderID){
+function addDeliverySchedule($street, $locality, $town, $district, $postcode, $long, $lat, $date, $status, $orderID)
+{
     include "dbConnection.php";
     $sql = "CALL sp_addDeliverySchedule('$street', '$locality', '$town','$district', '$postcode', '$long', '$lat', '$date', '$status', '$orderID');";
     $result = mysqli_query($conn, $sql);
@@ -374,7 +389,8 @@ function addDeliverySchedule($street, $locality, $town, $district, $postcode, $l
 }
 
 //add discount
-function addDiscount($per, $start, $end, $status, $productLineID){
+function addDiscount($per, $start, $end, $status, $productLineID)
+{
     include "dbConnection.php";
     $sql = "CALL sp_addDiscount('$per', '$start', '$end', '$status', '$productLineID');";
     $result = mysqli_query($conn, $sql);
@@ -383,12 +399,13 @@ function addDiscount($per, $start, $end, $status, $productLineID){
 }
 
 //get array customer favorites
-function getCustomerFavorite($userID){
+function getCustomerFavorite($userID)
+{
     include "dbConnection.php";
     $sql = "CALL sp_getUserFavorite('$userID');";
     $result = $conn->query($sql);
     $favorite = array();
-    if ($result -> num_rows > 0) {
+    if ($result && $result -> num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             array_push($favorite, $row['petCatID']);
         }
@@ -407,7 +424,7 @@ function getAdminID()
     //fetch petshop id from db
     $sql = "CALL sp_getAdminID();";
     $result = $conn->query($sql);
-    if ($result -> num_rows > 0) {
+    if ($result && $result -> num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $adminID = $row['userID'];
         }
@@ -417,7 +434,8 @@ function getAdminID()
 
 
 //update user status
-function updateUserStatus($id, $status){
+function updateUserStatus($id, $status)
+{
     include "dbConnection.php";
     $sql = "CALL sp_updateUserStatus('$id', '$status');";
     $result = mysqli_query($conn, $sql);
@@ -426,7 +444,8 @@ function updateUserStatus($id, $status){
 }
 
 //update product review status
-function updateProductReviewStatus($id, $status){
+function updateProductReviewStatus($id, $status)
+{
     include "dbConnection.php";
     $sql = "CALL sp_updateProductReview('$id', '$status');";
     $result = mysqli_query($conn, $sql);
@@ -435,7 +454,8 @@ function updateProductReviewStatus($id, $status){
 }
 
 //update petshop speciality status
-function updateSpecialityStatus($id, $status){
+function updateSpecialityStatus($id, $status)
+{
     include "dbConnection.php";
     $sql = "CALL sp_updateSpecialityStatus('$id', '$status');";
     $result = mysqli_query($conn, $sql);
@@ -444,7 +464,8 @@ function updateSpecialityStatus($id, $status){
 }
 
 //update productline status
-function updateProductLineStatus($id, $status){
+function updateProductLineStatus($id, $status)
+{
     include "dbConnection.php";
     $sql = "CALL sp_updateProductLineStatus('$id', '$status');";
     $result = mysqli_query($conn, $sql);
@@ -453,7 +474,8 @@ function updateProductLineStatus($id, $status){
 }
 
 //update product status
-function updateProductStatus($id, $status){
+function updateProductStatus($id, $status)
+{
     include "dbConnection.php";
     $sql = "CALL sp_updateProductStatus('$id', '$status');";
     $result = mysqli_query($conn, $sql);
@@ -462,7 +484,8 @@ function updateProductStatus($id, $status){
 }
 
 //update customer favorite
-function updateFavoriteStatus($id, $status){
+function updateFavoriteStatus($id, $status)
+{
     include "dbConnection.php";
     $sql = "CALL sp_updateFavoriteStatus('$id', '$status');";
     $result = mysqli_query($conn, $sql);
@@ -471,7 +494,8 @@ function updateFavoriteStatus($id, $status){
 }
 
 //update my customer order details status to delivered
-function updateMyCustomerOrderDetailsStatus($id, $status){
+function updateMyCustomerOrderDetailsStatus($id, $status)
+{
     include "dbConnection.php";
     $sql = "CALL sp_updateMyCustomerOrderDetailsStatus('$id', '$status');";
     $result = mysqli_query($conn, $sql);
@@ -480,7 +504,8 @@ function updateMyCustomerOrderDetailsStatus($id, $status){
 }
 
 //update Delivery Schedule Status
-function updateDeliveryScheduleStatus($id, $status){
+function updateDeliveryScheduleStatus($id, $status)
+{
     include "dbConnection.php";
     $sql = "CALL sp_updateDeliveryScheduleStatus('$id', '$status');";
     $result = mysqli_query($conn, $sql);
@@ -489,7 +514,8 @@ function updateDeliveryScheduleStatus($id, $status){
 }
 
 //update product
-function updateProduct($productID,$name, $brandID, $description, $imgpath, $prodCatID, $petCatID, $status, $lastMDT){
+function updateProduct($productID, $name, $brandID, $description, $imgpath, $prodCatID, $petCatID, $status, $lastMDT)
+{
     include "dbConnection.php";
     $sql = "CALL sp_updateProduct('$productID','$name', '$brandID', '$description', '$imgpath', '$prodCatID', '$petCatID', '$status', '$lastMDT');";
     $result = mysqli_query($conn, $sql);
@@ -498,7 +524,8 @@ function updateProduct($productID,$name, $brandID, $description, $imgpath, $prod
 }
 
 //update productline
-function updateProductLine($prodLineID, $unit, $num, $qoh, $price, $date){
+function updateProductLine($prodLineID, $unit, $num, $qoh, $price, $date)
+{
     include "dbConnection.php";
     $sql = "CALL sp_updateProductLine('$prodLineID', '$unit', '$num', '$qoh', '$price', '$date');";
     $result = mysqli_query($conn, $sql);
@@ -507,7 +534,8 @@ function updateProductLine($prodLineID, $unit, $num, $qoh, $price, $date){
 }
 
 //update userDetails
-function updateUser($userID, $fname, $lname, $email, $nic, $mobile, $postcode,  $street, $locality, $town, $district, $lastmodif){
+function updateUser($userID, $fname, $lname, $email, $nic, $mobile, $postcode, $street, $locality, $town, $district, $lastmodif)
+{
     include "dbConnection.php";
     $sql = "CALL sp_updateUser('$userID','$fname', '$lname', '$email', '$nic', '$mobile', '$postcode', '$street', '$locality', '$town', '$district', '$lastmodif');";
     $result = mysqli_query($conn, $sql);
@@ -516,7 +544,8 @@ function updateUser($userID, $fname, $lname, $email, $nic, $mobile, $postcode,  
 }
 
 //update petshop
-function updatePetshop($userID, $pname, $brn, $desc, $img, $street, $locality, $town, $district, $lastmodif){
+function updatePetshop($userID, $pname, $brn, $desc, $img, $street, $locality, $town, $district, $lastmodif)
+{
     include "dbConnection.php";
     $sql = "CALL sp_updatePetshop('$userID', '$pname', '$brn', '$desc', '$img', '$street', '$locality', '$town', '$district', '$lastmodif');";
     $result = mysqli_query($conn, $sql);
@@ -525,7 +554,8 @@ function updatePetshop($userID, $pname, $brn, $desc, $img, $street, $locality, $
 }
 
 //update orderDetails Quantity
-function updateOrderDetailsQuantity($orderID, $productLineID, $quantity){
+function updateOrderDetailsQuantity($orderID, $productLineID, $quantity)
+{
     include "dbConnection.php";
     $sql = "CALL sp_updateOrderDetailsQuantity('$orderID', '$productLineID', '$quantity');";
     $result = mysqli_query($conn, $sql);
@@ -534,7 +564,8 @@ function updateOrderDetailsQuantity($orderID, $productLineID, $quantity){
 }
 
 //update productline quantity on hand
-function updateProductLineQOH($productLineID, $quantity){
+function updateProductLineQOH($productLineID, $quantity)
+{
     include "dbConnection.php";
     $sql = "CALL sp_updateProductLineQOH('$productLineID', '$quantity');";
     $result = mysqli_query($conn, $sql);
@@ -544,7 +575,8 @@ function updateProductLineQOH($productLineID, $quantity){
 
 
 //update orders Status
-function updateOrderStatus($orderID, $status){
+function updateOrderStatus($orderID, $status)
+{
     include "dbConnection.php";
     $sql = "CALL sp_updateOrderStatus('$orderID', '$status');";
     $result = mysqli_query($conn, $sql);
@@ -553,7 +585,8 @@ function updateOrderStatus($orderID, $status){
 }
 
 //update orderDetails Status
-function updateOrderDetailsStatus($orderID, $status){
+function updateOrderDetailsStatus($orderID, $status)
+{
     include "dbConnection.php";
     $sql = "CALL sp_updateOrderDetailsStatus('$orderID', '$status');";
     $result = mysqli_query($conn, $sql);
@@ -562,7 +595,8 @@ function updateOrderDetailsStatus($orderID, $status){
 }
 
 //update single order details status
-function updateSingleOrderDetailsStatus($orderID, $productLineID, $status){
+function updateSingleOrderDetailsStatus($orderID, $productLineID, $status)
+{
     include "dbConnection.php";
     $sql = "CALL sp_updateSingleOrderDetailsStatus('$orderID', '$productLineID', '$status');";
     $result = mysqli_query($conn, $sql);
@@ -571,7 +605,8 @@ function updateSingleOrderDetailsStatus($orderID, $productLineID, $status){
 }
 
 //update user lastLoginDateTime
-function updateUserLogin($lastLogin, $userID){
+function updateUserLogin($lastLogin, $userID)
+{
     include "dbConnection.php";
     $sql = "CALL sp_updateUserLogin('$lastLogin', '$userID');";
     $result = mysqli_query($conn, $sql);
@@ -580,7 +615,8 @@ function updateUserLogin($lastLogin, $userID){
 }
 
 //update discount status Expired
-function updateDiscountStatus($productLineID){
+function updateDiscountStatus($productLineID)
+{
     include "dbConnection.php";
     $sql = "CALL sp_updateDiscountStatus('$productLineID');";
     $result = mysqli_query($conn, $sql);
@@ -596,7 +632,7 @@ function getPetshopID($uid)
     //fetch petshop id from db
     $sql = "CALL sp_getPetshopID($uid);";
     $result = $conn->query($sql);
-    if ($result -> num_rows > 0) {
+    if ($result && $result -> num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $petshopid = $row['petshopID'];
         }
@@ -612,19 +648,20 @@ function DiscountedProductLine()
     //fetch petshop id from db
     $sql = "CALL sp_getDiscountedProductLine();";
     $result = $conn->query($sql);
-    if ($result -> num_rows > 0) {
+    if ($result && $result -> num_rows > 0) {
         return $result;
     }
     return 0;
 }
 
-//get recently added product id by petshop 
-function getLatestProductId($uid){
+//get recently added product id by petshop
+function getLatestProductId($uid)
+{
     include "dbConnection.php";
     $petshopid = getPetshopID($uid);
     $sql = "CALL sp_getProductID($petshopid)";
     $result = $conn->query($sql);
-    if ($result -> num_rows > 0) {
+    if ($result && $result -> num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $prodID = $row['productID'];
         }
@@ -633,16 +670,17 @@ function getLatestProductId($uid){
 }
 
 //get active user order
-function getActiveUserOrder($userID){
+function getActiveUserOrder($userID)
+{
     include "dbConnection.php";
     $sql = "CALL sp_getActiveUserOrder($userID);";
     $result = $conn->query($sql);
     $output = 0;
 
-    if ($result -> num_rows > 0) {
-    //output data for each row
+    if ($result && $result -> num_rows > 0) {
+        //output data for each row
         while ($row = $result->fetch_assoc()) {
-             //check for active orders for this user
+            //check for active orders for this user
             $output = $row['orderID'];
         }
     }
@@ -660,7 +698,7 @@ function getCountMyProducts($uid)
     //fetch petshop id from db
     $sql = "CALL sp_countMyProducts($pid);";
     $result = $conn->query($sql);
-    if ($result -> num_rows > 0) {
+    if ($result && $result -> num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $count++;
         }
@@ -676,7 +714,7 @@ function getCountMyProductsByPetshopID($pid)
     //fetch petshop id from db
     $sql = "CALL sp_countMyProducts($pid);";
     $result = $conn->query($sql);
-    if ($result -> num_rows > 0) {
+    if ($result && $result -> num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $count++;
         }
@@ -693,7 +731,7 @@ function getCountMyPetshopSpecialities($uid)
     //fetch petshop id from db
     $sql = "CALL sp_getPetshopSpecialities($pid);";
     $result = $conn->query($sql);
-    if ($result -> num_rows > 0) {
+    if ($result && $result -> num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $count++;
         }
@@ -710,7 +748,7 @@ function getCountMyPetshopDeliveries($uid)
     //fetch petshop id from db
     $sql = "CALL sp_getCountMyDeliveries($pid);";
     $result = $conn->query($sql);
-    if ($result -> num_rows > 0) {
+    if ($result && $result -> num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             if ($row['status'] == "Delivered") {
                 $count++;
@@ -729,9 +767,9 @@ function getCountMyPetshopOrders($uid)
     //fetch petshop id from db
     $sql = "CALL sp_getCountMyOrders($pid);";
     $result = $conn->query($sql);
-    if ($result -> num_rows > 0) {
+    if ($result && $result -> num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-                $count++;
+            $count++;
         }
     }
     return $count;
@@ -746,7 +784,7 @@ function getCountMyPetshopCustomers($uid)
     //fetch petshop id from db
     $sql = "CALL sp_getCountMyCustomers($pid);";
     $result = $conn->query($sql);
-    if ($result -> num_rows > 0) {
+    if ($result && $result -> num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $count++;
         }
@@ -763,7 +801,7 @@ function countProductLineInOrder($orderID, $uid)
     //fetch petshop id from db
     $sql = "CALL sp_countProductLineInOrder($orderID,$pid);";
     $result = $conn->query($sql);
-    if ($result -> num_rows > 0) {
+    if ($result && $result -> num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $count = $row['countID'];
         }
@@ -780,7 +818,7 @@ function countProductLineInOrderDelivered($orderID, $uid)
     //fetch petshop id from db
     $sql = "CALL sp_countProductLineInOrderDelivered($orderID,$pid);";
     $result = $conn->query($sql);
-    if ($result -> num_rows > 0) {
+    if ($result && $result -> num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $count = $row['countID'];
         }
@@ -797,7 +835,7 @@ function getPaidOrderDetailsTotalsByPetshopID($orderID, $uid)
     //fetch petshop id from db
     $sql = "CALL sp_getPaidOrderDetailsTotalsByPetshopID($orderID,$pid);";
     $result = $conn->query($sql);
-    if ($result -> num_rows > 0) {
+    if ($result && $result -> num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             return  $row['total'];
         }
@@ -814,7 +852,7 @@ function getPaidOrderDetailsTotalsByPetshopIDDelivered($orderID, $uid)
     //fetch petshop id from db
     $sql = "CALL sp_getPaidOrderDetailsTotalsByPetshopIDDelivered($orderID,$pid);";
     $result = $conn->query($sql);
-    if ($result -> num_rows > 0) {
+    if ($result && $result -> num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             return  $row['total'];
         }
@@ -823,16 +861,17 @@ function getPaidOrderDetailsTotalsByPetshopIDDelivered($orderID, $uid)
 }
 
 //get No of products in paid order details by orderID
-function getPaidOrderDetailsNoOFProducts($orderID){
+function getPaidOrderDetailsNoOFProducts($orderID)
+{
     include "dbConnection.php";
     $sql = "CALL sp_getPaidOrderDetailsNoOFProducts('$orderID');";
     $result = $conn->query($sql);
     $output = 0;
 
-    if ($result -> num_rows > 0) {
-    //output data for each row
+    if ($result && $result -> num_rows > 0) {
+        //output data for each row
         while ($row = $result->fetch_assoc()) {
-             //check for active orders for this user
+            //check for active orders for this user
             $output = $row['qty'];
         }
     }
@@ -840,16 +879,17 @@ function getPaidOrderDetailsNoOFProducts($orderID){
 }
 
 //get total price in paid order details by orderID
-function getPaidOrderDetailsTotals($orderID){
+function getPaidOrderDetailsTotals($orderID)
+{
     include "dbConnection.php";
     $sql = "CALL sp_getPaidOrderDetailsTotals('$orderID');";
     $result = $conn->query($sql);
     $output = 0;
 
-    if ($result -> num_rows > 0) {
-    //output data for each row
+    if ($result && $result -> num_rows > 0) {
+        //output data for each row
         while ($row = $result->fetch_assoc()) {
-             //check for active orders for this user
+            //check for active orders for this user
             $output = $row['total'];
         }
     }
@@ -857,91 +897,98 @@ function getPaidOrderDetailsTotals($orderID){
 }
 
 //get product details by productID
-function getProductDetailsByProductID($productID){
+function getProductDetailsByProductID($productID)
+{
     include "dbConnection.php";
     $sql = "CALL sp_getProductDetails('$productID');";
     $result = $conn->query($sql);
     $output = 0;
 
-    if ($result -> num_rows > 0) {
+    if ($result && $result -> num_rows > 0) {
         return $result;
     }
     return $output;
 }
 
 //get petshop specialities
-function getPetshopSpecialities($petshopID){
+function getPetshopSpecialities($petshopID)
+{
     include "dbConnection.php";
     $sql = "CALL sp_getPetshopSpecialities('$petshopID');";
     $result = $conn->query($sql);
     $output = 0;
 
-    if ($result -> num_rows > 0) {
+    if ($result && $result -> num_rows > 0) {
         return $result;
     }
     return null;
 }
 
 //get user Details by userID
-function getUserDetails($userID){
+function getUserDetails($userID)
+{
     include "dbConnection.php";
     $sql = "CALL sp_getUserDetails('$userID');";
     $result = $conn->query($sql);
     $output = 0;
 
-    if ($result -> num_rows > 0) {
+    if ($result && $result -> num_rows > 0) {
         return $result;
     }
     return null;
 }
 
 //get available brands at a petshop
-function getavailableBrandsAtPetshop($petshopID){
+function getavailableBrandsAtPetshop($petshopID)
+{
     include "dbConnection.php";
     $sql = "CALL sp_getavailableBrandsAtPetshop('$petshopID');";
     $result = $conn->query($sql);
     $output = 0;
 
-    if ($result -> num_rows > 0) {
+    if ($result && $result -> num_rows > 0) {
         return $result;
     }
     return null;
 }
 
 //get delivery schedule
-function getDeliverySchedule($orderID){
+function getDeliverySchedule($orderID)
+{
     include "dbConnection.php";
     $sql = "CALL sp_getDeliverySchedule('$orderID');";
     $result = $conn->query($sql);
     $output = 0;
 
-    if ($result -> num_rows > 0) {
+    if ($result && $result -> num_rows > 0) {
         return $result;
     }
     return null;
 }
 
 //get discount
-function getDiscount($productLineID, $status){
+function getDiscount($productLineID, $status)
+{
     include "dbConnection.php";
     $sql = "CALL sp_getDiscount('$productLineID', '$status');";
     $result = $conn->query($sql);
     $output = 0;
 
-    if ($result -> num_rows > 0) {
+    if ($result && $result -> num_rows > 0) {
         return $result;
     }
     return null;
 }
 
 //get delivery schedule
-function getDeliveryScheduleStatus($orderID){
+function getDeliveryScheduleStatus($orderID)
+{
     include "dbConnection.php";
     $sql = "CALL sp_getDeliverySchedule('$orderID');";
     $result = $conn->query($sql);
     $output = "Pending";
 
-    if ($result -> num_rows > 0) {
+    if ($result && $result -> num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $output = $row['status'];
         }
@@ -950,26 +997,28 @@ function getDeliveryScheduleStatus($orderID){
 }
 
 //get productline
-function getProductLine($productID){
+function getProductLine($productID)
+{
     include "dbConnection.php";
     $sql = "CALL sp_getProductLine('$productID');";
     $result = $conn->query($sql);
     $output = 0;
 
-    if ($result -> num_rows > 0) {
+    if ($result && $result -> num_rows > 0) {
         return $result;
     }
     return null;
 }
 
 //get petshop status bypetshopID
-function getPetshopStatus($id){
+function getPetshopStatus($id)
+{
     include "dbConnection.php";
     $sql = "CALL sp_getPetshopStatus('$id');";
     $result = $conn->query($sql);
     $output = 0;
 
-    if ($result -> num_rows > 0) {
+    if ($result && $result -> num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $output = $row['status'];
         }
@@ -980,15 +1029,16 @@ function getPetshopStatus($id){
 
 
 //get customer productline
-//load Cart from dataabase
-function loadCart($orderID){
+//load Cart from database
+function loadCart($orderID)
+{
     include "dbConnection.php";
     $sql = "CALL sp_getProductLineDetailsByOrderIDActive($orderID,'active');";
     $result = $conn->query($sql);
     $output = false;
-    if ($result -> num_rows > 0) {
+    if ($result && $result -> num_rows > 0) {
         //output data for each row
-        //all productline details from that order
+        //get all productline details from that order
         //create session cart
         while ($row = $result->fetch_assoc()) {
             $quantity = $row['quantity'];
@@ -997,7 +1047,7 @@ function loadCart($orderID){
             $status = $row['status'];
             $plID = $row['productLineID'];
 
-             //Create cart
+            //Create cart
             $item_array = array(
                 'id'  => $plID,
                 'name' => $remark,
@@ -1008,61 +1058,54 @@ function loadCart($orderID){
             $output = true;
         }
     }
-   return $output;
+    return $output;
 }
 
+
 //save cookie['cart'] in database
-function saveCartInDb($userID){
+function saveCartInDb($userID)
+{
     //cart is not empty => login => save in database, delete session, cookies
-                //check cookies cart
-                if(isset($_COOKIE['cart'])){
-
-                    $cart = $_COOKIE["cart"];
-                    $cart = json_decode($cart);
-
-                    //check if order exists
-                    if (getActiveUserOrder($userID) > 0) {
-                        $orderID = getActiveUserOrder($userID);
-                    } else {
-                        //create a new order for this user
-                        $createdDT= date("Y/m/d G:i:s");
-                        $status="active";
-                        $result = addOrder($createdDT, $status, $userID);
-                    }
-				    while($orderID <= 0){
-				    	$orderID = getActiveUserOrder($userID);
-				    }
-                    //get data from cookies
-                    foreach($cart as $key => $value){
-                            //key1 = field nname
-                            //value1 = data
-                            //check if productLineID exists in order
-                            //update product quantity
-                            //add product
-                            //check if there is an active order else create an order
-                            //check if productDetailID avail => add quantity
-                            //else add productdetailsID
-                            if ($orderID > 0) {
-                                //get productLineDetails
-                                $productLineID = $value->id;
-                                $quantity = $value->quantity;
-                                $price = $value->price;
-                                $remark =$value->name;
-                                $status= "active" ;
-                                //if productLineID already exists, add quantity then update quantity only
-                                $existingQuantity = verifyOrderDetails($orderID, $productLineID);
-                                if ($existingQuantity > 0) {
-                                    //already exists
-                                    $quantity += $existingQuantity;
-                                    updateOrderDetailsQuantity($orderID, $productLineID, $quantity);
-                                } else {
-                                    //add productline
-                                    addOrderDetails($quantity, $price, $remark, $status, $orderID, $productLineID);
-                                }
-                            }
-                    }
-                    
+    if (isset($_COOKIE['cart'])) {
+        $cart = $_COOKIE["cart"];
+        $cart = json_decode($cart);
+        $orderID = 0;
+        //check if order exists
+        if (getActiveUserOrder($userID) > 0) {
+            $orderID = getActiveUserOrder($userID);
+        } else {
+            //create a new order for this user
+            $createdDT= date("Y/m/d G:i:s");
+            $status="active";
+            $result = addOrder($createdDT, $status, $userID);
+        }
+        while ($orderID = 0) {
+            // active user order
+            $orderID = getActiveUserOrder($userID);
+        }
+        //get data from cookies
+        foreach ($cart as $key => $value) {
+            if ($orderID > 0) {
+                //get productLine Details from cart
+                $productLineID = $value->id;
+                $quantity = $value->quantity;
+                $price = $value->price;
+                $remark =$value->name;
+                $status= "active" ;
+                //if productLineID already exists in customer order, fetch quantity then update quantity only
+                //else add new product
+                $existingQuantity = verifyOrderDetails($orderID, $productLineID);
+                if ($existingQuantity > 0) {
+                    //already exists
+                    $quantity += $existingQuantity;
+                    updateOrderDetailsQuantity($orderID, $productLineID, $quantity);
+                } else {
+                    //add productline
+                    addOrderDetails($quantity, $price, $remark, $status, $orderID, $productLineID);
                 }
+            }
+        }
+    }
 }
 
 //send email
@@ -1075,15 +1118,10 @@ function sendEmail($email, $fname, $lname, $subject, $body)
     return $mailstatus;
 }
 
-//check email
-
-//check number
-
-//create user
-
 
 //get number of days left
-function daysleft($endDate){
+function daysleft($endDate)
+{
     $now = time(); // or your date as well
     $your_date = strtotime($endDate);
     $datediff = $now - $your_date;
@@ -1092,7 +1130,8 @@ function daysleft($endDate){
 }
 
 //auto update discount status
-function updateDiscountStatusAuto(){
+function updateDiscountStatusAuto()
+{
     include "dbConnection.php";
     $sql = "CALL sp_updateDiscountStatusbyendDate();";
     $result = mysqli_query($conn, $sql);

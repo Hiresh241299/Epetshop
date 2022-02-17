@@ -160,11 +160,10 @@ ob_start();
                 //**********get registration success message
                 if ($role == 3) {
                     //activate account first
-                    //send email
                     //hash user id
+                    //send email
                     $userID = getUserID($email);
                     $hashid = password_hash($userID, PASSWORD_DEFAULT);
-                    //$_SESSION['activateUserID'] = $userID;
                     $subject="Activate Your E-Petshop Account";
                     $body='Click <a href="http://localhost/epetshop/activated.php?key='.$hashid.'" target="_blank">here</a> to activate your key <br><br>
                     If you did not make this request, please disregard this email.';

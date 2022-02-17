@@ -122,9 +122,9 @@
                                 <li class="user-info">
                                     <h5 class="user-name">Hiresh Mohun</h5>
                                 </li>
-                                <li> <a href="#"><i class="lnr lnr-user"></i>My Profile</a> </li>
-                                <li> <a href="#"><i class="lnr lnr-cog"></i>Setting</a> </li>
-                                <li class="logout"> <a href="login.php"><i class="fa fa-power-off"></i>
+                                <!--<li> <a href="#"><i class="lnr lnr-user"></i>My Profile</a> </li>
+                                <li> <a href="#"><i class="lnr lnr-cog"></i>Setting</a> </li>-->
+                                <li class="logout"> <a href="logout.php"><i class="fa fa-power-off"></i>
                                         Logout</a> </li>
                             </ul>
                         </li>

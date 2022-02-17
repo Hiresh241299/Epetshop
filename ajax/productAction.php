@@ -18,7 +18,7 @@ if (isset($_POST['action'])) {
             $productID = $_POST['productidValue'];
 
             if (addProductReview($review, $date, $status, $userID, $productID)) {
-                $output ="1";
+                $output =1;
             }
         }
     }
@@ -29,7 +29,7 @@ if (isset($_POST['action'])) {
             $id = $_POST['reviewidval'];
             $status = 0;
             if (updateProductReviewStatus($id, $status)) {
-                $output = "1";
+                $output = 1;
             }
         }
     }
@@ -40,7 +40,7 @@ if (isset($_POST['action'])) {
             $id = $_POST['sid'];
             $status = 0;
             if (updateSpecialityStatus($id, $status)) {
-                $output = "1";
+                $output = 1;
             }
         }
     }
@@ -52,7 +52,7 @@ if (isset($_POST['action'])) {
             $id = $_POST['fid'];
             $status = 0;
             if (updateFavoriteStatus($id, $status)) {
-                $output = "1";
+                $output = 1;
             }
         }
     }
@@ -64,7 +64,7 @@ if (isset($_POST['action'])) {
             $id = $_POST['productID'];
             $status = 0;
             if (updateProductStatus($id, $status)) {
-                $output = "1";
+                $output = 1;
             }
         }
     }
@@ -77,7 +77,7 @@ if (isset($_POST['action'])) {
                 $id = $_POST['productLineID'];
                 $status = 0;
                 if (updateProductLineStatus($id, $status)) {
-                    $output = "1";
+                    $output = 1;
                 }
             }
         }
@@ -104,7 +104,7 @@ if (isset($_POST['action'])) {
                     // param in orderDetailsId and status
                     if ($orderID == $row['id']) {
                         updateMyCustomerOrderDetailsStatus($orderDetailsID, $status);
-                        $output = "1";
+                        $output = 1;
                     }
                 }
             }
@@ -114,7 +114,7 @@ if (isset($_POST['action'])) {
                 //table orders
                 //table delivery schedule
                 updateDeliveryScheduleStatus($orderID, "Delivered");
-                $output = "1";
+                $output = 1;
             }
         }
     }

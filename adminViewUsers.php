@@ -154,7 +154,7 @@ if (isset($_GET['rid'])){
                                                                 <td class="">'.$joinDate.'</td>
                                                                 <td class="">'.$lastLogin.'</td>
                                                                 '.$status.'
-                                                                <td>BTN</span></td>
+                                                                <td><button type="button" class="btn btn-info">View Details</button</span></td>
                                                             </tr>
                                                             ';
                                                             

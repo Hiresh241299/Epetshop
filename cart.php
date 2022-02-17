@@ -390,30 +390,29 @@ function checkQuantity(id, qoh) {
     quantity = document.getElementById('quantity' + id).value;
     if (quantity == 1) {
         document.getElementById('btnminus' + id).disabled = true;
-    }
-    else{
+    } else {
         document.getElementById('btnminus' + id).disabled = false;
     }
-    if(quantity == qoh) {
+    if (quantity == qoh) {
         document.getElementById('btnplus' + id).disabled = true;
-    }
-    else{
+    } else {
         document.getElementById('btnplus' + id).disabled = false;
     }
-    
+
 }
 
-function checkValidity(){
+function checkValidity() {
     isvalid = document.getElementById('valid').value;
-    if(isvalid == 1){
+    if (isvalid == 1) {
         document.getElementById('checkoutBTN').disabled = false;
     }
-    if(isvalid == 0){
+    if (isvalid == 0) {
         document.getElementById('checkoutBTN').disabled = true;
     }
 }
-function payment(){
-    window.location.href='checkout.php#checkout';
+
+function payment() {
+    window.location.href = 'checkout.php#checkout';
 }
 //disable buttons - and +
 //get values

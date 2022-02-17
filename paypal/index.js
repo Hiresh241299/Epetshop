@@ -24,15 +24,15 @@ paypal
         console.log(details);
         //payment complete
         //ajax call to add Delivery Schedule
-            var orderid_ = document.getElementById("orderid").value;
-            var mobile_ = document.getElementById("mobile").value;
-            var street_ = document.getElementById("street").value;
-            var locality_ = document.getElementById("locality").value;
-            var town_ = document.getElementById("town").value;
-            var district_ = document.getElementById("district").value;
-            var postcode_ = document.getElementById("postcode").value;
-            var lng_ = document.getElementById("lng").value;
-            var lat_ = document.getElementById("lat").value;
+        var orderid_ = document.getElementById("orderid").value;
+        var mobile_ = document.getElementById("mobile").value;
+        var street_ = document.getElementById("street").value;
+        var locality_ = document.getElementById("locality").value;
+        var town_ = document.getElementById("town").value;
+        var district_ = document.getElementById("district").value;
+        var postcode_ = document.getElementById("postcode").value;
+        var lng_ = document.getElementById("lng").value;
+        var lat_ = document.getElementById("lat").value;
 
         $.ajax({
           url: "ajax/productAction.php",
@@ -40,25 +40,23 @@ paypal
             oid: orderid_,
             mobile: mobile_,
             street: street_,
-            locality:locality_,
-            town:town_,
-            district:district_,
-            postcode:postcode_,
-            lng:lng_,
-            lat:lat_,
-            action: "addDeliverySchedule"
+            locality: locality_,
+            town: town_,
+            district: district_,
+            postcode: postcode_,
+            lng: lng_,
+            lat: lat_,
+            action: "addDeliverySchedule",
           },
           type: "post",
           success: function (data) {
             if (data == 1) {
-              //toastr
+              //give message
               toastr.success("Delivery Scheduled");
               window.location.replace("customerOrder.php?p=1#paymentCompleted");
             }
           },
-          //toastr
         });
-        //go to order page
       });
     },
     onCancel: function (data) {

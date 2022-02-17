@@ -20,6 +20,12 @@ if (isset($_SESSION["userid"])) {
 }else{
     $userID = 0;
 }
+//404
+if (isset($_GET['prodid'])) {
+    if($_GET['prodid'] == 999){
+        header('Location: pagenotfound.php');
+    }
+}
 
 //get query string
 if (isset($_GET['prodid'])) {
@@ -638,6 +644,7 @@ function productlinePrice() {
 
 //ajax add reviews
 function addProductReview(userid, productid, prodid) {
+    debugger;
     review = document.getElementById('review').value;
     if (review != "") {
         document.getElementById('reviewError').innerHTML = "";
@@ -652,12 +659,13 @@ function addProductReview(userid, productid, prodid) {
             type: 'post',
             success: function(data) {
                 if (data == 1) {
-                    toastr.success('Review added');
-                    document.getElementById('review').value = "";
-                    window.location.href = "viewProductDetails.php?r=1&prodid=" + prodid;
+                    
                 }
             }
         });
+        toastr.success('Review added');
+        document.getElementById('review').value = "";
+        window.location.href = "viewProductDetails.php?r=1&prodid=" + prodid;
     } else {
         //review cannot be blank
         document.getElementById('reviewError').innerHTML = "Cannot submit empty review!!!";
@@ -676,10 +684,11 @@ function deleteReview(prid, prodid) {
         type: 'post',
         success: function(data) {
             if (data == 1) {
-                toastr.success('Review Deleted');
-                window.location.href = "viewProductDetails.php?r=1&prodid=" + prodid;
+                
             }
         }
     });
+    toastr.success('Review Deleted');
+    window.location.href = "viewProductDetails.php?r=1&prodid=" + prodid;
 }
 </script>

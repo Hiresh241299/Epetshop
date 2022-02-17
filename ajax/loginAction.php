@@ -54,7 +54,7 @@ if ((isset($_POST['action']) && ($_POST['action'] == "login"))) {
             $lastLogin = date("Y/m/d G:i:s");
             updateUserLogin($lastLogin, $userID);
 
-                
+            //save in db
             saveCartInDb($userID);
             //clear cookies
             //clear session if exists
@@ -71,24 +71,22 @@ if ((isset($_POST['action']) && ($_POST['action'] == "login"))) {
             //if remember me is check, create cookie
             if ($isChecked) {
                 //save email in cookie
-                //$_COOKIE['email'] = $userEmail;
                 setcookie("email", $userEmail, time() + (86400 * 30), "/");
             } else {
-                //delete cookie if exists
-                //$_COOKIE['email'] = "";
+                //delete cookie
                 setcookie("email", null, -1, '/');
             }
             //check role id to redirect to appropriate page
             $roleid = getUserRole($userEmail);
             if ($roleid == 1) {
                 $output = 1;
-            //header('location: adminDashboard.php');
+            //location: adminDashboard.php
             } elseif ($roleid == 2) {
-                //header('Location: petshopHome.php');
+                //Location: petshopHome.php
                 $output = 2;
             } elseif ($roleid == 3) {
                 $output = 3;
-                //header('Location: index.php');
+                //Location: index.php')
             }
         }
         //credentials does not match ********** DISPLAY ERROR MESSAGE HERE

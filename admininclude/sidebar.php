@@ -48,17 +48,17 @@
                 <ul class="sub-menu-list">
                     <li><a href="adminviewContent.php?content=br">Brands</a> </li>
                     <li><a href="adminviewContent.php?content=p">Pet Category</a></li>
-                    <li><a href="adminviewContent.php?content=pro">Product Category</a></li>
+                    <!--<li><a href="adminviewContent.php?content=pro">Product Category</a></li>-->
                     <li><a href="adminviewContent.php?content=loc">Location</a></li>
                 </ul>
             </li>
-            <li class='menu-list <?php (($_SESSION['NavActive'] == "adminFiles")? $x ="active":$x =""); echo $x;?>'><a
+            <!--<li class='menu-list <?php (($_SESSION['NavActive'] == "adminFiles")? $x ="active":$x =""); echo $x;?>'><a
                     href="#"><i class="fa fa-file-text"></i>
                     <span>Document<i class="lnr lnr-chevron-right"></i></span></a>
                 <ul class="sub-menu-list">
                     <li><a href="adminviewUsers.php">Terms and Conditions</a>
                 </ul>
-            </li>
+            </li>-->
         </ul>
         <!-- //sidebar nav end -->
         <!-- toggle button start -->

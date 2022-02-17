@@ -77,8 +77,7 @@
                 </ul>
             </div>
             <div class="columns col-lg-6 text-lg-right">
-                <p>© 2020 SpryStore. All rights reserved. Design by <a href="https://w3layouts.com/" target="_blank">
-                        W3Layouts</a>
+                <p>© 2022 <span class="text-warning">E </span>Petshop
                 </p>
             </div>
             <button onclick="topFunction()" id="movetop" title="Go to top">

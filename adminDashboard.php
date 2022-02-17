@@ -72,7 +72,7 @@ $_SESSION['NavActive']="adminhome";
                 $result = $conn->query($sql);
                 $orderCount = 0;
                 $total = 0;
-                $percentgeIncome = 10;
+                $percentgeIncome = 0.03;
                 if ($result -> num_rows > 0) {
                     //output data for each row
                     while ($row = $result->fetch_assoc()) {
@@ -118,8 +118,8 @@ $_SESSION['NavActive']="adminhome";
                                 <div class="col-sm-6 pl-sm-2 statistics-grid">
                                     <div class="card card_border border-primary-top p-4">
                                         <i class="lnr lnr-briefcase"> </i>
-                                        <h3 class="text-danger number">Rs <?php echo ($total/$percentgeIncome);?></h3>
-                                        <p class="stat-text">Income</p>
+                                        <h3 class="text-danger number">Rs <?php echo ($total * $percentgeIncome);?></h3>
+                                        <p class="stat-text">3% Income</p>
                                     </div>
                                 </div>
                             </div>
@@ -127,47 +127,6 @@ $_SESSION['NavActive']="adminhome";
                     </div>
                 </div>
                 <!-- //statistics data -->
-
-                <!-- charts -->
-                <div class="chart">
-                    <div class="row">
-                        <div class="col-lg-6 pr-lg-2 chart-grid">
-                            <div class="card text-center card_border">
-                                <div class="card-header chart-grid__header">
-                                    Bar Chart
-                                </div>
-                                <div class="card-body">
-                                    <!-- bar chart -->
-                                    <div id="container">
-                                        <canvas id="barchart"></canvas>
-                                    </div>
-                                    <!-- //bar chart -->
-                                </div>
-                                <div class="card-footer text-muted chart-grid__footer">
-                                    Updated 2 hours ago
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 pl-lg-2 chart-grid">
-                            <div class="card text-center card_border">
-                                <div class="card-header chart-grid__header">
-                                    Line Chart
-                                </div>
-                                <div class="card-body">
-                                    <!-- line chart -->
-                                    <div id="container">
-                                        <canvas id="linechart"></canvas>
-                                    </div>
-                                    <!-- //line chart -->
-                                </div>
-                                <div class="card-footer text-muted chart-grid__footer">
-                                    Updated just now
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- //charts -->
 
                 <!-- Petshop join request -->
                 <div class="accordions">
@@ -281,7 +240,7 @@ $_SESSION['NavActive']="adminhome";
                                         aria-expanded="true" aria-controls="collapseTwo">Recently Joined Users</a>
                                 </div>
                                 <div class="card-body">
-                                    <div class="collapse" id="collapseTwo" data-parent="#accordionExample"
+                                    <div class="collapse show" id="collapseTwo" data-parent="#accordionExample"
                                         aria-labelledby="headingTwo">
                                         <!--datatable-->
                                         <div class="table-responsive">
@@ -365,7 +324,7 @@ $_SESSION['NavActive']="adminhome";
                                                             <td class="">'.$joinDate.'</td>
                                                             <td class="">'.$lastLogin.'</td>
                                                             '.$status.'
-                                                            <td>BTN</span></td>
+                                                            <td><button type="button" class="btn btn-info">View Details</button</span></td>
                                                         </tr>
                                                             ';
                                                         

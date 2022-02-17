@@ -251,6 +251,7 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2)) {
                             $previousID = 0;
                             $bg = 0;
                             $total = 0;
+                            $text= "";
 
                             if ($result -> num_rows > 0) {
                                 //output data for each row
@@ -269,6 +270,7 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2)) {
                                     $_img = $row['imgPath'];
                                     $_CustomerName = $row['firstName'] . " " . $row['lastName'];
                                     $_mobile = $row['mobile'];
+                                    $text = "Hello, $_CustomerName. Your order has been delivered. Thank you for shopping with us :)";
 
                                 //get delivery schedule for address and maps location
                                         $street = "";
@@ -318,7 +320,7 @@ if ((!isset($_SESSION["roleid"])) || ($_SESSION["roleid"] != 2)) {
                                             <td rowspan="'.$rowSpan.'">Rs'.$total.'</td>
                                             <td rowspan="'.$rowSpan.'">
                                             <a href="https://www.google.com/maps/search/?api=1&query='.$longitude.','.$latitude.'" target="_blank" class="btn btn-info text-center col-6" style="padding:2px; margin:1px;" title="Get map direction"><i class="fa fa-map-marker text-center" aria-hidden="true"></i></a>
-                                            <a href="https://api.whatsapp.com/send?phone=230'.$_mobile.'&text=&source=&data=" target="_blank" class="btn btn-success text-center col-6" style="padding:2px; margin:1px;" title="Whatsapp"><i class="fa fa-whatsapp text-center" aria-hidden="true"></i></a>
+                                            <a href="https://api.whatsapp.com/send?phone=230'.$_mobile.'&text='.$text.'&source=&data=" target="_blank" class="btn btn-success text-center col-6" style="padding:2px; margin:1px;" title="Whatsapp"><i class="fa fa-whatsapp text-center" aria-hidden="true"></i></a>
                                             <a href="petshopHome.php#delivery" class="btn text-center text-white col-6" onclick="setOrderid('.$_id.')" title="Delivery completed" style="padding:2px; margin:1px; background-color: #ff7315;"><i class="fa fa-check text-center"  aria-hidden="true"></i></a>
                                             </td>
                                         </tr>

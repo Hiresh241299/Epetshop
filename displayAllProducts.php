@@ -247,7 +247,7 @@ if (isset($_SESSION["roleid"])) {
                         <!--Sort results-->
                         <div class="row ecomhny-topbar">
                             <div class="col-6 ecomhny-result">
-                                <h4 class="ecomhny-result-count"> Showing all <span id="showingResult"></span> Results
+                                <h4 class="ecomhny-result-count" hidden> Showing all <span id="showingResult" ></span> Results
                                 </h4>
                             </div>
                             <div class="col-3 ecomhny-topbar-ordering float-right">

@@ -85,7 +85,7 @@ function validate(fieldName) {
     }
   }
 
-  //phone
+  //mobile
   if (fieldName == "phone") {
     //allow onlyy letters
     regex = /^[5][0-9]{7}$/;

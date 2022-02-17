@@ -118,7 +118,7 @@ $_SESSION['NavActive']="adminPetshop";
                                                             </br>
                                                             <a href="https://www.google.com/maps/search/?api=1&query='.$long.','.$lat.'" target="_blank">OPEN MAP</a></p>
                                                             <p class="mb-3">'.$desc.'</p>
-                                                            <p class="mb-lg-5 mb-3">Speciality:</p>
+                                                            <!--<p class="mb-lg-5 mb-3">Speciality:</p>-->
                                                             '.$btn.'
                                                             </div>
                                                         </div>

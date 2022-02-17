@@ -154,8 +154,8 @@ $conn->next_result();
                                     <form action="" method="post">
                                         <div class="form-group">
                                             <p class="login-texthny mb-2 text-white">Speciality</p>
-                                            <select id="favorite" name="favorite" class="form-control">
-                                                <option value="" selected>Select Speciality</option>
+                                            <select id="favorite" name="favorite" class="form-control" required>
+                                                <option value="" selected>Select Pets</option>
                                                 <?php
                                             $sql = "CALL 	sp_getUserFavoriteDropdown($userid);";
                                             $result = $conn->query($sql);

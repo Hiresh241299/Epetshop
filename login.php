@@ -58,25 +58,28 @@ if(isset($_COOKIE['email'])){
                                     <div class="form-group">
                                         <p class="login-texthny mb-2 text-white">Email address</p>
                                         <input type="email" class="form-control" id="email" name="email"
-                                            aria-describedby="emailHelp" placeholder="" value="<?php echo $userEmail;?>" required="">
+                                            aria-describedby="emailHelp" placeholder="" value="<?php echo $userEmail;?>"
+                                            required="">
                                         <!--<small id="emailHelp" class="form-text text-white">We'll never share your email
                                             with anyone else.</small>-->
                                     </div>
                                     <div class="form-group">
                                         <p class="login-texthny mb-2 text-white">Password</p>
-                                        <input type="password" class="form-control" id="password"
-                                            name="password" placeholder="" required="">
+                                        <input type="password" class="form-control" id="password" name="password"
+                                            placeholder="" required="">
                                     </div>
                                     <div class="form-group">
                                         <div class="userhny-check">
-                                            <input type="checkbox" id="remember" value="1" id="remember" name="remember">
+                                            <input type="checkbox" id="remember" value="1" id="remember"
+                                                name="remember">
                                             <label class="privacy-policy text-white">Remember me</label>
                                         </div>
                                     </div>
                                     <label class="privacy-policy text-danger" id="loginErrMsg"></label></br>
                                     <button type="button" class="btn btn-success submit-login btn mb-4" name="login"
-                                         onclick='userLogin()'>Login</button>
-                                    <small class="form-text text-white">Don't have an account? <a href="register.php" class="text-warning">Register Now</a></small></br>
+                                        onclick='userLogin()'>Login</button>
+                                    <small class="form-text text-white">Don't have an account? <a href="register.php"
+                                            class="text-warning">Register Now</a></small></br>
                                 </form>
                             </div>
                         </div>
@@ -125,33 +128,33 @@ if(isset($_COOKIE['email'])){
 <?php include "bottomScripts.php"; ?>
 
 <script>
-function userLogin(){
+function userLogin() {
     //ajax call to login
     //get email
-email = document.getElementById('email').value;
-password = document.getElementById('password').value;
-ischeck = document.getElementById('remember').checked;
-    
+    email = document.getElementById('email').value;
+    password = document.getElementById('password').value;
+    ischeck = document.getElementById('remember').checked;
+
     $.ajax({
-            url: 'ajax/LoginAction.php',
-            data: {
-                email:email,
-                password:password,
-                check:ischeck,
-                action: "login"
-            },
-            type: 'post',
-            success: function(data) {
-                if(data == 1){
-                    window.location.href='adminDashboard.php';
-                }else if(data == 2){
-                    window.location.href='petshopHome.php';
-                }else if(data == 3){
-                    window.location.href='index.php';
-                }else{
+        url: 'ajax/LoginAction.php',
+        data: {
+            email: email,
+            password: password,
+            check: ischeck,
+            action: "login"
+        },
+        type: 'post',
+        success: function(data) {
+            if (data == 1) {
+                window.location.href = 'adminDashboard.php';
+            } else if (data == 2) {
+                window.location.href = 'petshopHome.php';
+            } else if (data == 3) {
+                window.location.href = 'index.php';
+            } else {
                 $('#loginErrMsg').text(data);
-                }
             }
-        });
+        }
+    });
 }
 </script>
